@@ -1,4 +1,5 @@
 import io
+import os
 import re
 
 from setuptools import setup
@@ -14,5 +15,10 @@ setup(
     author='IBM RXN team',
     packages=['rxn_chemutils'],
     package_data={'rxn_chemutils': ['py.typed']},
-    install_requires=[]
+    install_requires=[
+        'attrs>=19.1.0',
+        'click>=7.0',
+        'rxn_utilities '
+        '@ git+https://{}@github.ibm.com/rxn/rxn_utilities@latest'.format(os.environ['GHE_TOKEN']),
+    ]
 )

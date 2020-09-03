@@ -1,0 +1,3 @@
+attrs==19.1.0
+click==7.0
+rxn_utilities @ git+https://${GHE_TOKEN}@github.ibm.com/rxn/rxn_utilities@latest
