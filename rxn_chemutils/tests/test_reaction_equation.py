@@ -2,10 +2,9 @@ from typing import List
 
 from rxn_chemutils.reaction_equation import (
     ReactionEquation, merge_reactants_and_agents, sort_compounds, canonicalize_compounds,
-    reaction_equation_to_string, reaction_equation_from_string, remove_duplicate_compounds,
-    has_repeated_molecules, rxn_standardization
+    remove_duplicate_compounds, has_repeated_molecules, rxn_standardization
 )
-from rxn_chemutils.utils import canonicalize_smiles
+from rxn_chemutils.conversion import canonicalize_smiles
 
 
 def test_merge_reactants_and_agents():
@@ -68,7 +67,7 @@ def test_equation_to_string():
     products = ['NCOC']
     reaction = ReactionEquation(reactants, agents, products)
 
-    reaction_string = reaction_equation_to_string(reaction)
+    reaction_string = reaction.to_string()
     expected = 'COCO.[Na+].[OH-].OCC>O.C>NCOC'
 
     assert reaction_string == expected
@@ -80,7 +79,7 @@ def test_equation_to_string_with_fragment_bond():
     products = ['NCOC']
     reaction = ReactionEquation(reactants, agents, products)
 
-    reaction_string = reaction_equation_to_string(reaction, fragment_bond='~')
+    reaction_string = reaction.to_string(fragment_bond='~')
     expected = 'COCO.[Na+]~[OH-].OCC>O.C>NCOC'
 
     assert reaction_string == expected
@@ -89,7 +88,7 @@ def test_equation_to_string_with_fragment_bond():
 def test_equation_from_string():
     reaction_string = 'COCO.[Na+].[OH-].OCC>O.C>NCOC'
 
-    reaction = reaction_equation_from_string(reaction_string)
+    reaction = ReactionEquation.from_string(reaction_string)
 
     expected_reactants = ['COCO', '[Na+]', '[OH-]', 'OCC']
     expected_agents = ['O', 'C']
@@ -102,7 +101,7 @@ def test_equation_from_string():
 def test_equation_from_string_with_fragment_bond():
     reaction_string = 'COCO.[Na+]~[OH-].OCC>O.C>NCOC'
 
-    reaction = reaction_equation_from_string(reaction_string, fragment_bond='~')
+    reaction = ReactionEquation.from_string(reaction_string, fragment_bond='~')
 
     expected_reactants = ['COCO', '[Na+].[OH-]', 'OCC']
     expected_agents = ['O', 'C']
@@ -115,7 +114,7 @@ def test_equation_from_string_with_fragment_bond():
 def test_equation_from_string_with_no_agent():
     reaction_string = 'COCO.[Na+].[OH-].OCC>>NCOC'
 
-    reaction = reaction_equation_from_string(reaction_string)
+    reaction = ReactionEquation.from_string(reaction_string)
 
     expected_reactants = ['COCO', '[Na+]', '[OH-]', 'OCC']
     expected_agents: List[str] = []

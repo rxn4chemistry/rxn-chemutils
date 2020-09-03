@@ -1,12 +1,9 @@
-from collections import Counter
-
 import pytest
 
-from rxn_chemutils.utils import (
-    equivalent_smiles, canonicalize_smiles, InvalidSmiles, smiles_to_mol,
-    split_smiles_and_fragment_info, canonicalize_reaction_smiles, inchify_smiles,
-    canonicalize_smiles_with_fragment_bonds, inchify_smiles_with_fragment_bonds, atom_type_counter,
-    is_valid_smiles
+from rxn_chemutils.conversion import (
+    smiles_to_mol, InvalidSmiles, inchify_smiles, canonicalize_smiles,
+    inchify_smiles_with_fragment_bonds, canonicalize_smiles_with_fragment_bonds,
+    canonicalize_reaction_smiles, split_smiles_and_fragment_info
 )
 
 
@@ -85,28 +82,6 @@ def test_canonicalize_reaction_smiles_with_fragments():
                         ' |f:4.5.6|'
 
 
-def test_equivalent_smiles():
-    assert equivalent_smiles('CCO', 'C(C)O')
-    assert not equivalent_smiles('CCO', 'O(C)C')
-
-    assert equivalent_smiles('CCO', 'C(C)O', 'OCC')
-    assert not equivalent_smiles('CCO', 'C(C)O', 'O(C)C')
-
-    # Should be false for invalid SMILES
-    assert not equivalent_smiles('CCO', '', 'O(C)C')
-
-
-def test_is_valid_smiles():
-    assert is_valid_smiles('CCO')
-    assert is_valid_smiles('C')
-    assert is_valid_smiles('NOOOOO')
-    assert is_valid_smiles('CC(CCC)')
-
-    assert not is_valid_smiles('YES')
-    assert not is_valid_smiles('Noo')
-    assert not is_valid_smiles('CC(CC')
-
-
 def test_split_reaction_smiles():
     reaction_smiles = 'BrC1=C(C(=O)O)C=C(C=C1)COC.C1(O)=CC(O)=CC=C1.[OH-].[Na+]' \
                       '>S(=O)(=O)([O-])[O-].[Cu+2].O' \
@@ -128,9 +103,3 @@ def test_split_reaction_smiles_with_no_fragment_info():
     pure_smiles, fragment_info = split_smiles_and_fragment_info(reaction_smiles)
     assert pure_smiles == reaction_smiles
     assert fragment_info == ''
-
-
-def test_atom_type_counter():
-    assert atom_type_counter('CCO') == Counter({'C': 2, 'H': 6, 'O': 1})
-    assert atom_type_counter('CC=O') == Counter({'C': 2, 'H': 4, 'O': 1})
-    assert atom_type_counter('[Na+].[Cl-]') == Counter({'Na': 1, 'Cl': 1})

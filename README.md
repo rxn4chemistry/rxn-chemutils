@@ -1,5 +1,7 @@
 # rxn_chemutils
 
+[![Build Status](https://travis.ibm.com/rxn/rxn_chemutils.svg?token=zJxfB9t9kgVLYHLdp5pG&branch=develop)](https://travis.ibm.com/rxn/rxn_chemutils)
+
 Chemistry-related utilities
 
 ## Setup

@@ -1,5 +1,8 @@
+from rxn_chemutils.extended_reaction_smiles import (
+    parse_extended_reaction_smiles, to_extended_reaction_smiles, determine_fragment_groups,
+    merge_molecules_from_fragment_groups
+)
 from rxn_chemutils.reaction_equation import ReactionEquation
-from rxn_chemutils.reaction_smiles_converter import ReactionSmilesConverter
 
 
 def test_from_reaction_smiles():
@@ -7,7 +10,7 @@ def test_from_reaction_smiles():
                       '>[Li]CCCC.C1CCOC1' \
                       '>[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)C(=O)O)[F:8]'
 
-    reaction = ReactionSmilesConverter.from_reaction_smiles(reaction_smiles)
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
 
     assert reaction.reactants == ['CC1=CC(F)=C(Br)C=C1']
     assert reaction.agents == ['[Li]CCCC', 'C1CCOC1']
@@ -20,7 +23,7 @@ def test_from_reaction_smiles_with_fragments():
                       '>OC1=CC=C2C3=C(C(OC2=C1)=O)C=C(C=C3)COC' \
                       ' |f:2.3,4.5|'
 
-    reaction = ReactionSmilesConverter.from_reaction_smiles(reaction_smiles)
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
 
     assert reaction.reactants == ['BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[Na+].[OH-]']
     assert reaction.agents == ['O', 'O=S(=O)([O-])[O-].[Cu+2]']
@@ -37,7 +40,7 @@ def test_from_reaction_smiles_with_NaH():
                       '>C(C)OC(=O)C=1OC2=C(C1N)CCCC2' \
                       ' |f:4.5|'
 
-    reaction = ReactionSmilesConverter.from_reaction_smiles(reaction_smiles)
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
 
     assert reaction.reactants == [
         'C1=CC=C(P(C2=CC=CC=C2)C2=CC=CC=C2)C=C1', 'N(=NC(=O)OCC)C(=O)OCC', 'C(CO)(=O)OCC',
@@ -54,7 +57,7 @@ def test_to_reaction_smiles():
 
     reaction = ReactionEquation(reactants, agents, products)
 
-    reaction_smiles = ReactionSmilesConverter.to_reaction_smiles(reaction)
+    reaction_smiles = to_extended_reaction_smiles(reaction)
     expected = 'CC1=CC(F)=C(Br)C=C1' \
                '>[Li]CCCC.C1CCOC1' \
                '>CC1=CC(F)=C(C(=O)O)C=C1'
@@ -69,7 +72,7 @@ def test_to_reaction_smiles_with_fragments():
 
     reaction = ReactionEquation(reactants, agents, products)
 
-    reaction_smiles = ReactionSmilesConverter.to_reaction_smiles(reaction)
+    reaction_smiles = to_extended_reaction_smiles(reaction)
     expected = 'BrC1=C(C(=O)O)C=C(COC)C=C1.C1(O)=CC(O)=CC=C1.[Na+].[OH-]' \
                '>O.O=S(=O)([O-])[O-].[Cu+2]' \
                '>OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3' \
@@ -85,10 +88,33 @@ def test_to_reaction_smiles_with_dummy_fragments():
 
     reaction = ReactionEquation(reactants, agents, products)
 
-    reaction_smiles = ReactionSmilesConverter.to_reaction_smiles(reaction)
+    reaction_smiles = to_extended_reaction_smiles(reaction)
     expected = 'A.B.C.D.E' \
                '>F.G.H' \
                '>I.J.K.L.M.N' \
                ' |f:1.2,5.6,11.12.13|'
 
     assert reaction_smiles == expected
+
+
+def test_fragment_groups():
+    assert determine_fragment_groups('|f:2.3,4.5|') == [[2, 3], [4, 5]]
+    assert determine_fragment_groups('|f:2.3,4.5.8|') == [[2, 3], [4, 5, 8]]
+    assert determine_fragment_groups('|f:2.3,4|') == [[2, 3], [4]]
+    assert determine_fragment_groups('|f:12.3,4.105|') == [[12, 3], [4, 105]]
+    assert determine_fragment_groups('') == []
+
+
+def test_merge_molecules_from_fragment_groups():
+    # We consider, as an example, the following reaction
+    # C.CC.CCC.CCCC > N.NN.NNN.NNNN.NNNNN > O.OO.OOO.OOOO
+    # with fragmentation info |f:0.2.3,4.6,5.8|
+
+    groups = [[0, 2, 3], [4, 6], [5, 8]]
+
+    assert merge_molecules_from_fragment_groups(['C', 'CC', 'CCC', 'CCCC'], groups,
+                                                0) == ['CC', 'C.CCC.CCCC']
+    assert merge_molecules_from_fragment_groups(['N', 'NN', 'NNN', 'NNNN', 'NNNNN'], groups,
+                                                4) == ['NNNN', 'N.NNN', 'NN.NNNNN']
+    assert merge_molecules_from_fragment_groups(['O', 'OO', 'OOO', 'OOOO'], groups,
+                                                9) == ['O', 'OO', 'OOO', 'OOOO']

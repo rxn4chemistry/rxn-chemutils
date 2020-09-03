@@ -1,36 +1,51 @@
+import re
 from typing import List, Tuple
 
 from rdkit.Chem import Mol
 
 from .chemical_reaction import ChemicalReaction
+from .conversion import mols_to_smiles, canonicalize_smiles, split_smiles_and_fragment_info
+from .rdkit_utils import remove_atom_mapping
 from .reaction_equation import ReactionEquation
-from .reaction_smiles_utils import determine_fragment_groups, merge_molecules_from_fragment_groups
-from .utils import split_smiles_and_fragment_info, remove_atom_mapping, mols_to_smiles
 
 
-class UnsupportedReactionSmiles(ValueError):
+class UnsupportedExtendedReactionSmiles(ValueError):
 
     def __init__(self, reaction_smiles: str):
         super().__init__(f'The syntax of "{reaction_smiles}" is not supported by RDKit.')
 
 
-class ReactionSmilesConverter:
+def parse_extended_reaction_smiles(extended_reaction_smiles: str) -> ReactionEquation:
     """
-    Convert reaction SMILES with fragment information to and from ReactionEquation instances.
+    Convert an extended reaction SMILES (with potential fragment information)
+    to a ReactionEquation instance.
+
+    Args:
+        extended_reaction_smiles: extended reaction SMILES
+
+    Returns:
+        ReactionEquation instance
     """
+    return _Importer.convert(extended_reaction_smiles)
 
-    @staticmethod
-    def from_reaction_smiles(reaction_smiles: str) -> ReactionEquation:
-        return _Importer.convert(reaction_smiles)
 
-    @staticmethod
-    def to_reaction_smiles(reaction: ReactionEquation) -> str:
-        return _Exporter.convert(reaction)
+def to_extended_reaction_smiles(reaction: ReactionEquation) -> str:
+    """
+    Convert a ReactionEquation instance to an extended reaction SMILES (with
+    potential fragment information).
+
+    Args:
+        reaction: reaction equation to convert
+
+    Returns:
+        The extended reaction SMILES string.
+    """
+    return _Exporter.convert(reaction)
 
 
 class _Importer:
     """
-    Convert reaction SMILES to ReactionEquation instances.
+    Convert extended reaction SMILES to ReactionEquation instances.
     """
 
     @staticmethod
@@ -41,12 +56,12 @@ class _Importer:
         try:
             rxn = ChemicalReaction(pure_smiles, sanitize=False)
         except Exception:
-            raise UnsupportedReactionSmiles(reaction_smiles)
+            raise UnsupportedExtendedReactionSmiles(reaction_smiles)
 
         try:
             return _Importer.process_reaction_participants(rxn, fragment_info)
         except Exception:
-            raise UnsupportedReactionSmiles(reaction_smiles)
+            raise UnsupportedExtendedReactionSmiles(reaction_smiles)
 
     @staticmethod
     def process_reaction_participants(
@@ -86,7 +101,7 @@ class _Importer:
 
 class _Exporter:
     """
-    Convert ReactionEquation to reaction SMILES with fragment information.
+    Convert ReactionEquation to extended reaction SMILES with fragment information.
     """
 
     @staticmethod
@@ -150,3 +165,61 @@ class _Exporter:
         group_strings = ['.'.join(str(number) for number in g) for g in groups]
         all_groups = ','.join(group_strings)
         return f'|f:{all_groups}|'
+
+
+def determine_fragment_groups(fragment_info: str) -> List[List[int]]:
+    """
+    From the fragment info string (such as '|f:0.2,5.6|'), determine the groups of indices that must be grouped.
+
+    Returns:
+        List of groups (f.i. [[0,2], [5,6]])
+    """
+
+    m = re.findall(r'(\d+(?:\.\d+)*)', fragment_info)
+
+    groups = []
+    for match in m:
+        indices = match.split('.')
+        groups.append([int(i) for i in indices])
+    return groups
+
+
+def merge_molecules_from_fragment_groups(
+    smiles_list: List[str], fragment_groups: List[List[int]], offset: int
+) -> List[str]:
+    """
+    Combine molecules according to the fragment definition.
+
+    Args:
+        smiles_list: SMILES strings to potentially merge
+        fragment_groups: indices for groups of molecules belonging together; some may be out of range
+        offset: what index the first molecule in smiles_list corresponds to
+
+    Returns:
+        List of molecules, some of which were potentially merged. Non-merged molecules come first.
+    """
+
+    allowed_indices = set(range(len(smiles_list)))
+    merged_indices = set()
+
+    merged_molecules = []
+
+    for group in fragment_groups:
+        relative_indices = [i - offset for i in group]
+        in_range = [e in allowed_indices for e in relative_indices]
+
+        # either all indices are in the range, or none is
+        all_in_range = all(in_range)
+        none_in_range = not any(in_range)
+        if not (all_in_range or none_in_range):
+            raise ValueError()
+
+        if all_in_range:
+            merged_molecule = '.'.join(smiles_list[i] for i in relative_indices)
+            merged_molecules.append(canonicalize_smiles(merged_molecule))
+            merged_indices.update(relative_indices)
+
+    remaining_molecule_indices = sorted(list(allowed_indices - merged_indices))
+    unmerged_molecules = [smiles_list[i] for i in remaining_molecule_indices]
+
+    return unmerged_molecules + merged_molecules

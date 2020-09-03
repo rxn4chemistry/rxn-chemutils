@@ -1,6 +1,6 @@
 import click
 
-from rxn_chemutils.utils import canonicalize_smiles, canonicalize_reaction_smiles
+from rxn_chemutils.conversion import canonicalize_smiles, canonicalize_reaction_smiles
 
 
 @click.command()

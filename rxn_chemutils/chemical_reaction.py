@@ -2,7 +2,7 @@ from typing import List
 
 from rdkit.Chem import Mol
 
-from .utils import smiles_to_mol
+from .conversion import smiles_to_mol
 
 
 class ChemicalReaction:
