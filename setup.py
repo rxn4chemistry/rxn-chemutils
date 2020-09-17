@@ -4,10 +4,13 @@ import re
 
 from setuptools import setup
 
-__version__ = re.search(
+match = re.search(
     r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
     io.open('rxn_chemutils/__init__.py', encoding='utf_8_sig').read()
-).group(1)
+)
+if match is None:
+    raise SystemExit('Version number not found.')
+__version__ = match.group(1)
 
 setup(
     name='rxn_chemutils',
