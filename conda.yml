@@ -1,0 +1,19 @@
+name: rxn_chemutils
+channels:
+  - https://conda.anaconda.org/rdkit
+dependencies:
+  - rdkit=2020.03.1
+  - python>=3.6,<3.8
+  - pip>=19.1
+  - pip:
+    - attrs==19.1.0
+    - click==7.0
+    - rxn_utilities @ git+https://${GHE_TOKEN}@github.ibm.com/rxn/rxn_utilities@latest
+    - -e .
+    # analysis
+    - jupyter==1.0.0
+    # test requirements
+    - flake8==3.7.9
+    - mypy==0.761
+    - pytest==5.3.4
+    - yapf==0.30.0
