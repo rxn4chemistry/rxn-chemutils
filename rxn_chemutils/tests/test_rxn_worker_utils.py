@@ -23,7 +23,10 @@ def test_standardize_smiles():
     smiles = 'CNC(=O)C'
     assert standardize_smiles(smiles) == 'CNC(C)=O'
     assert standardize_smiles(smiles, inchify=True) == 'CN=C(C)O'
-    # case 5: testing an invalid SMILES and error handling
+    # case 5: inchification with metal disconnection
+    smiles = 'CCCC[Li]'
+    assert standardize_smiles(smiles, inchify=True) == '[CH2]CCC.[Li]'
+    # case 6: testing an invalid SMILES and error handling
     invalid_smiles = 'C%5%%5'
     with pytest.raises(RDKitError):
         try:
