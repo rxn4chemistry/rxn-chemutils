@@ -13,9 +13,17 @@ def test_rdkit_error():
 
 def test_standardize_smiles():
     smiles = 'C(O)C'
+    # case 1: canonicalization and sanitization
     assert standardize_smiles(smiles) == 'CCO'
+    # case 2: disabled canonicalization
     assert standardize_smiles(smiles, canonicalize=False) == 'C(O)C'
+    # case 3: disabled canonicalization with inchification (inherent canonicalization)
     assert standardize_smiles(smiles, canonicalize=False, inchify=True) == 'CCO'
+    # case 4: canonicalization different from inchification (tautomers interconversion)
+    smiles = 'CNC(=O)C'
+    assert standardize_smiles(smiles) == 'CNC(C)=O'
+    assert standardize_smiles(smiles, inchify=True) == 'CN=C(C)O'
+    # case 5: testing an invalid SMILES and error handling
     invalid_smiles = 'C%5%%5'
     with pytest.raises(RDKitError):
         try:
