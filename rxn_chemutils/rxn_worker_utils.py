@@ -36,7 +36,7 @@ def standardize_smiles(
     inchify: bool = False,
 ) -> str:
     """
-    Process a molecule to validate it.
+    Ensure that a SMILES follows a desired standard.
     It allows canonicalization, sanitization and inchification keeping stereochemistry with isomericSmile=True.
     It can process multiple molecules separated by ".".
     Note that inchify set to True will also canonicalize the molecule.
@@ -82,7 +82,7 @@ def standardize_molecules(
     molecule_token_delimiter: Optional[str] = None
 ) -> str:
     """
-    Validate and canonicalize molecules.
+    Ensure that a set of molecules represented by a string follows a desired standard.
 
     Args:
         molecules (str): molecules SMILES. Molecules can be separated via a ".".
