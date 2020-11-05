@@ -1,8 +1,9 @@
 """Utilities used in the RXN forward/retrosynthesis workers."""
 import sys
 from rdkit import Chem
-from typing import Optional
 from io import StringIO
+from loguru import logger
+from typing import Optional
 
 RXN_SMILES_SEPARATOR = '>>'
 
@@ -57,7 +58,10 @@ def standardize_smiles(
     if inchify:
         inchi_string = Chem.MolToInchi(molecule)
         if inchi_string is None:
-            raise RDKitError('InchificationError', 'Inchify failed for SMILES: {}'.format(smiles))
+            logger.warning(
+                'Inchification failure for SMILES: {}. Returning its canonical version.'
+            )
+            return Chem.MolToSmiles(molecule, isomericSmiles=True)
         else:
             # canonical set to True because we can't guarantee no canonicalization
             return Chem.MolToSmiles(Chem.MolFromInchi(inchi_string), canonical=True)

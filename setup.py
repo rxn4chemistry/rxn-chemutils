@@ -21,6 +21,7 @@ setup(
     install_requires=[
         'attrs>=19.1.0',
         'click>=7.0',
+        'loguru==0.5.3',
         'rxn_utilities '
         '@ git+https://{}@github.ibm.com/rxn/rxn_utilities@latest'.format(os.environ['GHE_TOKEN']),
     ]

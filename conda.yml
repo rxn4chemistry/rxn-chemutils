@@ -8,6 +8,7 @@ dependencies:
   - pip:
     - attrs==19.1.0
     - click==7.0
+    - loguru==0.5.3
     - rxn_utilities @ git+https://${GHE_TOKEN}@github.ibm.com/rxn/rxn_utilities@latest
     - -e .
     # test requirements
