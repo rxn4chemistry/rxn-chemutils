@@ -1,4 +1,29 @@
-from rxn_chemutils.tokenization import tokenize_smiles, detokenize_smiles
+import pytest
+from rxn_chemutils.tokenization import TokenizationError, to_tokens, tokenize_smiles, detokenize_smiles
+
+
+def test_tokenization_error():
+    error = TokenizationError('ATokenizationError', 'my message')
+    assert error.type == 'TokenizationError'
+    assert error.title == 'ATokenizationError'
+    assert error.detail == 'my message'
+    with pytest.raises(ValueError):
+        raise error
+
+
+def test_to_tokens():
+    smiles = r'C\C=C\C'
+    groundtruth = ['C', '\\', 'C', '=', 'C', '\\', 'C']
+    tokens = to_tokens(smiles)
+    assert tokens == groundtruth
+    smiles = 'CCZCC'
+    with pytest.raises(TokenizationError):
+        try:
+            to_tokens(smiles)
+        except TokenizationError as exception:
+            assert exception.title == 'SmilesJoinedTokensMismatch'
+            assert exception.detail == 'smiles=CCZCC != joined_tokens=CCCC'
+            raise
 
 
 def test_tokenize_simple_smiles():

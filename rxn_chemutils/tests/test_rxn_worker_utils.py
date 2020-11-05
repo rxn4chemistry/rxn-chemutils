@@ -1,5 +1,5 @@
 import pytest
-from rxn_chemutils.rxn_worker_utils import RDKitError, standardize_smiles, standardize_molecules, tokenize
+from rxn_chemutils.rxn_worker_utils import RDKitError, standardize_smiles, standardize_molecules
 
 
 def test_rdkit_error():
@@ -89,9 +89,3 @@ def test_standardize_molecules():
             # molecule token delimiters.
             assert exception.detail == 'Invalid molecule for SMILES: _C_'
             raise
-
-
-def test_tokenize():
-    smiles = 'COCO.OCC>>NCOC'
-    expected = 'C O C O . O C C >> N C O C'.split()
-    assert tokenize(smiles) == expected

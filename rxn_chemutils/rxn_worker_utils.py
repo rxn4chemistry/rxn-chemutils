@@ -1,15 +1,9 @@
 """Utilities used in the RXN forward/retrosynthesis workers."""
-import re
 import sys
 from rdkit import Chem
-from typing import List, Optional
+from typing import Optional
 from io import StringIO
 
-SMILES_TOKENIZER_PATTERN = (
-    r'(\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|'
-    r'\.|=|#|-|\+|\\\\|\/|:|~|@|\?|>>?|\*|\$|\%[0-9]{2}|[0-9])'
-)
-SMILES_REGEX = re.compile(SMILES_TOKENIZER_PATTERN)
 RXN_SMILES_SEPARATOR = '>>'
 
 
@@ -168,16 +162,3 @@ def standardize_molecules(
         else:
             raise
     return standardized_molecules
-
-
-def tokenize(smiles: str) -> List[str]:
-    """
-    Tokenize a SMILES.
-
-    Args:
-        smiles (str): a SMILES string.
-
-    Returns:
-        List[str]: list of tokens.
-    """
-    return SMILES_REGEX.findall(smiles)
