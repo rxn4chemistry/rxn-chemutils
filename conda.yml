@@ -10,8 +10,6 @@ dependencies:
     - click==7.0
     - rxn_utilities @ git+https://${GHE_TOKEN}@github.ibm.com/rxn/rxn_utilities@latest
     - -e .
-    # analysis
-    - jupyter==1.0.0
     # test requirements
     - flake8==3.7.9
     - mypy==0.761

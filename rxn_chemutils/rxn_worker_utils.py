@@ -37,6 +37,7 @@ def standardize_smiles(
 ) -> str:
     """
     Ensure that a SMILES follows a desired standard.
+
     It allows canonicalization, sanitization and inchification keeping stereochemistry with isomericSmile=True.
     It can process multiple molecules separated by ".".
     Note that inchify set to True will also canonicalize the molecule.
