@@ -1,7 +1,6 @@
 from rxn_chemutils.extended_reaction_smiles import (
-    parse_extended_reaction_smiles, to_extended_reaction_smiles, determine_fragment_groups,
-    merge_molecules_from_fragment_groups
-)
+    parse_extended_reaction_smiles, to_extended_reaction_smiles,
+    determine_fragment_groups, merge_molecules_from_fragment_groups)
 from rxn_chemutils.reaction_equation import ReactionEquation
 
 
@@ -25,7 +24,9 @@ def test_from_reaction_smiles_with_fragments():
 
     reaction = parse_extended_reaction_smiles(reaction_smiles)
 
-    assert reaction.reactants == ['BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[Na+].[OH-]']
+    assert reaction.reactants == [
+        'BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[Na+].[OH-]'
+    ]
     assert reaction.agents == ['O', 'O=S(=O)([O-])[O-].[Cu+2]']
     assert reaction.products == ['OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3']
 
@@ -43,8 +44,8 @@ def test_from_reaction_smiles_with_NaH():
     reaction = parse_extended_reaction_smiles(reaction_smiles)
 
     assert reaction.reactants == [
-        'C1=CC=C(P(C2=CC=CC=C2)C2=CC=CC=C2)C=C1', 'N(=NC(=O)OCC)C(=O)OCC', 'C(CO)(=O)OCC',
-        'O=C1C(C#N)CCCC1', '[H-].[Na+]'
+        'C1=CC=C(P(C2=CC=CC=C2)C2=CC=CC=C2)C=C1', 'N(=NC(=O)OCC)C(=O)OCC',
+        'C(CO)(=O)OCC', 'O=C1C(C#N)CCCC1', '[H-].[Na+]'
     ]
     assert reaction.agents == ['C1CCOC1', 'C1CCOC1', 'C1CCOC1', 'C1CCOC1']
     assert reaction.products == ['C(C)OC(=O)C1=C(N)C2=C(O1)CCCC2']
@@ -66,7 +67,9 @@ def test_to_reaction_smiles():
 
 
 def test_to_reaction_smiles_with_fragments():
-    reactants = ['BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[Na+].[OH-]']
+    reactants = [
+        'BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[Na+].[OH-]'
+    ]
     agents = ['O', 'O=S(=O)([O-])[O-].[Cu+2]']
     products = ['OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3']
 
@@ -112,9 +115,11 @@ def test_merge_molecules_from_fragment_groups():
 
     groups = [[0, 2, 3], [4, 6], [5, 8]]
 
-    assert merge_molecules_from_fragment_groups(['C', 'CC', 'CCC', 'CCCC'], groups,
+    assert merge_molecules_from_fragment_groups(['C', 'CC', 'CCC', 'CCCC'],
+                                                groups,
                                                 0) == ['CC', 'C.CCC.CCCC']
-    assert merge_molecules_from_fragment_groups(['N', 'NN', 'NNN', 'NNNN', 'NNNNN'], groups,
-                                                4) == ['NNNN', 'N.NNN', 'NN.NNNNN']
-    assert merge_molecules_from_fragment_groups(['O', 'OO', 'OOO', 'OOOO'], groups,
-                                                9) == ['O', 'OO', 'OOO', 'OOOO']
+    assert merge_molecules_from_fragment_groups(
+        ['N', 'NN', 'NNN', 'NNNN', 'NNNNN'], groups,
+        4) == ['NNNN', 'N.NNN', 'NN.NNNNN']
+    assert merge_molecules_from_fragment_groups(
+        ['O', 'OO', 'OOO', 'OOOO'], groups, 9) == ['O', 'OO', 'OOO', 'OOOO']
