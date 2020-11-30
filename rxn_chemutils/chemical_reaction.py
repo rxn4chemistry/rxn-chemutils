@@ -90,8 +90,8 @@ class ChemicalReaction:
         # any time
         molecules_self = (self.reactants, self.agents, self.products)
         molecules_other = (other.reactants, other.agents, other.products)
-        for i in range(len(molecules_self)):
-            for a, b in zip(molecules_self[i], molecules_other[i]):
+        for group_self, group_other in zip(molecules_self, molecules_other):
+            for a, b in zip(group_self, group_other):
                 if not self.__mols_equal(a, b):
                     return False
 
