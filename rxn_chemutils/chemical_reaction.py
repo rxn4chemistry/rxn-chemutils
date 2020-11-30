@@ -22,10 +22,10 @@ class ChemicalReaction:
         """Creates a new instance of type Reaction based on a reaction SMARTs.
 
         Args:
-            reaction_smarts (str): A reaction smarts
-            remove_duplicates (bool, optional): Whether to remove duplicates from within reactants, agents and products. Defaults to False.
-            sanitize (bool, optional): Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
-            kwargs (Any): Keyword arguments supplied to rdkit's MolToSmiles. Defaults: canonical=True
+            reaction_smarts: A reaction smarts
+            remove_duplicates: Whether to remove duplicates from within reactants, agents and products. Defaults to False.
+            sanitize: Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
+            kwargs: Keyword arguments supplied to rdkit's MolToSmiles. Defaults: canonical=True
         """
         kwargs.setdefault("canonical", True)
 
@@ -43,7 +43,7 @@ class ChemicalReaction:
         """Returns the number of molecules participating in this reaction (reactants, agents, and products).
 
         Returns:
-            int: The number of molecules participating in this reaction.
+            The number of molecules participating in this reaction.
         """
         return len(self.reactants) + len(self.agents) + len(self.products)
 
@@ -51,7 +51,7 @@ class ChemicalReaction:
         """Returns the reaction SMARTS of this instance (reactants>agents>products).
 
         Returns:
-            str: The reaction SMARTS representing this instance.
+            The reaction SMARTS representing this instance.
         """
         return (".".join([
             rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
@@ -68,10 +68,10 @@ class ChemicalReaction:
         """Compares the count, order, and SMILES string of each molecule in this reaction.
 
         Args:
-            other (Reaction): A reaction to be compared with this instance.
+            other: A reaction to be compared with this instance.
 
         Returns:
-            bool: Whether this instance is equal to another.
+            Whether this instance is equal to another.
         """
         if len(self) != len(other):
             return False
@@ -107,14 +107,14 @@ class ChemicalReaction:
         """Creates a tuple of lists of reactants, agents, and products as rdkit Mol instances from a reaction SMARTS.
 
         Args:
-            reaction_smarts (str): A reaction SMARTS.
-            sanitize (bool): Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
+            reaction_smarts: A reaction SMARTS.
+            sanitize: Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
 
         Raises:
             ValueError: This error is raised if a non-valid reaction SMARTS is provided.
 
         Returns:
-            Tuple[List[Mol], List[Mol], List[Mol]]: A tuple of lists of reactants, agents, and products representing the reaction.
+            A tuple of lists of reactants, agents, and products representing the reaction.
         """
         if reaction_smarts.count(">") != 2:
             raise ValueError("A valid SMARTS reaction must contain two '>'.")
@@ -146,10 +146,10 @@ class ChemicalReaction:
         """Encodes a molecule as a SMILES string by applying the rdkit MolToSmiles arguments supplied to this instantce.
 
         Args:
-            mol (Mol): An rdkit Mol instance.
+            mol: An rdkit Mol instance.
 
         Returns:
-            str: The SMILES encoding of the input Mol.
+            The SMILES encoding of the input Mol.
         """
         return rdk.MolToSmiles(mol, **self.__smiles_to_mol_kwargs)
 
@@ -165,7 +165,7 @@ class ChemicalReaction:
         """Returns the reactants of this reactions as a list of SMILES.
 
         Returns:
-            List[str]: A list of SMILES of the reactants.
+            A list of SMILES of the reactants.
         """
         return [
             rdk.MolToSmiles(reactant, **self.__smiles_to_mol_kwargs)
@@ -176,7 +176,7 @@ class ChemicalReaction:
         """Returns the agents of this reactions as a list of SMILES.
 
         Returns:
-            List[str]: A list of SMILES of the agents.
+            A list of SMILES of the agents.
         """
         return [
             rdk.MolToSmiles(agent, **self.__smiles_to_mol_kwargs)
@@ -187,7 +187,7 @@ class ChemicalReaction:
         """Returns the products of this reactions as a list of SMILES.
 
         Returns:
-            List[str]: A list of SMILES of the products.
+            A list of SMILES of the products.
         """
         return [
             rdk.MolToSmiles(product, **self.__smiles_to_mol_kwargs)
@@ -199,10 +199,10 @@ class ChemicalReaction:
            of lists of indices in the reactants, agents, and products.
 
         Args:
-            pattern (str): A SMARTS pattern.
+            pattern: A SMARTS pattern.
 
         Returns:
-            Tuple[List[int], List[int], List[int]]: A tuple of lists of indices from the lists of reactants, agents, and products.
+            A tuple of lists of indices from the lists of reactants, agents, and products.
         """
         p = rdk.MolFromSmarts(pattern)
 
@@ -227,11 +227,11 @@ class ChemicalReaction:
         """Finds a SMARTS pattern in a part (reactants, agents, products) of the reaction.
 
         Args:
-            pattern (str): A SMARTS pattern.
+            pattern: A SMARTS pattern.
             reaction_part (ChemicalReactionPart): The reaction part to search.
 
         Returns:
-            List[int]: A list of indices from the list of molecules representing the chosen reaction part.
+            A list of indices from the list of molecules representing the chosen reaction part.
         """
         p = rdk.MolFromSmarts(pattern)
 
@@ -274,10 +274,10 @@ class ChemicalReaction:
         """Remove reactants, agents and products based on their index within the respective lists.
 
         Args:
-            indices (Tuple[List[int], List[int], List[int]]): The indices of the molecules to be removed from the reaction.
+            indices: The indices of the molecules to be removed from the reaction.
 
         Returns:
-            Reaction: Itself with changes applied.
+            Itself with changes applied.
         """
         if len(indices) > 0:
             for idx in sorted(indices[0], reverse=True):
@@ -293,16 +293,28 @@ class ChemicalReaction:
 
         return self
 
+    @overload
+    def filter(self, indices: Tuple[List[int]]) -> "ChemicalReaction":
+        ...
+
+    @overload
+    def filter(self, indices: Tuple[List[int],
+                                    List[int]]) -> "ChemicalReaction":
+        ...
+
     def filter(
             self, indices: Tuple[List[int], List[int],
                                  List[int]]) -> "ChemicalReaction":
+        ...
+
+    def filter(self, indices):
         """Filter for reactants, agents and products based on their index within the respective lists. This is the complement to remove.
 
         Args:
-            indices (Tuple[List[int], List[int], List[int]]): The indices of the molecules to not be removed from the reaction.
+            indices: The indices of the molecules to not be removed from the reaction.
 
         Returns:
-            Reaction: Itself with changes applied.
+            Itself with changes applied.
         """
         if len(indices) > 0 and len(indices[0]) > 0:
             for idx in range(len(self.reactants) - 1, -1, -1):
@@ -329,12 +341,12 @@ class ChemicalReaction:
            The rdkit MolToSmiles argument supplied to this instance will be applied.
 
         Args:
-            sort_reactants (bool, optional): Whether to sort the reactants. Defaults to True.
-            sort_agents (bool, optional): Whether to sort the agents. Defaults to True.
-            sort_products (bool, optional): Whether to sort the products. Defaults to True.
+            sort_reactants: Whether to sort the reactants. Defaults to True.
+            sort_agents: Whether to sort the agents. Defaults to True.
+            sort_products: Whether to sort the products. Defaults to True.
 
         Returns:
-            Reaction: Itself with changes applied.
+            Itself with changes applied.
         """
         # Mol to SMILES here is rather inefficient, but this allows for
         # changes to the Mol objects at any time in the lifecycle of the instance
@@ -365,7 +377,7 @@ class ChemicalReaction:
         """Removes prodcuts that are also found in reactants or agents.
 
         Returns:
-            Reaction: Itself with prodcuts occuring as reactants or agents removed.
+            Itself with prodcuts occuring as reactants or agents removed.
         """
 
         reactants_smiles = self.get_reactants_as_smiles()
@@ -382,7 +394,7 @@ class ChemicalReaction:
         """Checks whether the reactants, agents, or products contain None (usually due to failed rdkit MolFromSmiles).
 
         Returns:
-            bool: Whether the reactants, agents, or products contain None.
+            Whether the reactants, agents, or products contain None.
         """
 
         return None in self.reactants or None in self.agents or None in self.products
@@ -391,7 +403,7 @@ class ChemicalReaction:
         """Removes all None values from the reactants, agents, and products.
 
         Returns:
-            Reaction: Itself with None values removed.
+            Itself with None values removed.
         """
         self.reactants = [m for m in self.reactants if m != None]
         self.agents = [m for m in self.agents if m != None]
