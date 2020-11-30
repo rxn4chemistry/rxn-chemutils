@@ -74,12 +74,12 @@ def test_find_in(chemical_reaction):
 
 def test_remove(chemical_reaction):
     chemical_reaction.remove(([1], [0], [1]))
-    assert len(chemical_reaction.reactants) == 1
+    assert str(chemical_reaction) == "[14C]Cl>>[Na]Cl"
 
 
 def test_filter(chemical_reaction):
     chemical_reaction.filter(([1], [0], [1]))
-    assert len(chemical_reaction.reactants) == 1
+    assert str(chemical_reaction) == "O[Na]>O>[14C]O"
 
 
 def test_sort(chemical_reaction):
