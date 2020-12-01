@@ -1,7 +1,6 @@
 """ Contains the class Reaction representing unidirectional reactions. """
-import re
 from enum import Enum
-from typing import Tuple, List, Dict, Any, overload
+from typing import Tuple, List, Any, overload
 from rdkit.Chem import AllChem as rdk
 from rdkit.Chem.rdchem import Mol
 from rxn_utilities import container_utilities

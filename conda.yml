@@ -12,7 +12,7 @@ dependencies:
     - rxn_utilities @ git+https://${GHE_TOKEN}@github.ibm.com/rxn/rxn_utilities@latest
     - -e .
     # test requirements
-    - flake8==3.7.9
+    - flake8==3.8.4
     - mypy==0.761
     - pytest==5.3.4
     - yapf==0.30.0
