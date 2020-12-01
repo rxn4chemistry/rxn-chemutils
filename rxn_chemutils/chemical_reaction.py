@@ -39,7 +39,7 @@ class ChemicalReaction:
     # Overwrites / Virtuals
     #
 
-    def __len__(self) -> int:
+    def __len__(self):
         """Returns the number of molecules participating in this reaction (reactants, agents, and products).
 
         Returns:
@@ -47,7 +47,7 @@ class ChemicalReaction:
         """
         return len(self.reactants) + len(self.agents) + len(self.products)
 
-    def __str__(self) -> str:
+    def __str__(self):
         """Returns the reaction SMARTS of this instance (reactants>agents>products).
 
         Returns:
