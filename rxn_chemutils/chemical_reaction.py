@@ -24,7 +24,7 @@ class ChemicalReaction:
         Args:
             reaction_smarts (str): A reaction smarts
             remove_duplicates (bool, optional): Whether to remove duplicates from within reactants, agents and products. Defaults to False.
-            sanitize (bool, optional): Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
+            sanitize (bool, optional): Whather to pass the sanitize keyword argument to rdkit's MolFromSmiles.
             kwargs (Any): Keyword arguments supplied to rdkit's MolToSmiles. Defaults: canonical=True
         """
         kwargs.setdefault("canonical", True)
@@ -108,7 +108,7 @@ class ChemicalReaction:
 
         Args:
             reaction_smarts (str): A reaction SMARTS.
-            sanitize (bool): Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
+            sanitize (bool): Whather to pass the sanitize keyword argument to rdkit's MolFromSmiles.
 
         Raises:
             ValueError: This error is raised if a non-valid reaction SMARTS is provided.
