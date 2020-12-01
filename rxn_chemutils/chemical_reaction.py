@@ -4,7 +4,6 @@ from enum import Enum
 from typing import Tuple, List, Dict, Any, overload
 from rdkit.Chem import AllChem as rdk
 from rdkit.Chem.rdchem import Mol
-from rxn_utilities import container_utilities
 
 
 class ChemicalReactionPart(Enum):
@@ -124,10 +123,9 @@ class ChemicalReaction:
             [p.split(".") for p in reaction_smarts.split(">")])
 
         if self.__remove_duplicates:
-            raw_reactants = container_utilities.remove_duplicates(
-                raw_reactants)
-            raw_agents = container_utilities.remove_duplicates(raw_agents)
-            raw_products = container_utilities.remove_duplicates(raw_products)
+            raw_reactants = list(dict.fromkeys(raw_reactants))
+            raw_agents = list(dict.fromkeys(raw_agents))
+            raw_products = list(dict.fromkeys(raw_products))
 
         return (
             [
