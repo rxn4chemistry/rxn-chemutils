@@ -28,7 +28,7 @@ class ChemicalReaction:
             sanitize: Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
             kwargs: Keyword arguments supplied to rdkit's MolToSmiles. Defaults: canonical=True
         """
-        kwargs.setdefault('canonical', True)
+        kwargs.setdefault("canonical", True)
 
         self.__reaction_smarts = reaction_smarts
         self.__remove_duplicates = remove_duplicates
@@ -54,13 +54,13 @@ class ChemicalReaction:
         Returns:
             The reaction SMARTS representing this instance.
         """
-        return ('.'.join([
+        return (".".join([
             rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
             for m in self.reactants if m
-        ]) + '>' + '.'.join([
+        ]) + ">" + ".".join([
             rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
             for m in self.agents if m
-        ]) + '>' + '.'.join([
+        ]) + ">" + ".".join([
             rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
             for m in self.products if m
         ]))
@@ -117,11 +117,11 @@ class ChemicalReaction:
         Returns:
             A tuple of lists of reactants, agents, and products representing the reaction.
         """
-        if reaction_smarts.count('>') != 2:
-            raise ValueError('A valid SMARTS reaction must contain two ">".')
+        if reaction_smarts.count(">") != 2:
+            raise ValueError("A valid SMARTS reaction must contain two '>'.")
 
         raw_reactants, raw_agents, raw_products = tuple(
-            [p.split('.') for p in reaction_smarts.split('>')])
+            [p.split(".") for p in reaction_smarts.split(">")])
 
         if self.__remove_duplicates:
             raw_reactants = container_utilities.remove_duplicates(
@@ -132,15 +132,15 @@ class ChemicalReaction:
         return (
             [
                 rdk.MolFromSmiles(reactant, sanitize=sanitize)
-                for reactant in raw_reactants if reactant != ''
+                for reactant in raw_reactants if reactant != ""
             ],
             [
                 rdk.MolFromSmiles(agent, sanitize=sanitize)
-                for agent in raw_agents if agent != ''
+                for agent in raw_agents if agent != ""
             ],
             [
                 rdk.MolFromSmiles(product, sanitize=sanitize)
-                for product in raw_products if product != ''
+                for product in raw_products if product != ""
             ],
         )
 
@@ -258,15 +258,18 @@ class ChemicalReaction:
         return []
 
     @overload
-    def remove(self, indices: Tuple[List[int]]) -> None:
+    def remove(self, indices: Tuple[List[int]]) -> "ChemicalReaction":
         ...
 
     @overload
-    def remove(self, indices: Tuple[List[int], List[int]]) -> None:
+    def remove(self, indices: Tuple[List[int],
+                                    List[int]]) -> "ChemicalReaction":
         ...
 
     @overload
-    def remove(self, indices: Tuple[List[int], List[int], List[int]]) -> None:
+    def remove(
+            self, indices: Tuple[List[int], List[int],
+                                 List[int]]) -> "ChemicalReaction":
         ...
 
     def remove(self, indices):
@@ -274,6 +277,9 @@ class ChemicalReaction:
 
         Args:
             indices: The indices of the molecules to be removed from the reaction.
+
+        Returns:
+            Itself with changes applied.
         """
         if len(indices) > 0:
             for idx in sorted(indices[0], reverse=True):
@@ -287,16 +293,20 @@ class ChemicalReaction:
             for idx in sorted(indices[2], reverse=True):
                 del self.products[idx]
 
+        return self
+
     @overload
-    def filter(self, indices: Tuple[List[int]]) -> None:
+    def filter(self, indices: Tuple[List[int]]) -> "ChemicalReaction":
         ...
 
     @overload
-    def filter(self, indices: Tuple[List[int], List[int]]) -> None:
+    def filter(self, indices: Tuple[List[int],
+                                    List[int]]) -> "ChemicalReaction":
         ...
 
-    @overload
-    def filter(self, indices: Tuple[List[int], List[int], List[int]]) -> None:
+    def filter(
+            self, indices: Tuple[List[int], List[int],
+                                 List[int]]) -> "ChemicalReaction":
         ...
 
     def filter(self, indices):
@@ -304,6 +314,9 @@ class ChemicalReaction:
 
         Args:
             indices: The indices of the molecules to not be removed from the reaction.
+
+        Returns:
+            Itself with changes applied.
         """
         if len(indices) > 0 and len(indices[0]) > 0:
             for idx in range(len(self.reactants) - 1, -1, -1):
@@ -320,10 +333,12 @@ class ChemicalReaction:
                 if idx not in indices[2]:
                     del self.products[idx]
 
+        return self
+
     def sort(self,
              sort_reactants=True,
              sort_agents=True,
-             sort_products=True) -> None:
+             sort_products=True) -> "ChemicalReaction":
         """Order the molecules participating in this reaction based on their SMILES strings.
            The rdkit MolToSmiles argument supplied to this instance will be applied.
 
@@ -331,6 +346,9 @@ class ChemicalReaction:
             sort_reactants: Whether to sort the reactants. Defaults to True.
             sort_agents: Whether to sort the agents. Defaults to True.
             sort_products: Whether to sort the products. Defaults to True.
+
+        Returns:
+            Itself with changes applied.
         """
         # Mol to SMILES here is rather inefficient, but this allows for
         # changes to the Mol objects at any time in the lifecycle of the instance
@@ -355,8 +373,14 @@ class ChemicalReaction:
                                               ),
             )
 
-    def remove_precursors_from_products(self) -> None:
-        """Removes prodcuts that are also found in reactants or agents."""
+        return self
+
+    def remove_precursors_from_products(self) -> "ChemicalReaction":
+        """Removes prodcuts that are also found in reactants or agents.
+
+        Returns:
+            Itself with prodcuts occuring as reactants or agents removed.
+        """
 
         reactants_smiles = self.get_reactants_as_smiles()
         agents_smiles = self.get_agents_as_smiles()
@@ -365,6 +389,8 @@ class ChemicalReaction:
         for i, product in reversed(list(enumerate(products_smiles))):
             if product in reactants_smiles or product in agents_smiles:
                 del self.products[i]
+
+        return self
 
     def has_none(self) -> bool:
         """Checks whether the reactants, agents, or products contain None (usually due to failed rdkit MolFromSmiles).
@@ -375,11 +401,17 @@ class ChemicalReaction:
 
         return None in self.reactants or None in self.agents or None in self.products
 
-    def remove_none(self) -> None:
-        """Removes all None values from the reactants, agents, and products."""
+    def remove_none(self) -> "ChemicalReaction":
+        """Removes all None values from the reactants, agents, and products.
+
+        Returns:
+            Itself with None values removed.
+        """
         self.reactants = [m for m in self.reactants if m is not None]
         self.agents = [m for m in self.agents if m is not None]
         self.products = [m for m in self.products if m is not None]
+
+        return self
 
     #
     # Static Methods
