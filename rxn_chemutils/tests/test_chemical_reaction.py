@@ -9,8 +9,9 @@ def chemical_reaction():
 
 @pytest.fixture
 def duplicate_chemical_reaction():
-    return ChemicalReaction('[14C]Cl.[14C]Cl.[Na]O>O.O>[Na]Cl.[Na]Cl.[14C]O',
-                            remove_duplicates=True)
+    return ChemicalReaction(
+        '[14C]Cl.[14C]Cl.[Na]O>O.O>[Na]Cl.[Na]Cl.[14C]O', remove_duplicates=True
+    )
 
 
 @pytest.fixture
@@ -31,8 +32,7 @@ def test_str(chemical_reaction):
 
 
 def test_eq(chemical_reaction):
-    chemical_reaction_reversed = ChemicalReaction(
-        '[Na]Cl.[14C]O>O>[14C]Cl.[Na]O')
+    chemical_reaction_reversed = ChemicalReaction('[Na]Cl.[14C]O>O>[14C]Cl.[Na]O')
     assert chemical_reaction == chemical_reaction
     assert chemical_reaction != chemical_reaction_reversed
 
@@ -66,8 +66,7 @@ def test_find(chemical_reaction):
 
 
 def test_find_in(chemical_reaction):
-    assert chemical_reaction.find_in('O',
-                                     ChemicalReactionPart.reactants) == [1]
+    assert chemical_reaction.find_in('O', ChemicalReactionPart.reactants) == [1]
     assert chemical_reaction.find_in('O', ChemicalReactionPart.agents) == [0]
     assert chemical_reaction.find_in('O', ChemicalReactionPart.products) == [1]
 

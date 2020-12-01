@@ -10,13 +10,12 @@ from .reaction_equation import ReactionEquation
 
 
 class UnsupportedExtendedReactionSmiles(ValueError):
+
     def __init__(self, reaction_smiles: str):
-        super().__init__(
-            f'The syntax of "{reaction_smiles}" is not supported by RDKit.')
+        super().__init__(f'The syntax of "{reaction_smiles}" is not supported by RDKit.')
 
 
-def parse_extended_reaction_smiles(
-        extended_reaction_smiles: str) -> ReactionEquation:
+def parse_extended_reaction_smiles(extended_reaction_smiles: str) -> ReactionEquation:
     """
     Convert an extended reaction SMILES (with potential fragment information)
     to a ReactionEquation instance.
@@ -48,10 +47,10 @@ class _Importer:
     """
     Convert extended reaction SMILES to ReactionEquation instances.
     """
+
     @staticmethod
     def convert(reaction_smiles: str) -> ReactionEquation:
-        pure_smiles, fragment_info = split_smiles_and_fragment_info(
-            reaction_smiles)
+        pure_smiles, fragment_info = split_smiles_and_fragment_info(reaction_smiles)
 
         # Parse the reaction with RDKit
         try:
@@ -65,12 +64,11 @@ class _Importer:
             raise UnsupportedExtendedReactionSmiles(reaction_smiles)
 
     @staticmethod
-    def process_reaction_participants(rxn: ChemicalReaction,
-                                      fragment_info: str) -> ReactionEquation:
+    def process_reaction_participants(
+        rxn: ChemicalReaction, fragment_info: str
+    ) -> ReactionEquation:
         raw_mol_groups = [rxn.reactants, rxn.agents, rxn.products]
-        raw_smiles_groups = [
-            _Importer.convert_to_smiles(group) for group in raw_mol_groups
-        ]
+        raw_smiles_groups = [_Importer.convert_to_smiles(group) for group in raw_mol_groups]
 
         fragment_groups = determine_fragment_groups(fragment_info)
         groups = _Importer.group_fragments(raw_smiles_groups, fragment_groups)
@@ -93,7 +91,8 @@ class _Importer:
         offset = 0
         for raw_smiles_group in raw_smiles_groups:
             merged_smiles_group = merge_molecules_from_fragment_groups(
-                raw_smiles_group, fragment_groups, offset)
+                raw_smiles_group, fragment_groups, offset
+            )
             merged_groups.append(merged_smiles_group)
             offset += len(raw_smiles_group)
 
@@ -104,22 +103,21 @@ class _Exporter:
     """
     Convert ReactionEquation to extended reaction SMILES with fragment information.
     """
+
     @staticmethod
     def convert(reaction: ReactionEquation) -> str:
         offset = 0
-        reactants, reactant_groups = _Exporter.fragment_group(
-            reaction.reactants, offset)
+        reactants, reactant_groups = _Exporter.fragment_group(reaction.reactants, offset)
         offset += len(reactants)
-        agents, agent_groups = _Exporter.fragment_group(
-            reaction.agents, offset)
+        agents, agent_groups = _Exporter.fragment_group(reaction.agents, offset)
         offset += len(agents)
-        products, product_groups = _Exporter.fragment_group(
-            reaction.products, offset)
+        products, product_groups = _Exporter.fragment_group(reaction.products, offset)
 
         groups = reactant_groups + agent_groups + product_groups
 
-        smiles_groups = ('.'.join(smiles for smiles in group)
-                         for group in (reactants, agents, products))
+        smiles_groups = (
+            '.'.join(smiles for smiles in group) for group in (reactants, agents, products)
+        )
         smiles_without_fragment_info = '>'.join(smiles_groups)
 
         if not groups:
@@ -129,8 +127,7 @@ class _Exporter:
         return f'{smiles_without_fragment_info} {fragment_info}'
 
     @staticmethod
-    def fragment_group(compounds: List[str],
-                       offset: int) -> Tuple[List[str], List[List[int]]]:
+    def fragment_group(compounds: List[str], offset: int) -> Tuple[List[str], List[List[int]]]:
         """
         Converts a group of molecules, some of which possibly are composed of several fragments,
         to the list of SMILES to put in the final reaction SMILES, and a list of groups of molecules
@@ -154,9 +151,7 @@ class _Exporter:
 
             number_fragments = len(molecules)
             if number_fragments > 1:
-                groups.append(
-                    list(range(current_index,
-                               current_index + number_fragments)))
+                groups.append(list(range(current_index, current_index + number_fragments)))
 
             current_index += number_fragments
 
@@ -189,9 +184,9 @@ def determine_fragment_groups(fragment_info: str) -> List[List[int]]:
     return groups
 
 
-def merge_molecules_from_fragment_groups(smiles_list: List[str],
-                                         fragment_groups: List[List[int]],
-                                         offset: int) -> List[str]:
+def merge_molecules_from_fragment_groups(
+    smiles_list: List[str], fragment_groups: List[List[int]], offset: int
+) -> List[str]:
     """
     Combine molecules according to the fragment definition.
 
@@ -220,8 +215,7 @@ def merge_molecules_from_fragment_groups(smiles_list: List[str],
             raise ValueError()
 
         if all_in_range:
-            merged_molecule = '.'.join(smiles_list[i]
-                                       for i in relative_indices)
+            merged_molecule = '.'.join(smiles_list[i] for i in relative_indices)
             merged_molecules.append(canonicalize_smiles(merged_molecule))
             merged_indices.update(relative_indices)
 

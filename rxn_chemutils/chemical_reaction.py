@@ -15,11 +15,14 @@ class ChemicalReactionPart(Enum):
 
 
 class ChemicalReaction:
-    def __init__(self,
-                 reaction_smarts: str,
-                 remove_duplicates: bool = False,
-                 sanitize: bool = True,
-                 **kwargs: Any):
+
+    def __init__(
+        self,
+        reaction_smarts: str,
+        remove_duplicates: bool = False,
+        sanitize: bool = True,
+        **kwargs: Any
+    ):
         """Creates a new instance of type Reaction based on a reaction SMARTs.
 
         Args:
@@ -34,7 +37,8 @@ class ChemicalReaction:
         self.__remove_duplicates = remove_duplicates
         self.__smiles_to_mol_kwargs = kwargs
         self.reactants, self.agents, self.products = self.__reaction_to_mols(
-            self.__reaction_smarts, sanitize)
+            self.__reaction_smarts, sanitize
+        )
 
     #
     # Overwrites / Virtuals
@@ -54,16 +58,15 @@ class ChemicalReaction:
         Returns:
             The reaction SMARTS representing this instance.
         """
-        return ('.'.join([
-            rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
-            for m in self.reactants if m
-        ]) + '>' + '.'.join([
-            rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
-            for m in self.agents if m
-        ]) + '>' + '.'.join([
-            rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
-            for m in self.products if m
-        ]))
+        return (
+            '.'.join(
+                [rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs) for m in self.reactants if m]
+            ) + '>' + '.'.join(
+                [rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs) for m in self.agents if m]
+            ) + '>' + '.'.join(
+                [rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs) for m in self.products if m]
+            )
+        )
 
     def __eq__(self, other) -> bool:
         """Compares the count, order, and SMILES string of each molecule in this reaction.
@@ -102,9 +105,8 @@ class ChemicalReaction:
     # Private Methods
     #
 
-    def __reaction_to_mols(
-            self, reaction_smarts: str,
-            sanitize: bool) -> Tuple[List[Mol], List[Mol], List[Mol]]:
+    def __reaction_to_mols(self, reaction_smarts: str,
+                           sanitize: bool) -> Tuple[List[Mol], List[Mol], List[Mol]]:
         """Creates a tuple of lists of reactants, agents, and products as rdkit Mol instances from a reaction SMARTS.
 
         Args:
@@ -121,26 +123,23 @@ class ChemicalReaction:
             raise ValueError('A valid SMARTS reaction must contain two ">".')
 
         raw_reactants, raw_agents, raw_products = tuple(
-            [p.split('.') for p in reaction_smarts.split('>')])
+            [p.split('.') for p in reaction_smarts.split('>')]
+        )
 
         if self.__remove_duplicates:
-            raw_reactants = container_utilities.remove_duplicates(
-                raw_reactants)
+            raw_reactants = container_utilities.remove_duplicates(raw_reactants)
             raw_agents = container_utilities.remove_duplicates(raw_agents)
             raw_products = container_utilities.remove_duplicates(raw_products)
 
         return (
             [
-                rdk.MolFromSmiles(reactant, sanitize=sanitize)
-                for reactant in raw_reactants if reactant != ''
+                rdk.MolFromSmiles(reactant, sanitize=sanitize) for reactant in raw_reactants
+                if reactant != ''
             ],
+            [rdk.MolFromSmiles(agent, sanitize=sanitize) for agent in raw_agents if agent != ''],
             [
-                rdk.MolFromSmiles(agent, sanitize=sanitize)
-                for agent in raw_agents if agent != ''
-            ],
-            [
-                rdk.MolFromSmiles(product, sanitize=sanitize)
-                for product in raw_products if product != ''
+                rdk.MolFromSmiles(product, sanitize=sanitize) for product in raw_products
+                if product != ''
             ],
         )
 
@@ -156,8 +155,7 @@ class ChemicalReaction:
         return rdk.MolToSmiles(mol, **self.__smiles_to_mol_kwargs)
 
     def __mols_equal(self, first_mol: Mol, second_mol: Mol) -> bool:
-        return self.__mol_to_smiles(first_mol) == self.__mol_to_smiles(
-            second_mol)
+        return self.__mol_to_smiles(first_mol) == self.__mol_to_smiles(second_mol)
 
     #
     # Pubilc Methods
@@ -170,8 +168,8 @@ class ChemicalReaction:
             A list of SMILES of the reactants.
         """
         return [
-            rdk.MolToSmiles(reactant, **self.__smiles_to_mol_kwargs)
-            for reactant in self.reactants if reactant
+            rdk.MolToSmiles(reactant, **self.__smiles_to_mol_kwargs) for reactant in self.reactants
+            if reactant
         ]
 
     def get_agents_as_smiles(self) -> List[str]:
@@ -181,8 +179,7 @@ class ChemicalReaction:
             A list of SMILES of the agents.
         """
         return [
-            rdk.MolToSmiles(agent, **self.__smiles_to_mol_kwargs)
-            for agent in self.agents if agent
+            rdk.MolToSmiles(agent, **self.__smiles_to_mol_kwargs) for agent in self.agents if agent
         ]
 
     def get_products_as_smiles(self) -> List[str]:
@@ -192,8 +189,8 @@ class ChemicalReaction:
             A list of SMILES of the products.
         """
         return [
-            rdk.MolToSmiles(product, **self.__smiles_to_mol_kwargs)
-            for product in self.products if product
+            rdk.MolToSmiles(product, **self.__smiles_to_mol_kwargs) for product in self.products
+            if product
         ]
 
     def find(self, pattern: str) -> Tuple[List[int], List[int], List[int]]:
@@ -214,18 +211,14 @@ class ChemicalReaction:
                 i for i, m in enumerate(self.reactants)
                 if m and len(list(m.GetSubstructMatch(p))) > 0
             ],
-            [
-                i for i, m in enumerate(self.agents)
-                if m and len(list(m.GetSubstructMatch(p))) > 0
-            ],
+            [i for i, m in enumerate(self.agents) if m and len(list(m.GetSubstructMatch(p))) > 0],
             [
                 i for i, m in enumerate(self.products)
                 if m and len(list(m.GetSubstructMatch(p))) > 0
             ],
         )
 
-    def find_in(self, pattern: str,
-                reaction_part: ChemicalReactionPart) -> List[int]:
+    def find_in(self, pattern: str, reaction_part: ChemicalReactionPart) -> List[int]:
         """Finds a SMARTS pattern in a part (reactants, agents, products) of the reaction.
 
         Args:
@@ -245,8 +238,7 @@ class ChemicalReaction:
 
         if reaction_part == ChemicalReactionPart.agents:
             return [
-                i for i, m in enumerate(self.agents)
-                if m and len(list(m.GetSubstructMatch(p))) > 0
+                i for i, m in enumerate(self.agents) if m and len(list(m.GetSubstructMatch(p))) > 0
             ]
 
         if reaction_part == ChemicalReactionPart.products:
@@ -320,10 +312,7 @@ class ChemicalReaction:
                 if idx not in indices[2]:
                     del self.products[idx]
 
-    def sort(self,
-             sort_reactants=True,
-             sort_agents=True,
-             sort_products=True) -> None:
+    def sort(self, sort_reactants=True, sort_agents=True, sort_products=True) -> None:
         """Order the molecules participating in this reaction based on their SMILES strings.
            The rdkit MolToSmiles argument supplied to this instance will be applied.
 
@@ -337,22 +326,19 @@ class ChemicalReaction:
         if sort_reactants:
             self.reactants = sorted(
                 self.reactants,
-                key=lambda m: rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs
-                                              ),
+                key=lambda m: rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs),
             )
 
         if sort_agents:
             self.agents = sorted(
                 self.agents,
-                key=lambda m: rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs
-                                              ),
+                key=lambda m: rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs),
             )
 
         if sort_products:
             self.products = sorted(
                 self.products,
-                key=lambda m: rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs
-                                              ),
+                key=lambda m: rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs),
             )
 
     def remove_precursors_from_products(self) -> None:
