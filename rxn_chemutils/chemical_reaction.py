@@ -407,9 +407,9 @@ class ChemicalReaction:
         Returns:
             Itself with None values removed.
         """
-        self.reactants = [m for m in self.reactants if m is not None]
-        self.agents = [m for m in self.agents if m is not None]
-        self.products = [m for m in self.products if m is not None]
+        self.reactants = [m for m in self.reactants if m != None]
+        self.agents = [m for m in self.agents if m != None]
+        self.products = [m for m in self.products if m != None]
 
         return self
 
