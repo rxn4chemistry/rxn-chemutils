@@ -1,7 +1,7 @@
 """ Contains the class Reaction representing unidirectional reactions. """
 import re
 from enum import Enum
-from typing import Tuple, List, Dict, Any, overload
+from typing import Tuple, List, Dict, Any
 from rdkit.Chem import AllChem as rdk
 from rdkit.Chem.rdchem import Mol
 
@@ -255,22 +255,10 @@ class ChemicalReaction:
 
         return []
 
-    @overload
-    def remove(self, indices: Tuple[List[int]]) -> "ChemicalReaction":
-        ...
-
-    @overload
-    def remove(self, indices: Tuple[List[int],
-                                    List[int]]) -> "ChemicalReaction":
-        ...
-
-    @overload
+    # Annotate the return type as Reaction... Python...
     def remove(
             self, indices: Tuple[List[int], List[int],
                                  List[int]]) -> "ChemicalReaction":
-        ...
-
-    def remove(self, indices):
         """Remove reactants, agents and products based on their index within the respective lists.
 
         Args:
