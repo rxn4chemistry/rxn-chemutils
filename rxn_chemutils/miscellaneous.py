@@ -1,3 +1,4 @@
+import re
 import typing
 from collections import Counter
 from typing import List
@@ -44,3 +45,21 @@ def atom_type_counter(smiles: str) -> typing.Counter[str]:
     mol: Mol = AddHs(MolFromSmiles(smiles))
     atoms: List[Atom] = mol.GetAtoms()
     return Counter(atom.GetSymbol() for atom in atoms)
+
+
+def remove_atom_mapping(smiles: str) -> str:
+    """
+    Remove the atom mapping of a reaction SMILES.
+
+    The resulting SMILES strings will still contain brackets and it may be
+    advisable to canonicalize them as a postprocessing step.
+
+    Args:
+        smiles: SMILES string potentially containing mapping information.
+
+    Returns:
+        A SMILES string without atom mapping information.
+    """
+
+    # We look for ":" followed by digits before a "]"
+    return re.sub(r':\d+]', ']', smiles)
