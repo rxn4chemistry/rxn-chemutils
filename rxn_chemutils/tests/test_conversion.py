@@ -3,7 +3,7 @@ import pytest
 from rxn_chemutils.conversion import (
     smiles_to_mol, InvalidSmiles, inchify_smiles, canonicalize_smiles,
     inchify_smiles_with_fragment_bonds, canonicalize_smiles_with_fragment_bonds,
-    canonicalize_reaction_smiles, split_smiles_and_fragment_info
+    canonicalize_reaction_smiles, split_smiles_and_fragment_info, cleanup_smiles
 )
 
 
@@ -80,6 +80,50 @@ def test_canonicalize_reaction_smiles_with_fragments():
                         '>ClCCl.ClCCl.O=C([O-])[O-].[Cs+].[Cs+]' \
                         '>CC(C)(C)[S@@](=O)/N=C/c1cccc(Br)c1' \
                         ' |f:4.5.6|'
+
+
+def test_cleanup_smiles():
+    # Basic checks
+    assert cleanup_smiles('C') == 'C'
+    assert cleanup_smiles('[C]') == '[C]'
+    assert cleanup_smiles('[CH4]') == 'C'
+    assert cleanup_smiles('C[C]C') == 'C[C]C'
+    assert cleanup_smiles('C[CH2]C') == 'CCC'
+
+    # Removes unnecessary dashes and parentheses
+    assert cleanup_smiles('C-C') == 'CC'
+    assert cleanup_smiles('C(C)') == 'CC'
+
+    # Does not do any canonicalization
+    assert cleanup_smiles('C(C)O') == 'C(C)O'
+
+    # Does not do any kekulization / aromatization
+    assert cleanup_smiles('c1ccccc1') == 'c1ccccc1'
+    assert cleanup_smiles('C1=CC=CC=C1') == 'C1=CC=CC=C1'
+
+    # Does not mess up with fragment molecules
+    assert cleanup_smiles('[C].[Pd]') == '[C].[Pd]'
+    assert cleanup_smiles('[Pd].[C]') == '[Pd].[C]'
+
+    # Does no valence check
+    carbon_with_eight_neighbours = 'C(C)(C)(C)(C)(C)(C)(C)C'
+    assert cleanup_smiles(carbon_with_eight_neighbours) == carbon_with_eight_neighbours
+    na_with_two_neighbors = '[Na]1OS(=O)(=O)O1'
+    assert cleanup_smiles(na_with_two_neighbors) == na_with_two_neighbors
+
+    # More complex example. It is not possible to avoid some reordering here,
+    # it should actually be CC(C)c1ccc(cc1)C(=O)CCCCl.
+    assert cleanup_smiles(
+        '[CH3][CH]([CH3])[c]1[cH][cH][c]([cH][cH]1)[C](=[O])[CH2][CH2][CH2][Cl]'
+    ) == 'CC(C)c1ccc(C(=O)CCCCl)cc1'
+
+    # Raises for invalid atom types
+    with pytest.raises(InvalidSmiles):
+        cleanup_smiles('CC[Invalid]O')
+
+    # Raises for empty string
+    with pytest.raises(InvalidSmiles):
+        cleanup_smiles('')
 
 
 def test_split_reaction_smiles():

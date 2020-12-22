@@ -2,7 +2,7 @@ from typing import List
 
 from rxn_chemutils.reaction_equation import (
     ReactionEquation, merge_reactants_and_agents, sort_compounds, canonicalize_compounds,
-    remove_duplicate_compounds, has_repeated_molecules, rxn_standardization
+    remove_duplicate_compounds, has_repeated_molecules, rxn_standardization, cleanup_compounds
 )
 from rxn_chemutils.conversion import canonicalize_smiles
 
@@ -47,6 +47,15 @@ def test_canonicalize_compounds():
         [canonicalize_smiles(s) for s in products]
     )
     assert canonicalized_reaction == expected
+
+
+def test_cleanup_compounds():
+    reaction = ReactionEquation(['CC[CH2]C', 'C-C'], [], ['[C].[Pd]'])
+
+    clean_reaction = cleanup_compounds(reaction)
+    expected = ReactionEquation(['CCCC', 'CC'], [], ['[C].[Pd]'])
+
+    assert clean_reaction == expected
 
 
 def test_remove_duplicate_compounds():

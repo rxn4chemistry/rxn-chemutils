@@ -50,6 +50,28 @@ def test_from_reaction_smiles_with_NaH():
     assert reaction.products == ['C(C)OC(=O)C1=C(N)C2=C(O1)CCCC2']
 
 
+def test_from_reaction_smiles_with_rdkit_problem():
+    # A previous version relying more on RDKit returned, as a reactant, 'C.[Pd]'.
+    reaction_smiles = '[C].[Pd]>CC>CCO |f:0.1|'
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
+    assert reaction.reactants == ['[C].[Pd]']
+    assert reaction.agents == ['CC']
+    assert reaction.products == ['CCO']
+
+    # Related example from Pistachio
+    reaction_smiles = (
+        '[CH3:24][C:23]([CH3:25])([CH3:26])[O:22][C:20](=[O:21])[N:10]1[C@@H:11]([CH2:12][CH2:13]'
+        '[C@@H:9]1[C:4]2=[CH:3][C:2](=[C:7]([CH:6]=[CH:5]2)[F:8])[F:1])/[CH:14]=[CH:15]/[C:16]'
+        '(=[O:17])[O:18][CH3:19]>[HH].[C].CCOC(=O)C.[Pd]>[CH3:24][C:23]([CH3:25])([CH3:26])[O:22]'
+        '[C:20](=[O:21])[N:10]1[C@@H:11]([CH2:12][CH2:13][C@@H:9]1[C:4]2=[CH:3][C:2](=[C:7]([CH:6]'
+        '=[CH:5]2)[F:8])[F:1])[CH2:14][CH2:15][C:16](=[O:17])[O:18][CH3:19] |f:2.4|'
+    )
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
+    assert reaction.reactants == ['CC(C)(C)OC(=O)N1[C@H](/C=C/C(=O)OC)CC[C@@H]1C1=CC(F)=C(F)C=C1']
+    assert reaction.agents == ['[HH]', 'CCOC(=O)C', '[C].[Pd]']
+    assert reaction.products == ['CC(C)(C)OC(=O)N1[C@H](CCC(=O)OC)CC[C@@H]1C1=CC(F)=C(F)C=C1']
+
+
 def test_to_reaction_smiles():
     reactants = ['CC1=CC(F)=C(Br)C=C1']
     agents = ['[Li]CCCC', 'C1CCOC1']

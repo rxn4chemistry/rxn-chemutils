@@ -3,7 +3,7 @@ from typing import List, Iterator, Optional
 import attr
 from rxn_utilities.container_utilities import remove_duplicates
 
-from .conversion import canonicalize_smiles
+from .conversion import canonicalize_smiles, cleanup_smiles
 
 
 @attr.s(auto_attribs=True)
@@ -96,6 +96,16 @@ def remove_duplicate_compounds(reaction: ReactionEquation) -> ReactionEquation:
     """
     groups_without_duplicates = (remove_duplicates(group) for group in reaction)
     return ReactionEquation(*groups_without_duplicates)
+
+
+def cleanup_compounds(reaction: ReactionEquation) -> ReactionEquation:
+    """
+    Basic cleanup of the compounds.
+    """
+    clean_compound_groups = (
+        [cleanup_smiles(s) for s in compound_group] for compound_group in reaction
+    )
+    return ReactionEquation(*clean_compound_groups)
 
 
 def rxn_standardization(reaction: ReactionEquation) -> ReactionEquation:

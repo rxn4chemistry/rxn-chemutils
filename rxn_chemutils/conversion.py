@@ -2,11 +2,11 @@ import re
 from typing import Sequence, List, Tuple
 
 from rdkit import RDLogger
-from rdkit.Chem import MolFromInchi, MolToInchi
+from rdkit.Chem import MolFromInchi, MolToInchi, SanitizeMol, SANITIZE_FINDRADICALS
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles
 
-from rxn_chemutils.rdkit_utils import remove_atom_mapping
+from rxn_chemutils.rdkit_utils import clear_atom_mapping
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
@@ -109,7 +109,7 @@ def canonicalize_reaction_smiles(reaction_smiles: str) -> str:
 
     mol_groups = [convert_group_to_mols(smiles_group) for smiles_group in raw_smiles_groups]
     for group in mol_groups:
-        remove_atom_mapping(group)
+        clear_atom_mapping(group)
 
     smiles_groups = [mols_to_smiles(group) for group in mol_groups]
 
@@ -121,6 +121,30 @@ def canonicalize_reaction_smiles(reaction_smiles: str) -> str:
         canonical_reaction_smiles += f' {fragment_info}'
 
     return canonical_reaction_smiles
+
+
+def cleanup_smiles(smiles: str) -> str:
+    """
+    Cleanup a SMILES string, doing the bare minimum.
+
+    This means that no canonicalization, no valence check, no kekulization, etc,
+    will be done.
+    See the unit tests for examples.
+
+    A minimal sanitization (SANITIZE_FINDRADICALS) is necessary, otherwise
+    "[C]" is converted to "C".
+
+    Args:
+        smiles: SMILES to clean up.
+
+    Returns:
+        A cleaned-up SMILES string.
+    """
+    mol = MolFromSmiles(smiles, sanitize=False)
+    if not smiles or mol is None:
+        raise InvalidSmiles(smiles)
+    SanitizeMol(mol, sanitizeOps=SANITIZE_FINDRADICALS)
+    return MolToSmiles(mol, canonical=False)
 
 
 def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:

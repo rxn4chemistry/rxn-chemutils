@@ -3,7 +3,7 @@ from typing import Sequence
 from rdkit.Chem.rdchem import Mol
 
 
-def remove_atom_mapping(mols: Sequence[Mol]) -> None:
+def clear_atom_mapping(mols: Sequence[Mol]) -> None:
     """
     Remove the mapping information in RDKit Mol objects.
     """
