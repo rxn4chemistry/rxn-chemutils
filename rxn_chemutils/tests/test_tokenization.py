@@ -22,7 +22,7 @@ def test_to_tokens():
             to_tokens(smiles)
         except TokenizationError as exception:
             assert exception.title == 'SmilesJoinedTokensMismatch'
-            assert exception.detail == 'SMILES=CCZCC != joined_tokens=CCCC'
+            assert exception.detail == 'SMILES="CCZCC" != joined_tokens="CCCC"'
             raise
 
 

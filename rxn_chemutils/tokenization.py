@@ -38,8 +38,7 @@ def to_tokens(smiles: str) -> List[str]:
 
     if smiles != ''.join(tokens):
         raise TokenizationError(
-            'SmilesJoinedTokensMismatch',
-            'SMILES={} != joined_tokens={}'.format(smiles, ''.join(tokens))
+            'SmilesJoinedTokensMismatch', f'SMILES="{smiles}" != joined_tokens="{"".join(tokens)}"'
         )
 
     return tokens

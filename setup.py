@@ -2,7 +2,7 @@ import io
 import os
 import re
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 match = re.search(
     r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
@@ -16,7 +16,7 @@ setup(
     name='rxn_chemutils',
     version=__version__,
     author='IBM RXN team',
-    packages=['rxn_chemutils'],
+    packages=find_packages(),
     package_data={'rxn_chemutils': ['py.typed']},
     install_requires=[
         'attrs>=19.1.0',
