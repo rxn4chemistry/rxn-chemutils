@@ -1,34 +1,111 @@
+import operator
 import re
-from typing import Sequence, List, Tuple
+from functools import reduce
+from typing import Sequence, List, Tuple, Optional, Union
 
-from rdkit import RDLogger
-from rdkit.Chem import MolFromInchi, MolToInchi, SanitizeMol, SANITIZE_FINDRADICALS
+from rdkit import RDLogger, Chem
+from rdkit.Chem import MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles
 
+from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
 from rxn_chemutils.rdkit_utils import clear_atom_mapping
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
 
-class InvalidSmiles(ValueError):
-
-    def __init__(self, smiles: str):
-        super().__init__(f'"{smiles}" is not a valid SMILES string')
-
-
-def canonicalize_smiles(smiles: str) -> str:
+def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:
     """
-    Canonicalizes a SMILES string for a molecule
+    Convert a SMILES string to an RDKit Mol.
+
+    Mainly a wrapper around MolFromSmiles that raises InvalidSmiles when necessary.
+
+    Raises:
+        InvalidSmiles for empty or invalid SMILES strings.
+
+    Args:
+        smiles: SMILES string to convert.
+        sanitize: whether to sanitize the molecules or not. Note: sanitization here
+            corresponds to doing a sanitization with SANITIZE_ALL.
+
+    Returns:
+        Mol instance.
     """
-    # Raise for empty SMILES
-    if not smiles:
+    mol = MolFromSmiles(smiles, sanitize=sanitize)
+    if not smiles or mol is None:
         raise InvalidSmiles(smiles)
+    return mol
+
+
+def mol_to_smiles(mol: Mol, canonical: bool = True) -> str:
+    """
+    Convert an RDKit Mol to a SMILES string.
+
+    Mainly a wrapper around MolToSmiles.
+    """
+    return MolToSmiles(mol, canonical=canonical)
+
+
+def sanitize_mol(
+    mol: Mol,
+    *,
+    include_sanitizations: Optional[List[Union[SanitizeFlags, int]]] = None,
+    exclude_sanitizations: Optional[List[Union[SanitizeFlags, int]]] = None
+) -> None:
+    """
+    Sanitize an RDKit Mol with the specification of sanitizations to include or
+    to exclude.
+
+    Raises:
+        SanitizationError for unsuccessful sanitizations
+
+    Args:
+        mol: molecule to sanitize
+        include_sanitizations: sanitizations to do. Exclusive with exclude_sanitizations.
+        exclude_sanitizations: sanitizations to exclude, all the other ones will
+            be applied. Exclusive with include_sanitizations.
+    """
+    if include_sanitizations is not None and exclude_sanitizations is None:
+        sanitize_ops = reduce(operator.or_, include_sanitizations, 0)
+    elif include_sanitizations is None and exclude_sanitizations is not None:
+        sanitize_ops = reduce(operator.xor, exclude_sanitizations, Chem.SANITIZE_ALL)
+    else:
+        raise ValueError(
+            'Exactly one of include_sanitizations or exclude_sanitizations must be given.'
+        )
 
     try:
-        return MolToSmiles(MolFromSmiles(smiles))
-    except Exception:
-        raise InvalidSmiles(smiles)
+        SanitizeMol(mol, sanitizeOps=sanitize_ops)
+    except Exception as e:
+        raise SanitizationError(mol) from e
+
+
+def canonicalize_smiles(smiles: str, check_valence: bool = True) -> str:
+    """
+    Canonicalize a SMILES string for a molecule.
+
+    Args:
+        smiles: SMILES string to canonicalize.
+        check_valence: if False, will not do any valence check.
+
+    Raises:
+        InvalidSmiles for problems in parsing SMILES or in the sanitization.
+
+    Returns:
+        Canonicalized SMILES string.
+    """
+    mol = smiles_to_mol(smiles, sanitize=False)
+
+    # Sanitization as a separate step, to enable exclusion of valence check
+    try:
+        excluded_sanitizations = []
+        if not check_valence:
+            excluded_sanitizations.append(Chem.SANITIZE_PROPERTIES)
+        sanitize_mol(mol, exclude_sanitizations=excluded_sanitizations)
+    except SanitizationError as e:
+        raise InvalidSmiles(smiles) from e
+
+    return mol_to_smiles(mol)
 
 
 def maybe_canonicalize(smiles: str) -> str:
@@ -140,27 +217,9 @@ def cleanup_smiles(smiles: str) -> str:
     Returns:
         A cleaned-up SMILES string.
     """
-    mol = MolFromSmiles(smiles, sanitize=False)
-    if not smiles or mol is None:
-        raise InvalidSmiles(smiles)
-    SanitizeMol(mol, sanitizeOps=SANITIZE_FINDRADICALS)
-    return MolToSmiles(mol, canonical=False)
-
-
-def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:
-    # Raise for empty SMILES
-    if not smiles:
-        raise InvalidSmiles(smiles)
-
-    mol = MolFromSmiles(smiles, sanitize=sanitize)
-    if mol is None:
-        raise InvalidSmiles(smiles)
-
-    return mol
-
-
-def mol_to_smiles(mol: Mol, canonical: bool = True) -> str:
-    return MolToSmiles(mol, canonical=canonical)
+    mol = smiles_to_mol(smiles, sanitize=False)
+    sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_FINDRADICALS])
+    return mol_to_smiles(mol, canonical=False)
 
 
 def mols_to_smiles(mols: Sequence[Mol], canonical: bool = True) -> List[str]:

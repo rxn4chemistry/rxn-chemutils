@@ -5,7 +5,8 @@ from typing import List
 
 from rdkit.Chem import MolFromSmiles, Mol, Atom, AddHs
 
-from rxn_chemutils.conversion import InvalidSmiles, canonicalize_smiles
+from rxn_chemutils.conversion import canonicalize_smiles
+from rxn_chemutils.exceptions import InvalidSmiles
 
 
 def is_valid_smiles(s: str) -> bool:

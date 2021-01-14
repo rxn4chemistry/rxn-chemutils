@@ -1,10 +1,12 @@
 import pytest
+from rdkit import Chem
 
 from rxn_chemutils.conversion import (
-    smiles_to_mol, InvalidSmiles, inchify_smiles, canonicalize_smiles,
-    inchify_smiles_with_fragment_bonds, canonicalize_smiles_with_fragment_bonds,
-    canonicalize_reaction_smiles, split_smiles_and_fragment_info, cleanup_smiles
+    smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
+    canonicalize_smiles_with_fragment_bonds, canonicalize_reaction_smiles,
+    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles
 )
+from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
 
 
 def test_smiles_to_mol():
@@ -18,8 +20,76 @@ def test_smiles_to_mol():
     with pytest.raises(InvalidSmiles):
         smiles_to_mol('')
 
+    # Invalid SMILES symbol
     with pytest.raises(InvalidSmiles):
         smiles_to_mol('L')
+
+    # Invalid valence
+    with pytest.raises(InvalidSmiles):
+        smiles_to_mol('CFC')
+
+
+def test_smiles_to_mol_without_sanitization():
+    # With sanitization, this would fail
+    mol = smiles_to_mol('CFC', sanitize=False)
+    assert mol.GetNumAtoms() == 3
+    assert mol.GetAtomWithIdx(0).GetSymbol() == 'C'
+    assert mol.GetAtomWithIdx(1).GetSymbol() == 'F'
+    assert mol.GetAtomWithIdx(2).GetSymbol() == 'C'
+
+    # empty molecule
+    with pytest.raises(InvalidSmiles):
+        smiles_to_mol('', sanitize=False)
+
+    # invalid SMILES symbol
+    with pytest.raises(InvalidSmiles):
+        smiles_to_mol('L', sanitize=False)
+
+
+def test_sanitize_mol():
+
+    def example_mol():
+        return smiles_to_mol('C1=CC=CC=C1N(=O)=O', sanitize=False)
+
+    # Example 1: do only aromatization
+    mol = example_mol()
+    sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_SETAROMATICITY])
+    assert mol_to_smiles(mol, canonical=False) == 'c1ccccc1N(=O)=O'
+
+    # Example 2: do only cleanup
+    mol = example_mol()
+    sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_CLEANUP])
+    assert mol_to_smiles(mol, canonical=False) == 'C1=CC=CC=C1[N+]([O-])=O'
+
+    # Example 3: do both cleanup and aromatization
+    mol = example_mol()
+    sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_CLEANUP, Chem.SANITIZE_SETAROMATICITY])
+    assert mol_to_smiles(mol, canonical=False) == 'c1ccccc1[N+]([O-])=O'
+
+    # Example 6: do all except aromatization
+    mol = example_mol()
+    sanitize_mol(mol, exclude_sanitizations=[Chem.SANITIZE_SETAROMATICITY])
+    assert mol_to_smiles(mol, canonical=False) == 'C1=CC=CC=C1[N+]([O-])=O'
+
+    # Example 5: do all except cleanup (and properties -> invalid valence otherwise)
+    mol = example_mol()
+    sanitize_mol(mol, exclude_sanitizations=[Chem.SANITIZE_CLEANUP, Chem.SANITIZE_PROPERTIES])
+    assert mol_to_smiles(mol, canonical=False) == 'c1ccccc1N(=O)=O'
+
+    # Raises exception for invalid sanitization
+    mol = smiles_to_mol('CFC', sanitize=False)
+    with pytest.raises(SanitizationError):
+        sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_PROPERTIES])
+
+    # Exactly one of included or excluded sanitizations must be included
+    with pytest.raises(ValueError):
+        sanitize_mol(example_mol())
+    with pytest.raises(ValueError):
+        sanitize_mol(
+            example_mol(),
+            include_sanitizations=[Chem.SANITIZE_ALL],
+            exclude_sanitizations=[Chem.SANITIZE_NONE]
+        )
 
 
 def test_inchify_smiles():
@@ -51,8 +121,24 @@ def test_canonicalize():
     with pytest.raises(InvalidSmiles):
         canonicalize_smiles('')
 
+    # invalid SMILES symbol
     with pytest.raises(InvalidSmiles):
         canonicalize_smiles('L')
+
+    # invalid valence
+    with pytest.raises(InvalidSmiles):
+        canonicalize_smiles('CFC')
+
+    # Canonicalization is possible for invalid valence if one does not sanitize
+    assert canonicalize_smiles('CFC', check_valence=False) == 'CFC'
+    assert canonicalize_smiles('F(C)C', check_valence=False) == 'CFC'
+    assert canonicalize_smiles('F(C)(C)', check_valence=False) == 'CFC'
+
+    # For invalid valences, still canonicalizes aromaticity, etc.
+    assert (
+        canonicalize_smiles('C1=CC=CC=C1CFC', check_valence=False) ==
+        canonicalize_smiles('c1ccccc1CFC', check_valence=False)
+    )
 
 
 def test_canonicalize_reaction_smiles():
