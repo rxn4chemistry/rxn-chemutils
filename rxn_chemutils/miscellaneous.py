@@ -9,30 +9,35 @@ from rxn_chemutils.conversion import canonicalize_smiles
 from rxn_chemutils.exceptions import InvalidSmiles
 
 
-def is_valid_smiles(s: str) -> bool:
+def is_valid_smiles(smiles: str, check_valence: bool = True) -> bool:
     """
     Whether a given string corresponds to a valid SMILES string.
 
     Args:
-        s: string to check.
+        smiles: string to check.
+        check_valence: whether to check the valence.
 
     Returns:
-        True if s is a valid SMILES string, else False.
+        True if the given SMILES is valid, else False.
     """
     try:
-        canonicalize_smiles(s)
+        canonicalize_smiles(smiles, check_valence=check_valence)
         return True
     except InvalidSmiles:
         return False
 
 
-def equivalent_smiles(*smiles: str) -> bool:
+def equivalent_smiles(*smiles: str, check_valence: bool = False) -> bool:
     """
     Returns true if all the given SMILES strings are equivalent.
     Will catch the exceptions for invalid SMILES and return false in that case.
+
+    Args:
+        smiles: multiple SMILES to check for equivalence.
+        check_valence: if True, molecules with invalid valence will be invalidated.
     """
     try:
-        canonical_smiles = [canonicalize_smiles(s) for s in smiles]
+        canonical_smiles = [canonicalize_smiles(s, check_valence=check_valence) for s in smiles]
         return len(set(canonical_smiles)) == 1
     except InvalidSmiles:
         return False

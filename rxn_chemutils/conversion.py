@@ -108,12 +108,12 @@ def canonicalize_smiles(smiles: str, check_valence: bool = True) -> str:
     return mol_to_smiles(mol)
 
 
-def maybe_canonicalize(smiles: str) -> str:
+def maybe_canonicalize(smiles: str, check_valence: bool = True) -> str:
     """
     Canonicalize a SMILES string, but returns the original SMILES string if it fails.
     """
     try:
-        return canonicalize_smiles(smiles)
+        return canonicalize_smiles(smiles, check_valence=check_valence)
     except InvalidSmiles:
         return smiles
 

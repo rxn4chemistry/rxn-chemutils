@@ -4,7 +4,7 @@ from typing import List, Tuple
 from rdkit.Chem import Mol
 
 from .chemical_reaction import ChemicalReaction
-from .conversion import mols_to_smiles, canonicalize_smiles, split_smiles_and_fragment_info
+from .conversion import mols_to_smiles, split_smiles_and_fragment_info
 from .miscellaneous import remove_atom_mapping
 from .rdkit_utils import clear_atom_mapping
 from .reaction_equation import ReactionEquation, cleanup_compounds
@@ -239,7 +239,7 @@ def merge_molecules_from_fragment_groups(
 
         if all_in_range:
             merged_molecule = '.'.join(smiles_list[i] for i in relative_indices)
-            merged_molecules.append(canonicalize_smiles(merged_molecule))
+            merged_molecules.append(merged_molecule)
             merged_indices.update(relative_indices)
 
     remaining_molecule_indices = sorted(list(allowed_indices - merged_indices))

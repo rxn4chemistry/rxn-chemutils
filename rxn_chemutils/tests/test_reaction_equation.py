@@ -1,10 +1,13 @@
 from typing import List
 
+import pytest
+
+from rxn_chemutils.conversion import canonicalize_smiles
+from rxn_chemutils.exceptions import InvalidSmiles
 from rxn_chemutils.reaction_equation import (
     ReactionEquation, merge_reactants_and_agents, sort_compounds, canonicalize_compounds,
     remove_duplicate_compounds, has_repeated_molecules, rxn_standardization, cleanup_compounds
 )
-from rxn_chemutils.conversion import canonicalize_smiles
 
 
 def test_merge_reactants_and_agents():
@@ -47,6 +50,16 @@ def test_canonicalize_compounds():
         [canonicalize_smiles(s) for s in products]
     )
     assert canonicalized_reaction == expected
+
+
+def test_canonicalize_compounds_with_invalid_valence():
+    reaction = ReactionEquation(reactants=['F', 'CC'], agents=[], products=['CFC'])
+
+    with pytest.raises(InvalidSmiles):
+        canonicalize_compounds(reaction)
+
+    # does not raise if no valence check, returns original reaction
+    assert canonicalize_compounds(reaction, check_valence=False) == reaction
 
 
 def test_cleanup_compounds():

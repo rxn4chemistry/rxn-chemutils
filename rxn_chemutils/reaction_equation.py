@@ -80,12 +80,15 @@ def sort_compounds(reaction: ReactionEquation) -> ReactionEquation:
     return ReactionEquation(*sorted_compound_groups)
 
 
-def canonicalize_compounds(reaction: ReactionEquation) -> ReactionEquation:
+def canonicalize_compounds(
+    reaction: ReactionEquation, check_valence: bool = True
+) -> ReactionEquation:
     """
     Canonicalize the molecules of a ReactionEquation.
     """
     canonicalized_compound_groups = (
-        [canonicalize_smiles(s) for s in compound_group] for compound_group in reaction
+        [canonicalize_smiles(s, check_valence=check_valence) for s in compound_group]
+        for compound_group in reaction
     )
     return ReactionEquation(*canonicalized_compound_groups)
 

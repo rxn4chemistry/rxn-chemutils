@@ -25,9 +25,20 @@ def test_from_reaction_smiles_with_fragments():
 
     reaction = parse_extended_reaction_smiles(reaction_smiles)
 
-    assert reaction.reactants == ['BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[Na+].[OH-]']
-    assert reaction.agents == ['O', 'O=S(=O)([O-])[O-].[Cu+2]']
+    assert reaction.reactants == ['BrC1=C(C(=O)O)C=C(COC)C=C1', 'C1(O)=CC(O)=CC=C1', '[OH-].[Na+]']
+    assert reaction.agents == ['O', 'S(=O)(=O)([O-])[O-].[Cu+2]']
     assert reaction.products == ['OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3']
+
+
+def test_from_reaction_smiles_does_not_sanitize():
+    # In earlier code, molecules were canonicalized if they were part of a fragment
+    reaction_smiles = 'C1=CC=CC=C1.[N+](=O)(O)[O-]>>C1=CC=CC=C1N(=O)=O |f:0.1|'
+
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
+
+    assert reaction.reactants == ['C1=CC=CC=C1.[N+](=O)(O)[O-]']
+    assert reaction.agents == []
+    assert reaction.products == ['C1=CC=CC=C1N(=O)=O']
 
 
 def test_from_reaction_smiles_with_NaH():

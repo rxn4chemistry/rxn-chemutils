@@ -4,7 +4,7 @@ from rdkit import Chem
 from rxn_chemutils.conversion import (
     smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
     canonicalize_smiles_with_fragment_bonds, canonicalize_reaction_smiles,
-    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles
+    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles, maybe_canonicalize
 )
 from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
 
@@ -139,6 +139,18 @@ def test_canonicalize():
         canonicalize_smiles('C1=CC=CC=C1CFC', check_valence=False) ==
         canonicalize_smiles('c1ccccc1CFC', check_valence=False)
     )
+
+
+def test_maybe_canonicalize():
+    # basic example
+    assert maybe_canonicalize('C(C)C') == 'CCC'
+
+    # invalid -> does not change the SMILES
+    assert maybe_canonicalize('C(CC') == 'C(CC'
+    assert maybe_canonicalize('F(C)C') == 'F(C)C'
+
+    # invalid valence, but flag given -> does the canonicalization
+    assert maybe_canonicalize('F(C)C', check_valence=False) == 'CFC'
 
 
 def test_canonicalize_reaction_smiles():

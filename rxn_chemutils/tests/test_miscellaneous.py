@@ -11,9 +11,14 @@ def test_equivalent_smiles():
 
     assert equivalent_smiles('CCO', 'C(C)O', 'OCC')
     assert not equivalent_smiles('CCO', 'C(C)O', 'O(C)C')
+    assert not equivalent_smiles('CF=C', 'F(C)C')
 
     # Should be false for invalid SMILES
     assert not equivalent_smiles('CCO', '', 'O(C)C')
+
+    # In case of invalid valence: not equivalent if check_valence flag is specified
+    assert equivalent_smiles('CFC', 'F(C)C')
+    assert not equivalent_smiles('CFC', 'F(C)C', check_valence=True)
 
 
 def test_is_valid_smiles():
@@ -22,9 +27,14 @@ def test_is_valid_smiles():
     assert is_valid_smiles('NOOOOO')
     assert is_valid_smiles('CC(CCC)')
 
+    assert not is_valid_smiles('CFC')
     assert not is_valid_smiles('YES')
     assert not is_valid_smiles('Noo')
     assert not is_valid_smiles('CC(CC')
+
+    assert is_valid_smiles('CFC', check_valence=False)
+    assert not is_valid_smiles('YES', check_valence=False)
+    assert not is_valid_smiles('CC(CC', check_valence=False)
 
 
 def test_atom_type_counter():
