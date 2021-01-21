@@ -4,7 +4,8 @@ from rdkit import Chem
 from rxn_chemutils.conversion import (
     smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
     canonicalize_smiles_with_fragment_bonds, canonicalize_reaction_smiles,
-    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles, maybe_canonicalize
+    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles,
+    maybe_canonicalize, smiles_to_inchi
 )
 from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
 
@@ -245,3 +246,26 @@ def test_split_reaction_smiles_with_no_fragment_info():
     pure_smiles, fragment_info = split_smiles_and_fragment_info(reaction_smiles)
     assert pure_smiles == reaction_smiles
     assert fragment_info == ''
+
+
+def test_smiles_to_inchi():
+    # different SMILES representations for phenol (aromatic, non-aromatic)
+    # should be converted to the same InChI
+    phenol_inchi = 'InChI=1S/C6H6O/c7-6-4-2-1-3-5-6/h1-5,7H'
+    for smiles in ['c1ccccc1O', 'C1=CC=CC=C1O']:
+        assert smiles_to_inchi(smiles) == phenol_inchi
+
+    # different SMILES representations for 4(1H)-pyrimidinone (tautomers)
+    # should be converted to the same InChI
+    expected_inchi = 'InChI=1S/C4H4N2O/c7-4-1-2-5-3-6-4/h1-3H,(H,5,6,7)'
+    for smiles in ['C1=CN=CNC1=O', 'C1=CNC=NC1=O', 'C1=CN=CN=C1O']:
+        assert smiles_to_inchi(smiles) == expected_inchi
+
+    with pytest.raises(InvalidSmiles):
+        smiles_to_inchi('')
+
+    with pytest.raises(InvalidSmiles):
+        smiles_to_inchi('invalid')
+
+    # Does not raise for invalid valence
+    assert smiles_to_inchi('CFC') == 'InChI=1S/C2H6F/c1-3-2/h1-2H3'

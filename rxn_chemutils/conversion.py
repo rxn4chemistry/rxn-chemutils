@@ -139,6 +139,24 @@ def canonicalize_smiles_with_fragment_bonds(smiles: str, fragment_bond='~') -> s
         raise InvalidSmiles(smiles)
 
 
+def smiles_to_inchi(smiles: str) -> str:
+    """
+    Get the InChI string for a given SMILES.
+
+    Raises:
+        InvalidSmiles for conversion errors or invalid SMILES.
+
+    Returns:
+        InChI string.
+    """
+
+    mol = smiles_to_mol(smiles, sanitize=False)
+    try:
+        return MolToInchi(mol)
+    except Exception:
+        raise InvalidSmiles(smiles)
+
+
 def inchify_smiles(smiles: str) -> str:
     """
     Inchify a SMILES string for a molecule
