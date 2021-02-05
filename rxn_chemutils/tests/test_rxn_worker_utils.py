@@ -1,3 +1,8 @@
+# LICENSED INTERNAL CODE. PROPERTY OF IBM.
+# IBM Research Zurich Licensed Internal Code
+# (C) Copyright IBM Corp. 2021
+# ALL RIGHTS RESERVED
+
 import pytest
 from rxn_chemutils.rxn_worker_utils import RDKitError, standardize_smiles, standardize_molecules
 

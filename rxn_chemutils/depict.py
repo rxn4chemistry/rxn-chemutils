@@ -1,3 +1,8 @@
+# LICENSED INTERNAL CODE. PROPERTY OF IBM.
+# IBM Research Zurich Licensed Internal Code
+# (C) Copyright IBM Corp. 2021
+# ALL RIGHTS RESERVED
+
 import urllib.parse
 
 INTERNAL_RENDERING_SERVICE = 'http://depict.ava19.zc2.ibm.com:8080/depict/bow'
