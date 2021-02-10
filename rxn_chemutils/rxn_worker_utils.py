@@ -2,7 +2,6 @@
 # IBM Research Zurich Licensed Internal Code
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
-
 """Utilities used in the RXN forward/retrosynthesis workers."""
 import sys
 from rdkit import Chem
