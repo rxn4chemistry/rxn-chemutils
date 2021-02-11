@@ -23,6 +23,12 @@ setup(
     author='IBM RXN team',
     packages=find_packages(),
     package_data={'rxn_chemutils': ['py.typed']},
+    scripts=[
+        'scripts/chemutils-canonicalize',
+        'scripts/chemutils-detokenize',
+        'scripts/chemutils-tokenize',
+        'scripts/chemutils-depictready',
+    ],
     install_requires=[
         'attrs>=19.1.0',
         'click>=7.0',
