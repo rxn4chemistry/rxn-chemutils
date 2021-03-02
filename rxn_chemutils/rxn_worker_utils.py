@@ -82,7 +82,9 @@ def standardize_molecules(
     inchify: bool = False,
     fragment_bond: str = '~',
     ordered_precursors: bool = True,
-    molecule_token_delimiter: Optional[str] = None
+    molecule_token_delimiter: Optional[str] = None,
+    is_enzymatic: bool = False,
+    enzyme_separator: str = '|'
 ) -> str:
     """
     Ensure that a set of molecules represented by a string follows a desired standard.
@@ -96,6 +98,8 @@ def standardize_molecules(
         fragment_bond (str): fragment bond. Defaults to '~'.
         ordered_precursors (bool): order precursors. Defaults to True.
         molecule_token_delimiter (Optional[str]): delimiter for big molecule tokens. Defaults to None
+        is_enzymatic (bool): the molecules are representing an enmzymatic reacgtion. Defaults to False.
+        enzyme_separator (str): separator for molecules and the enzyme. Defaults to '|'.
 
 
     Raises:
@@ -119,6 +123,13 @@ def standardize_molecules(
     sio = sys.stderr = StringIO()
     Chem.WrapLogs()
     try:
+        enzyme = ''
+        if is_enzymatic:
+            splitted_molecules = molecules.split(enzyme_separator)
+            molecules = splitted_molecules[0]
+            if len(splitted_molecules) > 1:
+                enzyme = splitted_molecules[1]
+                enzyme = '{}{}'.format(enzyme_separator, enzyme)
         if molecule_token_delimiter is not None:
             molecules = molecules.replace(molecule_token_delimiter, '')
         if fragment_bond in molecules:
@@ -147,6 +158,8 @@ def standardize_molecules(
                     ) for molecule in molecules.split('.')
                 ]
                 standardized_molecules = '.'.join(standardized_molecules_list)
+        # add optional enzyme information
+        standardized_molecules = '{}{}'.format(standardized_molecules, enzyme)
     except Exception:
         sio_str = str(sio.getvalue().strip())
         if 'Explicit valence for atom' in sio_str:

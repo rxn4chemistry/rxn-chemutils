@@ -6,7 +6,7 @@
 import re
 from typing import List
 
-SMILES_TOKENIZER_PATTERN = r'(\%\([0-9]{3}\)|\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\(|\)|\.|=|#|-|\+|\\|\/|:|~|@|\?|>>?|\*|\$|\%[0-9]{2}|[0-9])'
+SMILES_TOKENIZER_PATTERN = r'(\%\([0-9]{3}\)|\[[^\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\||\(|\)|\.|=|#|-|\+|\\|\/|:|~|@|\?|>>?|\*|\$|\%[0-9]{2}|[0-9])'
 SMILES_REGEX = re.compile(SMILES_TOKENIZER_PATTERN)
 
 
