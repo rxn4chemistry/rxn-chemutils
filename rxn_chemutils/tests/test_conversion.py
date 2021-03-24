@@ -274,3 +274,11 @@ def test_smiles_to_inchi():
 
     # Does not raise for invalid valence
     assert smiles_to_inchi('CFC') == 'InChI=1S/C2H6F/c1-3-2/h1-2H3'
+
+    # SMILES that are aromatized or not lead to the same InChi
+    assert smiles_to_inchi('C1=CC=CC=C1') == smiles_to_inchi('c1ccccc1')
+
+    # Stereochemistry information is kept: the InChi should be different if the
+    # SMILES have different double-bond or R/S stereochemistries
+    assert len({smiles_to_inchi(s) for s in ['CC=CC', 'C/C=C/C', r'C/C=C\C']}) == 3
+    assert len({smiles_to_inchi(s) for s in ['C(O)(N)C', '[C@H](O)(N)C', '[C@@H](O)(N)C']}) == 3

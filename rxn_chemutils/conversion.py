@@ -9,7 +9,7 @@ from functools import reduce
 from typing import Sequence, List, Tuple, Optional, Union
 
 from rdkit import RDLogger, Chem
-from rdkit.Chem import MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags
+from rdkit.Chem import MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags, AssignStereochemistry
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles
 
@@ -156,6 +156,13 @@ def smiles_to_inchi(smiles: str) -> str:
     """
 
     mol = smiles_to_mol(smiles, sanitize=False)
+
+    # Due to a bug (?) in RDKit, it is necessary to reassign the stereochemistry
+    # before conversion to InChi: https://github.com/rdkit/rdkit/issues/2361.
+    # Strangely, it is also necessary to do an empty sanitizion (NONE) beforehand.
+    sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_NONE])
+    AssignStereochemistry(mol, cleanIt=True, force=True)
+
     try:
         return MolToInchi(mol)
     except Exception:
