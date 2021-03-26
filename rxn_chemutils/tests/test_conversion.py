@@ -34,6 +34,9 @@ def test_smiles_to_mol():
     with pytest.raises(InvalidSmiles):
         smiles_to_mol('CFC')
 
+    # Radicals are kept when converting back to a SMILES
+    assert mol_to_smiles(smiles_to_mol('CC[C]CC')) == 'CC[C]CC'
+
 
 def test_smiles_to_mol_without_sanitization():
     # With sanitization, this would fail
@@ -50,6 +53,10 @@ def test_smiles_to_mol_without_sanitization():
     # invalid SMILES symbol
     with pytest.raises(InvalidSmiles):
         smiles_to_mol('L', sanitize=False)
+
+    # Doing strictly no sanitization with the RDKit functions messes up the
+    # radicals - smiles_to_mol takes care of this
+    assert mol_to_smiles(smiles_to_mol('CC[C]CC', sanitize=False)) == 'CC[C]CC'
 
 
 def test_sanitize_mol():

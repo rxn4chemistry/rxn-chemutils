@@ -42,6 +42,12 @@ def test_does_not_sanitize_molecules():
         assert not any('c' in sample for sample in samples)
         assert not any('[N+]' in sample for sample in samples)
 
+    # Check that radicals are kept
+    smiles = 'CC[C]CC'
+    for fn in randomization_functions:
+        samples = {fn(smiles) for _ in range(10)}
+        assert all('[C]' in sample for sample in samples)
+
 
 def test_keeps_stereochemistry():
     # Simple molecule with a stereocenter

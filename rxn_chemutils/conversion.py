@@ -39,6 +39,13 @@ def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:
     mol = MolFromSmiles(smiles, sanitize=sanitize)
     if not smiles or mol is None:
         raise InvalidSmiles(smiles)
+
+    # MolFromSmiles with sanitize=False ignores all the radicals and converts
+    # them back to normal atoms. To avoid this, we need to sanitize the radicals
+    # manually for the case sanitize=False
+    if not sanitize:
+        sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_FINDRADICALS])
+
     return mol
 
 
@@ -159,7 +166,7 @@ def smiles_to_inchi(smiles: str) -> str:
 
     # Due to a bug (?) in RDKit, it is necessary to reassign the stereochemistry
     # before conversion to InChi: https://github.com/rdkit/rdkit/issues/2361.
-    # Strangely, it is also necessary to do an empty sanitizion (NONE) beforehand.
+    # Strangely, it is also necessary to do an empty sanitization (NONE) beforehand.
     sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_NONE])
     AssignStereochemistry(mol, cleanIt=True, force=True)
 
