@@ -19,9 +19,7 @@ install:
   # install the most recent rdkit package from the RDKit anaconda channel.
   - conda install -q -c rdkit rdkit
 
-  - pip install -r requirements.txt
-  - pip3 install -r test_requirements.txt
-  - pip install -e .
+  - pip install -e .[dev]
 
 script:
   # Style guide enforcement
