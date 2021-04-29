@@ -3,12 +3,15 @@
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
 
-from typing import List, Iterator, Optional, Generator
+from typing import List, Iterator, Optional, Generator, TypeVar, Type
 
 import attr
 from rxn_utilities.container_utilities import remove_duplicates
 
 from .conversion import canonicalize_smiles, cleanup_smiles
+from .molecule_list import molecule_list_from_string, molecule_list_to_string
+
+T = TypeVar('T', bound='ReactionEquation')
 
 
 @attr.s(auto_attribs=True)
@@ -40,33 +43,19 @@ class ReactionEquation:
         Convert a ReactionEquation to an "rxn" reaction SMILES.
         """
 
-        groups = (compound_group for compound_group in self)
-
-        if fragment_bond is not None:
-            groups = ([smi.replace('.', fragment_bond) for smi in group] for group in groups)
-
-        smiles_groups = ('.'.join(group) for group in groups)
+        smiles_groups = (molecule_list_to_string(group, fragment_bond) for group in self)
         return '>'.join(smiles_groups)
 
     @classmethod
-    def from_string(
-        cls, reaction_string: str, fragment_bond: Optional[str] = None
-    ) -> 'ReactionEquation':
+    def from_string(cls: Type[T], reaction_string: str, fragment_bond: Optional[str] = None) -> T:
         """
         Convert a ReactionEquation from an "rxn" reaction SMILES.
         """
 
-        smiles_groups = reaction_string.split('>')
-
-        # split the groups
-        groups = [smiles_group.split('.') for smiles_group in smiles_groups]
-
-        # replace [''] by [] (for instance when there are no agents)
-        groups = [group if group != [''] else [] for group in groups]
-
-        # replace fragment bonds if necessary
-        if fragment_bond is not None:
-            groups = [[smi.replace(fragment_bond, '.') for smi in group] for group in groups]
+        groups = [
+            molecule_list_from_string(smiles_group, fragment_bond=fragment_bond)
+            for smiles_group in reaction_string.split('>')
+        ]
 
         return cls(*groups)
 
