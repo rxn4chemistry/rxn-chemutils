@@ -3,7 +3,7 @@
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
 
-from typing import List, Iterator, Optional
+from typing import List, Iterator, Optional, Generator
 
 import attr
 from rxn_utilities.container_utilities import remove_duplicates
@@ -31,9 +31,9 @@ class ReactionEquation:
         compound groups"""
         return (i for i in (self.reactants, self.agents, self.products))
 
-    def get_all_smiles(self) -> List[str]:
-        """Helper function to get all the SMILES in the reaction equation"""
-        return [molecule for group in self for molecule in group]
+    def iter_all_smiles(self) -> Generator[str, None, None]:
+        """Helper function to iterate over all the SMILES in the reaction equation"""
+        return (molecule for group in self for molecule in group)
 
     def to_string(self, fragment_bond: Optional[str] = None) -> str:
         """
@@ -132,5 +132,5 @@ def rxn_standardization(reaction: ReactionEquation) -> ReactionEquation:
 
 
 def has_repeated_molecules(reaction_equation: ReactionEquation) -> bool:
-    all_molecules = reaction_equation.get_all_smiles()
+    all_molecules = list(reaction_equation.iter_all_smiles())
     return len(set(all_molecules)) < len(all_molecules)

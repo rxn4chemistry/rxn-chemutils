@@ -151,6 +151,12 @@ def test_equation_from_string_with_no_agent():
     assert reaction == expected_reaction
 
 
+def test_iter_all_smiles():
+    reaction_string = 'COCO.[Na+].[OH-]>O>NCOC'
+    reaction = ReactionEquation.from_string(reaction_string)
+    assert list(reaction.iter_all_smiles()) == ['COCO', '[Na+]', '[OH-]', 'O', 'NCOC']
+
+
 def test_has_repeated_molecules():
     assert not has_repeated_molecules(ReactionEquation(['A', 'B'], ['C'], ['D', 'E']))
 
