@@ -5,6 +5,9 @@
 
 from collections import Counter
 
+import pytest
+
+from rxn_chemutils.exceptions import InvalidSmiles
 from rxn_chemutils.miscellaneous import (
     equivalent_smiles, atom_type_counter, is_valid_smiles, remove_atom_mapping
 )
@@ -46,6 +49,9 @@ def test_atom_type_counter():
     assert atom_type_counter('CCO') == Counter({'C': 2, 'H': 6, 'O': 1})
     assert atom_type_counter('CC=O') == Counter({'C': 2, 'H': 4, 'O': 1})
     assert atom_type_counter('[Na+].[Cl-]') == Counter({'Na': 1, 'Cl': 1})
+
+    with pytest.raises(InvalidSmiles):
+        _ = atom_type_counter('CC(')
 
 
 def test_remove_atom_mapping():

@@ -8,9 +8,9 @@ import typing
 from collections import Counter
 from typing import List
 
-from rdkit.Chem import MolFromSmiles, Mol, Atom, AddHs
+from rdkit.Chem import Mol, Atom, AddHs
 
-from rxn_chemutils.conversion import canonicalize_smiles
+from rxn_chemutils.conversion import canonicalize_smiles, smiles_to_mol
 from rxn_chemutils.exceptions import InvalidSmiles
 
 
@@ -53,7 +53,7 @@ def atom_type_counter(smiles: str) -> typing.Counter[str]:
     Return a counter of atom types (as symbols).
     """
 
-    mol: Mol = AddHs(MolFromSmiles(smiles))
+    mol: Mol = AddHs(smiles_to_mol(smiles, sanitize=False))
     atoms: List[Atom] = mol.GetAtoms()
     return Counter(atom.GetSymbol() for atom in atoms)
 
