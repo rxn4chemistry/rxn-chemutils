@@ -21,18 +21,21 @@ class UnsupportedExtendedReactionSmiles(ValueError):
         super().__init__(f'The syntax of "{reaction_smiles}" is not supported by RDKit.')
 
 
-def parse_extended_reaction_smiles(extended_reaction_smiles: str) -> ReactionEquation:
+def parse_extended_reaction_smiles(
+    extended_reaction_smiles: str, remove_atom_maps: bool = True
+) -> ReactionEquation:
     """
     Convert an extended reaction SMILES (with potential fragment information)
     to a ReactionEquation instance.
 
     Args:
         extended_reaction_smiles: extended reaction SMILES
+        remove_atom_maps: whether to remove the atom mapping information.
 
     Returns:
         ReactionEquation instance
     """
-    return _Importer.convert(extended_reaction_smiles)
+    return _Importer.convert(extended_reaction_smiles, remove_atom_maps=remove_atom_maps)
 
 
 def to_extended_reaction_smiles(reaction: ReactionEquation) -> str:
@@ -55,16 +58,22 @@ class _Importer:
     """
 
     @staticmethod
-    def convert(reaction_smiles: str) -> ReactionEquation:
+    def convert(extended_reaction_smiles: str, remove_atom_maps: bool) -> ReactionEquation:
         """
         Convert an extended SMILES to a reaction equation.
 
         Used to rely more on RDKit (see convert_with_rdkit). Now does as few
         RDKit operations as necessary.
+
+        Args:
+            extended_reaction_smiles: extended reaction SMILES
+            remove_atom_maps: whether to remove the atom mapping information.
         """
 
-        pure_smiles, fragment_info = split_smiles_and_fragment_info(reaction_smiles)
-        pure_smiles = remove_atom_mapping(pure_smiles)
+        pure_smiles, fragment_info = split_smiles_and_fragment_info(extended_reaction_smiles)
+
+        if remove_atom_maps:
+            pure_smiles = remove_atom_mapping(pure_smiles)
 
         reactant_groups = pure_smiles.split('>')
         mols_groups = [group.split('.') for group in reactant_groups]
@@ -74,7 +83,13 @@ class _Importer:
         groups = _Importer.group_fragments(mols_groups, fragment_groups)
 
         reaction_equation = ReactionEquation(*groups)
-        return cleanup_compounds(reaction_equation)
+
+        # If the atom maps were removed, cleaning up the compounds will
+        # return a much nicer string.
+        if remove_atom_maps:
+            reaction_equation = cleanup_compounds(reaction_equation)
+
+        return reaction_equation
 
     @staticmethod
     def convert_with_rdkit(reaction_smiles: str) -> ReactionEquation:

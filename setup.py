@@ -37,6 +37,7 @@ setup(
         'scripts/chemutils-detokenize',
         'scripts/chemutils-tokenize',
         'scripts/chemutils-depictready',
+        'scripts/chemutils-remove-mapping',
     ],
     install_requires=[
         'attrs>=19.1.0',

@@ -14,7 +14,6 @@ from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles
 
 from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
-from rxn_chemutils.rdkit_utils import clear_atom_mapping
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
@@ -209,32 +208,6 @@ def inchify_smiles_with_fragment_bonds(smiles: str, fragment_bond='~') -> str:
         )
     except Exception:
         raise InvalidSmiles(smiles)
-
-
-def canonicalize_reaction_smiles(reaction_smiles: str) -> str:
-    """
-    Canonicalizes a SMILES string for a reaction.
-    This will remove the atom mapping, but keep the fragment information.
-    """
-    reaction_smiles, fragment_info = split_smiles_and_fragment_info(reaction_smiles)
-
-    raw_smiles_groups = reaction_smiles.split('>')
-    assert len(raw_smiles_groups) == 3
-
-    mol_groups = [convert_group_to_mols(smiles_group) for smiles_group in raw_smiles_groups]
-    for group in mol_groups:
-        clear_atom_mapping(group)
-
-    smiles_groups = [mols_to_smiles(group) for group in mol_groups]
-
-    joined_strings = ['.'.join(group) for group in smiles_groups]
-
-    canonical_reaction_smiles = '>'.join(joined_strings)
-
-    if fragment_info:
-        canonical_reaction_smiles += f' {fragment_info}'
-
-    return canonical_reaction_smiles
 
 
 def cleanup_smiles(smiles: str) -> str:

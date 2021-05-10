@@ -63,7 +63,7 @@ def remove_atom_mapping(smiles: str) -> str:
     Remove the atom mapping of a reaction SMILES.
 
     The resulting SMILES strings will still contain brackets and it may be
-    advisable to canonicalize them as a postprocessing step.
+    advisable to canonicalize them or clean them up as a postprocessing step.
 
     Args:
         smiles: SMILES string potentially containing mapping information.

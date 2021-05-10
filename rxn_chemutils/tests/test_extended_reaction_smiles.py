@@ -22,6 +22,18 @@ def test_from_reaction_smiles():
     assert reaction.products == ['CC1=CC(F)=C(C(=O)O)C=C1']
 
 
+def test_from_reaction_smiles_keep_atom_maps():
+    reaction_smiles = '[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)Br)[F:8]' \
+                      '>[Li]CCCC.C1CCOC1' \
+                      '>[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)C(=O)O)[F:8]'
+
+    reaction = parse_extended_reaction_smiles(reaction_smiles, remove_atom_maps=False)
+
+    assert reaction.reactants == ['[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)Br)[F:8]']
+    assert reaction.agents == ['[Li]CCCC', 'C1CCOC1']
+    assert reaction.products == ['[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)C(=O)O)[F:8]']
+
+
 def test_from_reaction_smiles_with_fragments():
     reaction_smiles = 'BrC1=C(C(=O)O)C=C(C=C1)COC.C1(O)=CC(O)=CC=C1.[OH-].[Na+]' \
                       '>S(=O)(=O)([O-])[O-].[Cu+2].O' \

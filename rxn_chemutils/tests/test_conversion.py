@@ -8,9 +8,8 @@ from rdkit import Chem
 
 from rxn_chemutils.conversion import (
     smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
-    canonicalize_smiles_with_fragment_bonds, canonicalize_reaction_smiles,
-    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles,
-    maybe_canonicalize, smiles_to_inchi
+    canonicalize_smiles_with_fragment_bonds, split_smiles_and_fragment_info, cleanup_smiles,
+    sanitize_mol, mol_to_smiles, maybe_canonicalize, smiles_to_inchi
 )
 from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
 
@@ -164,33 +163,6 @@ def test_maybe_canonicalize():
 
     # invalid valence, but flag given -> does the canonicalization
     assert maybe_canonicalize('F(C)C', check_valence=False) == 'CFC'
-
-
-def test_canonicalize_reaction_smiles():
-    reaction_smiles = '[CH:8]1=[CH:7][C:4](=[CH:3][C:2](=[CH:9]1)[Br:1])[CH:5]=[O:6].[CH2:10]([CH2:11]O)[OH:12]' \
-                      '>CC1=CC=CC=C1.CC1=CC=C(C=C1)S(=O)(=O)O' \
-                      '>[CH2:10]1[CH2:11][O:6][CH:5]([O:12]1)[C:4]2=[CH:3][C:2](=[CH:9][CH:8]=[CH:7]2)[Br:1]'
-
-    canonical = canonicalize_reaction_smiles(reaction_smiles)
-
-    assert canonical == 'O=Cc1cccc(Br)c1.OCCO' \
-                        '>Cc1ccccc1.Cc1ccc(S(=O)(=O)O)cc1' \
-                        '>Brc1cccc(C2OCCO2)c1'
-
-
-def test_canonicalize_reaction_smiles_with_fragments():
-    # No change to the fragment information should happen
-    reaction_smiles = '[CH3:1][C:2]([CH3:3])([CH3:4])[S@@:5](=[O:6])[NH2:7].[CH:14]1=[CH:13][C:11](=[CH:10][C:9](=[CH:15]1)[Br:8])[CH:12]=O' \
-                      '>C(Cl)Cl.C(Cl)Cl.C(=O)([O-])[O-].[Cs+].[Cs+]' \
-                      '>[CH3:1][C:2]([CH3:3])([CH3:4])[S@@:5](=[O:6])/[N:7]=[CH:12]/[C:11]1=[CH:10][C:9](=[CH:15][CH:14]=[CH:13]1)[Br:8]' \
-                      ' |f:4.5.6|'
-
-    canonical = canonicalize_reaction_smiles(reaction_smiles)
-
-    assert canonical == 'CC(C)(C)[S@](N)=O.O=Cc1cccc(Br)c1' \
-                        '>ClCCl.ClCCl.O=C([O-])[O-].[Cs+].[Cs+]' \
-                        '>CC(C)(C)[S@@](=O)/N=C/c1cccc(Br)c1' \
-                        ' |f:4.5.6|'
 
 
 def test_cleanup_smiles():

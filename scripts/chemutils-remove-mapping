@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+# LICENSED INTERNAL CODE. PROPERTY OF IBM.
+# IBM Research Zurich Licensed Internal Code
+# (C) Copyright IBM Corp. 2021
+# ALL RIGHTS RESERVED
+
+import fileinput
+
+from rxn_chemutils.miscellaneous import remove_atom_mapping
+from rxn_chemutils.reaction_equation import cleanup_compounds
+from rxn_chemutils.reaction_smiles import (
+    determine_format, parse_reaction_smiles, to_reaction_smiles
+)
+
+
+def remove_mapping() -> None:
+    """
+    Remove the atom mapping in reaction SMILES strings.
+
+    The script will read strings either from stdin, or from a file given as the
+    first argument (behavior from the fileinput package).
+    """
+
+    for line in fileinput.input():
+        smiles = line.strip()
+        smiles = remove_atom_mapping(smiles)
+
+        reaction_format = determine_format(smiles)
+        reaction = parse_reaction_smiles(smiles, reaction_format)
+        reaction = cleanup_compounds(reaction)
+        print(to_reaction_smiles(reaction, reaction_format))
+
+
+if __name__ == '__main__':
+    remove_mapping()
