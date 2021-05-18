@@ -14,6 +14,12 @@ from .miscellaneous import remove_atom_mapping
 from .rdkit_utils import clear_atom_mapping
 from .reaction_equation import ReactionEquation, cleanup_compounds
 
+# Regex pattern to extract the fragment info from the extended info of reaction SMILES
+EXTENDED_FRAGMENT_REGEX = re.compile(r'f:[\d\.,]+')
+
+# Regex pattern to extract the fragment groups from the fragment info
+FRAGMENT_GROUP_REGEX = re.compile(r'(\d+(?:\.\d+)*)')
+
 
 class UnsupportedExtendedReactionSmiles(ValueError):
 
@@ -210,18 +216,32 @@ class _Exporter:
         return f'|f:{all_groups}|'
 
 
-def determine_fragment_groups(fragment_info: str) -> List[List[int]]:
+def determine_fragment_groups(extended_reaction_info: str) -> List[List[int]]:
     """
-    From the fragment info string (such as '|f:0.2,5.6|'), determine the groups of indices that must be grouped.
+    From the fragment info string (such as '|f:0.2,5.6|'), determine the groups
+    of indices that must be grouped.
+
+    Args:
+        extended_reaction_info: Extended reaction info, potentially containing
+            information about fragments, stereochemistry, etc. See documentation on
+            https://docs.chemaxon.com/display/docs/chemaxon-extended-smiles-and-smarts-cxsmiles-and-cxsmarts.md
 
     Returns:
         List of groups (f.i. [[0,2], [5,6]])
     """
 
-    m = re.findall(r'(\d+(?:\.\d+)*)', fragment_info)
+    # Extract the part related to fragments, starting with "f:"
+    fragment_subpart_match = EXTENDED_FRAGMENT_REGEX.search(extended_reaction_info)
+    if fragment_subpart_match is None:
+        return []
+    fragment_info = fragment_subpart_match.group(0)
 
+    # Extract the groups of associated numbers as strings
+    fragment_group_matches = FRAGMENT_GROUP_REGEX.findall(fragment_info)
+
+    # Convert to lists of integers
     groups = []
-    for match in m:
+    for match in fragment_group_matches:
         indices = match.split('.')
         groups.append([int(i) for i in indices])
     return groups

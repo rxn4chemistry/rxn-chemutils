@@ -47,6 +47,20 @@ def test_from_reaction_smiles_with_fragments():
     assert reaction.products == ['OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3']
 
 
+def test_from_reaction_smiles_with_other_extended_information():
+    # the part with "&1:", "c:", "H:", must not be considered for determination of fragments
+    reaction_smiles = '[CH3:1][C:2](=[O:3])[NH:4][C@H:5]([C:6](=[O:7])[OH:8])[C:9]([CH3:10])' \
+                      '([CH3:11])[SH:12].[O:13]=[N:14]O[Na]>O.Cl.CO>[CH3:1][C:2](=[O:3])[NH:4]' \
+                      '[C@H:5]([C:6](=[O:7])[OH:8])[C:9]([CH3:10])([CH3:11])[S:12][N:14]=[O:13]' \
+                      ' |c:5,7,H:3.2,&1:4,24,f:3.4|'
+
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
+
+    assert reaction.reactants == ['CC(=O)N[C@H](C(=O)O)C(C)(C)S', 'O=NO[Na]']
+    assert reaction.agents == ['O', 'Cl.CO']
+    assert reaction.products == ['CC(=O)N[C@H](C(=O)O)C(C)(C)SN=O']
+
+
 def test_from_reaction_smiles_does_not_sanitize():
     # In earlier code, molecules were canonicalized if they were part of a fragment
     reaction_smiles = 'C1=CC=CC=C1.[N+](=O)(O)[O-]>>C1=CC=CC=C1N(=O)=O |f:0.1|'
@@ -148,11 +162,19 @@ def test_to_reaction_smiles_with_dummy_fragments():
 
 
 def test_fragment_groups():
+    assert determine_fragment_groups('') == []
+
+    # Cases with only f involved
     assert determine_fragment_groups('|f:2.3,4.5|') == [[2, 3], [4, 5]]
     assert determine_fragment_groups('|f:2.3,4.5.8|') == [[2, 3], [4, 5, 8]]
     assert determine_fragment_groups('|f:2.3,4|') == [[2, 3], [4]]
     assert determine_fragment_groups('|f:12.3,4.105|') == [[12, 3], [4, 105]]
-    assert determine_fragment_groups('') == []
+
+    # More complex cases with other information; may contain more information, see
+    # https://docs.chemaxon.com/display/docs/chemaxon-extended-smiles-and-smarts-cxsmiles-and-cxsmarts.md
+    assert determine_fragment_groups('|a1:3,4,f:2.3,4|') == [[2, 3], [4]]
+    assert determine_fragment_groups('|f:2.3,4,&2:3,55,6|') == [[2, 3], [4]]
+    assert determine_fragment_groups('|m:0,22,f:2.3,4,&2:3,55,6|') == [[2, 3], [4]]
 
 
 def test_merge_molecules_from_fragment_groups():
