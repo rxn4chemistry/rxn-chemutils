@@ -3,7 +3,7 @@
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
 
-from typing import List, Iterator, Optional, Generator, TypeVar, Type
+from typing import List, Iterator, Optional, Generator, TypeVar, Type, Iterable
 
 import attr
 from rxn_utilities.container_utilities import remove_duplicates
@@ -14,7 +14,7 @@ from .molecule_list import molecule_list_from_string, molecule_list_to_string
 T = TypeVar('T', bound='ReactionEquation')
 
 
-@attr.s(auto_attribs=True)
+@attr.s(auto_attribs=True, init=False)
 class ReactionEquation:
     """
     Defines a reaction equation, as given by the molecules involved in a reaction.
@@ -28,6 +28,13 @@ class ReactionEquation:
     reactants: List[str]
     agents: List[str]
     products: List[str]
+
+    def __init__(self, reactants: Iterable[str], agents: Iterable[str], products: Iterable[str]):
+        """
+        Overwrite init function in order to enable instantiation from any iterator and
+        to force copying the lists.
+        """
+        self.__attrs_init__(list(reactants), list(agents), list(products))  # type: ignore
 
     def __iter__(self) -> Iterator[List[str]]:
         """Helper function to simplify functionality acting on all three

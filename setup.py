@@ -40,7 +40,7 @@ setup(
         'scripts/chemutils-remove-mapping',
     ],
     install_requires=[
-        'attrs>=19.1.0',
+        'attrs>=21.2.0',
         'click>=7.0',
         'loguru>=0.5.3',
         'rxn_utilities '

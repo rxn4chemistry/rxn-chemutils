@@ -186,3 +186,30 @@ def test_rxn_standardization():
     )
 
     assert rxn_standardization(initial_reaction_equation) == expected
+
+
+def test_can_be_instantiated_from_any_iterator():
+    a = {'C', 'O'}
+    b = (m for m in ['CO', 'OC'])
+    reaction_equation = ReactionEquation(a, [], b)
+
+    assert reaction_equation.reactants == ['C', 'O'] or reaction_equation.reactants == ['O', 'C']
+    assert reaction_equation.products == ['CO', 'OC']
+
+
+def test_list_objects_are_not_shared():
+    a = ['C', 'O']
+    b = ['CO']
+    reaction_equation = ReactionEquation(a, [], b)
+
+    # Modifying a list after using it to instantiate ReactionEquation should
+    # have no impact on the ReactionEquation instance
+    assert reaction_equation.reactants == a
+    a.append('N')
+    assert reaction_equation.reactants != a
+
+    # Modifying the ReactionEquation compounds lists should have no impact on
+    # the lists that were used to instantiate it.
+    assert b == reaction_equation.products
+    reaction_equation.products.append('N')
+    assert b != reaction_equation.products
