@@ -9,7 +9,7 @@ from rdkit import Chem
 from rxn_chemutils.conversion import (
     smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
     canonicalize_smiles_with_fragment_bonds, split_smiles_and_fragment_info, cleanup_smiles,
-    sanitize_mol, mol_to_smiles, maybe_canonicalize, smiles_to_inchi
+    sanitize_mol, mol_to_smiles, maybe_canonicalize, smiles_to_inchi, remove_hydrogens
 )
 from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
 
@@ -93,15 +93,38 @@ def test_sanitize_mol():
     with pytest.raises(SanitizationError):
         sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_PROPERTIES])
 
-    # Exactly one of included or excluded sanitizations must be included
-    with pytest.raises(ValueError):
-        sanitize_mol(example_mol())
+    # Not providing any options does the full sanitization
+    mol_1 = example_mol()
+    mol_2 = example_mol()
+    sanitize_mol(mol_1)
+    sanitize_mol(mol_2, include_sanitizations=[Chem.SANITIZE_ALL])
+    assert mol_to_smiles(mol_1) == mol_to_smiles(mol_2)
+
+    # Cannot specify all included and excluded sanitizations at the same time
     with pytest.raises(ValueError):
         sanitize_mol(
             example_mol(),
             include_sanitizations=[Chem.SANITIZE_ALL],
             exclude_sanitizations=[Chem.SANITIZE_NONE]
         )
+
+
+def test_remove_hydrogens():
+    smiles = '[H]C([H])([H])Oc1ccc2cccc(C([H])([H])C#N)c2c1'
+    smiles_without_h = 'COc1ccc2cccc(CC#N)c2c1'
+
+    # Removing the unnecessary hydrogens
+    mol = smiles_to_mol(smiles, sanitize=False)
+    assert mol_to_smiles(mol, canonical=False) == smiles
+    mol = remove_hydrogens(mol)
+    assert mol_to_smiles(mol, canonical=False) == smiles_without_h
+
+    # check that it does not sanitize the molecules
+    smiles = '[H]C([H])([H])CN(=O)=O'
+    smiles_without_h = 'CCN(=O)=O'
+    mol = smiles_to_mol(smiles, sanitize=False)
+    mol = remove_hydrogens(mol)
+    assert mol_to_smiles(mol, canonical=False) == smiles_without_h
 
 
 def test_inchify_smiles():
@@ -151,6 +174,14 @@ def test_canonicalize():
         canonicalize_smiles('C1=CC=CC=C1CFC', check_valence=False) ==
         canonicalize_smiles('c1ccccc1CFC', check_valence=False)
     )
+
+
+def test_canonicalize_removes_unnecessary_hydrogens():
+    # in an earlier version, canonicalize_smiles(x) did not behave the same as
+    # Chem.MolToSmiles(Chem.MolFromSmiles(x)) when there were implicit hydrogens.
+    smiles = '[H]C([H])([H])Oc1ccc2cccc(C([H])([H])C#N)c2c1'
+
+    assert canonicalize_smiles(smiles) == 'COc1ccc2cccc(CC#N)c2c1'
 
 
 def test_maybe_canonicalize():

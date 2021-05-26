@@ -9,7 +9,9 @@ from functools import reduce
 from typing import Sequence, List, Tuple, Optional, Union
 
 from rdkit import RDLogger, Chem
-from rdkit.Chem import MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags, AssignStereochemistry
+from rdkit.Chem import (
+    MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags, AssignStereochemistry, RemoveHs
+)
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles
 
@@ -67,6 +69,9 @@ def sanitize_mol(
     Sanitize an RDKit Mol with the specification of sanitizations to include or
     to exclude.
 
+    Note: the RDKit sanitization function does not remove unnecessary hydrogens. See
+    the function remove_hydrogens to do that.
+
     Raises:
         SanitizationError for unsuccessful sanitizations
 
@@ -76,19 +81,34 @@ def sanitize_mol(
         exclude_sanitizations: sanitizations to exclude, all the other ones will
             be applied. Exclusive with include_sanitizations.
     """
+
+    # if no details about which sanitization steps to do is given, do them all
+    if include_sanitizations is None and exclude_sanitizations is None:
+        include_sanitizations = [Chem.SANITIZE_ALL]
+
     if include_sanitizations is not None and exclude_sanitizations is None:
         sanitize_ops = reduce(operator.or_, include_sanitizations, 0)
     elif include_sanitizations is None and exclude_sanitizations is not None:
         sanitize_ops = reduce(operator.xor, exclude_sanitizations, Chem.SANITIZE_ALL)
     else:
-        raise ValueError(
-            'Exactly one of include_sanitizations or exclude_sanitizations must be given.'
-        )
+        raise ValueError('Cannot specify both include_sanitizations and exclude_sanitizations.')
 
     try:
         SanitizeMol(mol, sanitizeOps=sanitize_ops)
     except Exception as e:
         raise SanitizationError(mol) from e
+
+
+def remove_hydrogens(mol: Mol) -> Mol:
+    """
+    Remove unnecessary hydrogens in a molecule.
+
+    NB: The sanitization that is otherwise automatically done by RDKit is disabled.
+
+    Returns:
+        a new Mol object without unnecessary hydrogens.
+    """
+    return RemoveHs(mol, sanitize=False)
 
 
 def canonicalize_smiles(smiles: str, check_valence: bool = True) -> str:
@@ -106,6 +126,11 @@ def canonicalize_smiles(smiles: str, check_valence: bool = True) -> str:
         Canonicalized SMILES string.
     """
     mol = smiles_to_mol(smiles, sanitize=False)
+
+    # NB: Removal of the unnecessary hydrogen atoms is disabled with sanitize=False above,
+    # but the RDKit sanitize function does not actually do this. It is therefore
+    # necessary to call this separately.
+    mol = remove_hydrogens(mol)
 
     # Sanitization as a separate step, to enable exclusion of valence check
     try:
