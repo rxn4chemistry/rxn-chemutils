@@ -11,7 +11,8 @@ from rxn_chemutils.conversion import canonicalize_smiles
 from rxn_chemutils.exceptions import InvalidSmiles
 from rxn_chemutils.reaction_equation import (
     ReactionEquation, merge_reactants_and_agents, sort_compounds, canonicalize_compounds,
-    remove_duplicate_compounds, has_repeated_molecules, rxn_standardization, cleanup_compounds
+    remove_duplicate_compounds, has_repeated_molecules, rxn_standardization, cleanup_compounds,
+    apply_to_compounds
 )
 
 
@@ -165,6 +166,16 @@ def test_has_repeated_molecules():
     assert has_repeated_molecules(ReactionEquation(['A', 'B'], ['C'], ['D', 'E', 'E']))
     assert has_repeated_molecules(ReactionEquation(['A', 'B'], ['A'], ['D', 'E']))
     assert has_repeated_molecules(ReactionEquation(['A', 'B'], ['C'], ['B', 'E']))
+
+
+def test_apply_to_compounds():
+
+    def dummy_fn(smiles: str) -> str:
+        # add a 'C' to the SMILES
+        return smiles + 'C'
+
+    assert apply_to_compounds(ReactionEquation(['C', 'N', 'O'], ['P'], ['CNO']),
+                              dummy_fn) == ReactionEquation(['CC', 'NC', 'OC'], ['PC'], ['CNOC'])
 
 
 def test_rxn_standardization():

@@ -2,8 +2,8 @@
 # IBM Research Zurich Licensed Internal Code
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
-
-from typing import List, Iterator, Optional, Generator, TypeVar, Type, Iterable
+from functools import partial
+from typing import List, Iterator, Optional, Generator, TypeVar, Type, Iterable, Callable
 
 import attr
 from rxn_utilities.container_utilities import remove_duplicates
@@ -81,17 +81,31 @@ def sort_compounds(reaction: ReactionEquation) -> ReactionEquation:
     return ReactionEquation(*sorted_compound_groups)
 
 
+def apply_to_compounds(reaction: ReactionEquation, fn: Callable[[str], str]) -> ReactionEquation:
+    """
+    Apply a function to the individual compounds in a ReactionEquation.
+
+    Args:
+        reaction: reaction equation to apply the function to.
+        fn: function to apply.
+
+    Returns:
+        New ReactionEquation instance after application of the function to the compounds.
+    """
+    updated_compound_groups = (
+        [fn(compound) for compound in compound_group] for compound_group in reaction
+    )
+    return ReactionEquation(*updated_compound_groups)
+
+
 def canonicalize_compounds(
     reaction: ReactionEquation, check_valence: bool = True
 ) -> ReactionEquation:
     """
     Canonicalize the molecules of a ReactionEquation.
     """
-    canonicalized_compound_groups = (
-        [canonicalize_smiles(s, check_valence=check_valence) for s in compound_group]
-        for compound_group in reaction
-    )
-    return ReactionEquation(*canonicalized_compound_groups)
+    canonicalize_fn = partial(canonicalize_smiles, check_valence=check_valence)
+    return apply_to_compounds(reaction, canonicalize_fn)
 
 
 def remove_duplicate_compounds(reaction: ReactionEquation) -> ReactionEquation:
@@ -106,10 +120,7 @@ def cleanup_compounds(reaction: ReactionEquation) -> ReactionEquation:
     """
     Basic cleanup of the compounds.
     """
-    clean_compound_groups = (
-        [cleanup_smiles(s) for s in compound_group] for compound_group in reaction
-    )
-    return ReactionEquation(*clean_compound_groups)
+    return apply_to_compounds(reaction, cleanup_smiles)
 
 
 def rxn_standardization(reaction: ReactionEquation) -> ReactionEquation:
