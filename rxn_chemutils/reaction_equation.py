@@ -138,6 +138,19 @@ def rxn_standardization(reaction: ReactionEquation) -> ReactionEquation:
     )
 
 
+def remove_precursors_from_products(reaction: ReactionEquation) -> ReactionEquation:
+    """
+    Remove compounds in products that are also present in the reactants or reagents.
+    """
+    precursors = reaction.reactants + reaction.agents
+    products_without_precursors = [
+        product for product in reaction.products if product not in precursors
+    ]
+    return ReactionEquation(
+        reactants=reaction.reactants, agents=reaction.agents, products=products_without_precursors
+    )
+
+
 def has_repeated_molecules(reaction_equation: ReactionEquation) -> bool:
     all_molecules = list(reaction_equation.iter_all_smiles())
     return len(set(all_molecules)) < len(all_molecules)

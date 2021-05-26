@@ -12,7 +12,7 @@ from rxn_chemutils.exceptions import InvalidSmiles
 from rxn_chemutils.reaction_equation import (
     ReactionEquation, merge_reactants_and_agents, sort_compounds, canonicalize_compounds,
     remove_duplicate_compounds, has_repeated_molecules, rxn_standardization, cleanup_compounds,
-    apply_to_compounds
+    apply_to_compounds, remove_precursors_from_products
 )
 
 
@@ -197,6 +197,20 @@ def test_rxn_standardization():
     )
 
     assert rxn_standardization(initial_reaction_equation) == expected
+
+
+def test_remove_precursors_from_products():
+    reactants = ['COCO', '[Na+].[OH-]', 'OCC']
+    agents = ['O', 'C']
+    products = ['NCOC', 'C', 'COCO']
+    reaction = ReactionEquation(reactants, agents, products)
+
+    reaction = remove_precursors_from_products(reaction)
+
+    expected_products = ['NCOC']
+    expected_reaction = ReactionEquation(reactants, agents, expected_products)
+
+    assert reaction == expected_reaction
 
 
 def test_can_be_instantiated_from_any_iterator():
