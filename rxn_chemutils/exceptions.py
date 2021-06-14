@@ -13,6 +13,15 @@ class InvalidSmiles(ValueError):
         super().__init__(f'"{smiles}" is not a valid SMILES string')
 
 
+class InvalidMdl(ValueError):
+    """
+    Exception raised when converting invalid MDL Mol strings.
+    """
+
+    def __init__(self, mdl: str):
+        super().__init__(f'The following MDL string cannot be converted: {mdl}')
+
+
 class SanitizationError(ValueError):
 
     def __init__(self, mol: Mol):

@@ -13,9 +13,9 @@ from rdkit.Chem import (
     MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags, AssignStereochemistry, RemoveHs
 )
 from rdkit.Chem.rdchem import Mol
-from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles
+from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles, MolFromMolBlock, MolToMolBlock
 
-from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
+from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError, InvalidMdl
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
@@ -57,6 +57,39 @@ def mol_to_smiles(mol: Mol, canonical: bool = True) -> str:
     Mainly a wrapper around MolToSmiles.
     """
     return MolToSmiles(mol, canonical=canonical)
+
+
+def mdl_to_mol(mdl: str, sanitize: bool = True) -> Mol:
+    """
+    Convert an MDL Mol string to an RDKit Mol.
+
+    Mainly a wrapper around MolFromMolBlock that raises InvalidMdl when necessary.
+
+    Raises:
+        InvalidMdl for empty or invalid MDL mol strings.
+
+    Args:
+        mdl: MDL Mol string to convert.
+        sanitize: whether to sanitize the molecules or not. Note: sanitization here
+            corresponds to doing a sanitization with SANITIZE_ALL.
+
+    Returns:
+        Mol instance.
+    """
+    mol = MolFromMolBlock(mdl, sanitize=sanitize)
+    if mol is None:
+        raise InvalidMdl(mdl)
+
+    return mol
+
+
+def mol_to_mdl(mol: Mol) -> str:
+    """
+    Convert an RDKit Mol to an MDL Mol string.
+
+    Mainly a wrapper around MolToSmiles.
+    """
+    return MolToMolBlock(mol)
 
 
 def sanitize_mol(

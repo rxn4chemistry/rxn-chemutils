@@ -9,9 +9,30 @@ from rdkit import Chem
 from rxn_chemutils.conversion import (
     smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
     canonicalize_smiles_with_fragment_bonds, split_smiles_and_fragment_info, cleanup_smiles,
-    sanitize_mol, mol_to_smiles, maybe_canonicalize, smiles_to_inchi, remove_hydrogens
+    sanitize_mol, mol_to_smiles, maybe_canonicalize, smiles_to_inchi, remove_hydrogens, mol_to_mdl,
+    mdl_to_mol
 )
-from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError
+from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError, InvalidMdl
+
+WATER_MDL = '''
+     RDKit          2D
+
+  1  0  0  0  0  0  0  0  0  0999 V2000
+    0.0000    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+M  END
+'''
+
+CFC_MDL = '''
+     RDKit          2D
+
+  3  2  0  0  0  0  0  0  0  0999 V2000
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2990    0.7500    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0
+    2.5981   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0
+  2  3  1  0
+M  END
+'''
 
 
 def test_smiles_to_mol():
@@ -56,6 +77,26 @@ def test_smiles_to_mol_without_sanitization():
     # Doing strictly no sanitization with the RDKit functions messes up the
     # radicals - smiles_to_mol takes care of this
     assert mol_to_smiles(smiles_to_mol('CC[C]CC', sanitize=False)) == 'CC[C]CC'
+
+
+def test_mdl_to_mol():
+    # NB: we assert that the molecules are correct with their SMILES notation
+    assert mol_to_smiles(mdl_to_mol(WATER_MDL)) == 'O'
+
+    # Empty MDL
+    with pytest.raises(InvalidMdl):
+        _ = mdl_to_mol('')
+
+    # Invalid valence - raises by default
+    with pytest.raises(InvalidMdl):
+        _ = mdl_to_mol(CFC_MDL)
+
+    # Invalid valence - does not raise if no sanitization
+    assert mol_to_smiles(mdl_to_mol(CFC_MDL, sanitize=False)) == 'CFC'
+
+    # Back-conversion leads to original MDL
+    assert mol_to_mdl(mdl_to_mol(WATER_MDL)) == WATER_MDL
+    assert mol_to_mdl(mdl_to_mol(CFC_MDL, sanitize=False)) == CFC_MDL
 
 
 def test_sanitize_mol():
