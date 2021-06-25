@@ -9,7 +9,14 @@ INTERNAL_RENDERING_SERVICE = 'http://depict.ava19.zc2.ibm.com:8080/depict/bow'
 EXTERNAL_RENDERING_SERVICE = 'https://www.simolecule.com/cdkdepict/depict/bow'
 
 
-def smiles_depict_url(smiles: str, format: str = 'svg', use_internal_service=True) -> str:
+def smiles_depict_url(
+    smiles: str,
+    format: str = 'svg',
+    use_internal_service: bool = True,
+    abbreviate: str = 'on',
+    annotate: str = 'none',
+    zoom: float = 1.0,
+) -> str:
     """
     Generate the URL for the depiction of a SMILES string.
 
@@ -18,6 +25,11 @@ def smiles_depict_url(smiles: str, format: str = 'svg', use_internal_service=Tru
         format: 'svg', 'pdf', 'png', etc.
         use_internal_service: whether to use the service deployed on ZC2 (True)
             or the one available on the simolecule website (False).
+        abbreviate: Group abbreviation. Choose between "on", "off", "groups",
+            and "reagents".
+        annotate: Atom annotation. Choose between "none", "number", "mapidx",
+            "colmap", "atomvalue", and "cip".
+        zoom: zooming factor.
 
     Returns:
         URL string
@@ -25,11 +37,11 @@ def smiles_depict_url(smiles: str, format: str = 'svg', use_internal_service=Tru
     rendering_service = INTERNAL_RENDERING_SERVICE if use_internal_service else EXTERNAL_RENDERING_SERVICE
     params = {
         'smi': smiles,
-        'zoom': '1.0',
-        'abbr': 'on',
+        'zoom': zoom,
+        'abbr': abbreviate,
         'hdisp': 'bridgehead',
         'showtitle': 'false',
-        'annotate': 'none'
+        'annotate': annotate
     }
     params_str = urllib.parse.urlencode(params)
     return f'{rendering_service}/{format}?{params_str}'
