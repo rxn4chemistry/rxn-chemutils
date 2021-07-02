@@ -11,6 +11,7 @@ class InvalidSmiles(ValueError):
 
     def __init__(self, smiles: str):
         super().__init__(f'"{smiles}" is not a valid SMILES string')
+        self.smiles = smiles
 
 
 class InvalidMdl(ValueError):
@@ -20,6 +21,7 @@ class InvalidMdl(ValueError):
 
     def __init__(self, mdl: str):
         super().__init__(f'The following MDL string cannot be converted: {mdl}')
+        self.mdl = mdl
 
 
 class SanitizationError(ValueError):
