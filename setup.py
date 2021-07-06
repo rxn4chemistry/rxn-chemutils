@@ -49,9 +49,9 @@ setup(
     extras_require={
         'dev': [
             'flake8>=3.8.4',
-            'mypy>=0.761',
+            'mypy>=0.910',
             'pytest>=5.3.4',
-            'yapf>=0.30.0',
+            'yapf>=0.31.0',
         ],
     },
 )
