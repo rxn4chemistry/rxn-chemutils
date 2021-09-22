@@ -23,6 +23,23 @@ def test_parse_any_reaction_smiles():
     )
 
 
+def test_parse_any_reaction_smiles_with_mapping():
+    # Molecules with mapping
+    reactant_1 = '[CH3:1][CH3:2]'
+    reactant_2 = '[OH2:3]'
+    product = '[CH3:1][CH2:2][OH:3]'
+
+    # In the extracted equation, mapping is still present.
+    expected = ReactionEquation([reactant_1, reactant_2, '[Na+].[Cl-]'], [], [product])
+
+    assert parse_any_reaction_smiles(
+        f'{reactant_1}.{reactant_2}.[Na+]~[Cl-]>>{product}'
+    ) == expected
+    assert parse_any_reaction_smiles(
+        f'{reactant_1}.{reactant_2}.[Na+].[Cl-]>>{product} |f:2.3|'
+    ) == expected
+
+
 def test_parse_reaction_smiles():
     assert parse_reaction_smiles('CC.O>>CCO', ReactionFormat.STANDARD
                                  ) == ReactionEquation(['CC', 'O'], [], ['CCO'])
