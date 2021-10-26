@@ -215,6 +215,21 @@ def test_canonicalize():
         canonicalize_smiles('C1=CC=CC=C1CFC', check_valence=False) ==
         canonicalize_smiles('c1ccccc1CFC', check_valence=False)
     )
+    # For special aromatic cases, still canonicalizes aromaticity, etc.
+    assert (
+        canonicalize_smiles('[se]1cccc1', check_valence=False) ==
+        canonicalize_smiles('[se]1C=CC=C1', check_valence=False)
+    )
+
+
+def test_canonicalize_rotation():
+    # In an earlier version, the following SMILES kept switching between two
+    # SMILES variants when canonicalizing (back-and-forth between aromatic and
+    # non-aromatic.
+    smiles = 'c1cc[se]c1'
+    canonical_1 = canonicalize_smiles(smiles)
+    canonical_2 = canonicalize_smiles(canonical_1)
+    assert canonical_2 == canonical_1
 
 
 def test_canonicalize_removes_unnecessary_hydrogens():
@@ -255,6 +270,8 @@ def test_cleanup_smiles():
     # Does not do any kekulization / aromatization
     assert cleanup_smiles('c1ccccc1') == 'c1ccccc1'
     assert cleanup_smiles('C1=CC=CC=C1') == 'C1=CC=CC=C1'
+    assert cleanup_smiles('[se]1cccc1') == '[se]1cccc1'
+    assert cleanup_smiles('[se]1C=CC=C1') == '[se]1C=CC=C1'
 
     # Does not mess up with fragment molecules
     assert cleanup_smiles('[C].[Pd]') == '[C].[Pd]'

@@ -20,7 +20,7 @@ from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError, InvalidMd
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
 
-def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:
+def smiles_to_mol(smiles: str, sanitize: bool = True, find_radicals: bool = True) -> Mol:
     """
     Convert a SMILES string to an RDKit Mol.
 
@@ -33,6 +33,11 @@ def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:
         smiles: SMILES string to convert.
         sanitize: whether to sanitize the molecules or not. Note: sanitization here
             corresponds to doing a sanitization with SANITIZE_ALL.
+        find_radicals: usually, it will be very practical to have this set to
+            True, otherwise the imported Mol instances will potentially "add"
+            hydrogen atoms to radical atoms. However, in some cases it may be
+            useful to de-activate it because it may cause problems on aromatic
+            molecules. Irrelevant if sanitize=True.
 
     Returns:
         Mol instance.
@@ -42,10 +47,15 @@ def smiles_to_mol(smiles: str, sanitize: bool = True) -> Mol:
         raise InvalidSmiles(smiles)
 
     # MolFromSmiles with sanitize=False ignores all the radicals and converts
-    # them back to normal atoms. To avoid this, we need to sanitize the radicals
-    # manually for the case sanitize=False
+    # them back to normal atoms. To avoid this, we need to call the sanitization
+    # function, either with no sanitization, or with radical finding.
     if not sanitize:
-        sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_FINDRADICALS])
+        if find_radicals:
+            sanitizations = [Chem.SANITIZE_FINDRADICALS]
+        else:
+            sanitizations = [Chem.SANITIZE_NONE]
+
+        sanitize_mol(mol, include_sanitizations=sanitizations)
 
     return mol
 
@@ -158,7 +168,7 @@ def canonicalize_smiles(smiles: str, check_valence: bool = True) -> str:
     Returns:
         Canonicalized SMILES string.
     """
-    mol = smiles_to_mol(smiles, sanitize=False)
+    mol = smiles_to_mol(smiles, sanitize=False, find_radicals=False)
 
     # NB: Removal of the unnecessary hydrogen atoms is disabled with sanitize=False above,
     # but the RDKit sanitize function does not actually do this. It is therefore
@@ -223,8 +233,6 @@ def smiles_to_inchi(smiles: str) -> str:
 
     # Due to a bug (?) in RDKit, it is necessary to reassign the stereochemistry
     # before conversion to InChi: https://github.com/rdkit/rdkit/issues/2361.
-    # Strangely, it is also necessary to do an empty sanitization (NONE) beforehand.
-    sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_NONE])
     AssignStereochemistry(mol, cleanIt=True, force=True)
 
     try:

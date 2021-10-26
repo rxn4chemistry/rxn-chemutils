@@ -49,6 +49,19 @@ def test_does_not_sanitize_molecules():
         assert all('[C]' in sample for sample in samples)
 
 
+def test_does_not_change_aromaticity():
+    # Check that there is no conversion of aromatic vs kekulized representation
+    # (Selenium caused a few problems in other contexts)
+    smiles = 'c1cc[se]c1'
+    for fn in randomization_functions:
+        samples = {fn(smiles) for _ in range(10)}
+        assert all('[se]' in sample for sample in samples)
+    smiles = '[Se]1C=CC=C1'
+    for fn in randomization_functions:
+        samples = {fn(smiles) for _ in range(10)}
+        assert all('[Se]' in sample for sample in samples)
+
+
 def test_keeps_stereochemistry():
     # Simple molecule with a stereocenter
     smiles = 'COC[C@](CNC)(Cl)Br'

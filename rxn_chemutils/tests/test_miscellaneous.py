@@ -50,6 +50,9 @@ def test_atom_type_counter():
     assert atom_type_counter('CC=O') == Counter({'C': 2, 'H': 4, 'O': 1})
     assert atom_type_counter('[Na+].[Cl-]') == Counter({'Na': 1, 'Cl': 1})
 
+    # with radicals
+    assert atom_type_counter('[C]CO') == Counter({'C': 2, 'H': 3, 'O': 1})
+
     with pytest.raises(InvalidSmiles):
         _ = atom_type_counter('CC(')
 
