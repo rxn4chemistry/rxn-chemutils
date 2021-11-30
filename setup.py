@@ -39,13 +39,7 @@ setup(
         'scripts/chemutils-depictready',
         'scripts/chemutils-remove-mapping',
     ],
-    install_requires=[
-        'attrs>=21.2.0',
-        'click>=7.0',
-        'loguru>=0.5.3',
-        'rxn_utilities '
-        '@ git+https://{}@github.ibm.com/rxn/rxn_utilities@latest'.format(os.environ['GHE_TOKEN']),
-    ],
+    install_requires=['attrs>=21.2.0', 'click>=7.0', 'loguru>=0.5.3', 'rxn-utilities>=0.8.1'],
     extras_require={
         'dev': [
             'flake8>=3.8.4',

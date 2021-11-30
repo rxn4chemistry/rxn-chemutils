@@ -5,7 +5,7 @@ python:
   - "3.6"
 
 install:
-  - pip install -e .[dev]
+  - pip install -e .[dev] --extra-index-url https://${PYPI_USERNAME}:${PYPI_PASSWORD}@${PYPI_SERVER}/simple
   # install RDKit. This is not as a setup dependency in order not to install it
   # in downstream packages and avoid potential conflicts with the conda
   # installation of RDKit
