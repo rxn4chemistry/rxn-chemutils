@@ -19,3 +19,13 @@ script:
   - mypy .
   # Test suite
   - pytest
+
+deploy:
+  provider: pypi
+  server: https://${PYPI_SERVER}
+  distributions: "sdist bdist_wheel"
+  username: ${PYPI_USERNAME}
+  password: ${PYPI_PASSWORD}
+  on:
+    tags: true
+
