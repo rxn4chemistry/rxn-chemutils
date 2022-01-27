@@ -10,7 +10,7 @@ import pytest
 from rxn_chemutils.exceptions import InvalidSmiles
 from rxn_chemutils.miscellaneous import (
     equivalent_smiles, atom_type_counter, is_valid_smiles, remove_atom_mapping,
-    remove_chiral_centers
+    remove_chiral_centers, remove_double_bond_stereochemistry
 )
 
 
@@ -95,4 +95,20 @@ def test_remove_chiral_centers():
 
     assert all(
         remove_chiral_centers(smi) == expected for smi, expected in input_expected_dict.items()
+    )
+
+
+def test_remove_double_bond_stereochemistry():
+    input_expected_dict = {
+        'C/C=C/C': 'CC=CC',
+        r'C/C=C\C': 'CC=CC',
+        r'C\C=C\C': 'CC=CC',
+        'F/C=C/C=C/C': 'FC=CC=CC',
+        'C1=CC=CC=C1': 'C1=CC=CC=C1',
+        'c1ccccc1': 'c1ccccc1',
+    }
+
+    assert all(
+        remove_double_bond_stereochemistry(smi) == expected
+        for smi, expected in input_expected_dict.items()
     )

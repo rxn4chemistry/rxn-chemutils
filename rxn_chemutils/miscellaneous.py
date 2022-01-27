@@ -86,5 +86,22 @@ def remove_chiral_centers(smiles: str) -> str:
 
     Args:
         smiles: non-atom-mapped SMILES string.
+
+    Returns:
+        SMILES with no chiral information. It is not canonical.
     """
     return re.sub(CHIRAL_CENTER_PATTERN, r'[\g<1>\g<2>]', smiles)
+
+
+def remove_double_bond_stereochemistry(smiles: str) -> str:
+    """
+    Return SMILES where all the E/Z information on double bonds is removed.
+
+    Args:
+        smiles: SMILES string.
+
+    Returns:
+        SMILES with no sterochemical information for double bonds. The SMILES
+        is not guaranteed to be canonical.
+    """
+    return smiles.replace('/', '').replace('\\', '')
