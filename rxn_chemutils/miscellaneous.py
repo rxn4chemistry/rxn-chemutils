@@ -13,6 +13,10 @@ from rdkit.Chem import Mol, Atom, AddHs
 from rxn_chemutils.conversion import canonicalize_smiles, smiles_to_mol
 from rxn_chemutils.exceptions import InvalidSmiles
 
+CHIRAL_CENTER_PATTERN = re.compile(
+    r'\[([^],@]+)@+([^]]*)]'
+)  # Matches stereo centres, and groups what comes before and after "@"
+
 
 def is_valid_smiles(smiles: str, check_valence: bool = True) -> bool:
     """
@@ -74,3 +78,13 @@ def remove_atom_mapping(smiles: str) -> str:
 
     # We look for ":" followed by digits before a "]"
     return re.sub(r':\d+]', ']', smiles)
+
+
+def remove_chiral_centers(smiles: str) -> str:
+    """
+    Return SMILES where all the chiral centres are removed.
+
+    Args:
+        smiles: non-atom-mapped SMILES string.
+    """
+    return re.sub(CHIRAL_CENTER_PATTERN, r'[\g<1>\g<2>]', smiles)

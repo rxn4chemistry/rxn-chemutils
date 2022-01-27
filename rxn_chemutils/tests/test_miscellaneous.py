@@ -9,7 +9,8 @@ import pytest
 
 from rxn_chemutils.exceptions import InvalidSmiles
 from rxn_chemutils.miscellaneous import (
-    equivalent_smiles, atom_type_counter, is_valid_smiles, remove_atom_mapping
+    equivalent_smiles, atom_type_counter, is_valid_smiles, remove_atom_mapping,
+    remove_chiral_centers
 )
 
 
@@ -77,3 +78,21 @@ def test_remove_atom_mapping():
         '([cH][cH]1)[C](=[O])[CH2][CH2][CH2][Cl] |f:2.3.4.5|'
     )
     assert remove_atom_mapping(fragment_with_mapping) == fragment_without_mapping
+
+
+def test_remove_chiral_centers():
+    input_expected_dict = {
+        'O[C@](Br)(C)N': 'O[C](Br)(C)N',
+        'C[C@@](Br)(O)N': 'C[C](Br)(O)N',
+        'N[C@H](O)C': 'N[CH](O)C',
+        'N1[C@H](Cl)[C@@H](Cl)C(Cl)CC1': 'N1[CH](Cl)[CH](Cl)C(Cl)CC1',
+        'F/C=C/F': 'F/C=C/F',
+        '[N@+]': '[N+]',
+        '[N@@+]': '[N+]',
+        '[Si@@]': '[Si]',
+        '[Si@H]': '[SiH]'
+    }
+
+    assert all(
+        remove_chiral_centers(smi) == expected for smi, expected in input_expected_dict.items()
+    )
