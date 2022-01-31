@@ -7,10 +7,9 @@ import pytest
 from rdkit import Chem
 
 from rxn_chemutils.conversion import (
-    smiles_to_mol, inchify_smiles, canonicalize_smiles, inchify_smiles_with_fragment_bonds,
-    canonicalize_smiles_with_fragment_bonds, split_smiles_and_fragment_info, cleanup_smiles,
-    sanitize_mol, mol_to_smiles, maybe_canonicalize, smiles_to_inchi, remove_hydrogens, mol_to_mdl,
-    mdl_to_mol
+    smiles_to_mol, inchify_smiles, canonicalize_smiles, canonicalize_smiles_with_fragment_bonds,
+    split_smiles_and_fragment_info, cleanup_smiles, sanitize_mol, mol_to_smiles,
+    maybe_canonicalize, smiles_to_inchi, remove_hydrogens, mol_to_mdl, mdl_to_mol
 )
 from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError, InvalidMdl
 
@@ -180,11 +179,6 @@ def test_inchify_smiles():
         canonicalize_smiles('L')
 
 
-def test_inchify_smiles_with_fragment_bonds():
-    inchify_smiles = inchify_smiles_with_fragment_bonds('[Mg+2]~O=S(=O)([O-])[O-]')
-    assert inchify_smiles == inchify_smiles_with_fragment_bonds('O=S(=O)([O-])[O-]~[Mg+2]')
-
-
 def test_canonicalize_smiles_with_fragment_bonds():
     canonical_smiles = canonicalize_smiles_with_fragment_bonds('[Mg+2]~O=S(=O)([O-])[O-]')
     assert canonical_smiles == canonicalize_smiles_with_fragment_bonds('O=S(=O)([O-])[O-]~[Mg+2]')
@@ -350,3 +344,8 @@ def test_smiles_to_inchi():
     # SMILES have different double-bond or R/S stereochemistries
     assert len({smiles_to_inchi(s) for s in ['CC=CC', 'C/C=C/C', r'C/C=C\C']}) == 3
     assert len({smiles_to_inchi(s) for s in ['C(O)(N)C', '[C@H](O)(N)C', '[C@@H](O)(N)C']}) == 3
+
+    # extended tautomer check - where the default options do not detect
+    # tautomerism in a 1,3-diketone
+    assert smiles_to_inchi('C1C(=O)CC(=O)CC1') != smiles_to_inchi('C1C(=O)C=C(O)CC1')
+    assert smiles_to_inchi('C1C(=O)CC(=O)CC1', True) == smiles_to_inchi('C1C(=O)C=C(O)CC1', True)

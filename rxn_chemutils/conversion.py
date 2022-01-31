@@ -218,9 +218,13 @@ def canonicalize_smiles_with_fragment_bonds(smiles: str, fragment_bond='~') -> s
         raise InvalidSmiles(smiles)
 
 
-def smiles_to_inchi(smiles: str) -> str:
+def smiles_to_inchi(smiles: str, extended_tautomer_check: bool = False) -> str:
     """
     Get the InChI string for a given SMILES.
+
+    Args:
+        smiles: the SMILES to convert to InChI.
+        extended_tautomer_check: include the options for additional tautomer standardization.
 
     Raises:
         InvalidSmiles for conversion errors or invalid SMILES.
@@ -236,9 +240,27 @@ def smiles_to_inchi(smiles: str) -> str:
     AssignStereochemistry(mol, cleanIt=True, force=True)
 
     try:
-        return MolToInchi(mol)
+        return mol_to_inchi(mol, extended_tautomer_check=extended_tautomer_check)
     except Exception:
         raise InvalidSmiles(smiles)
+
+
+def mol_to_inchi(mol: Mol, extended_tautomer_check: bool = False) -> str:
+    """
+    Convert an RDKit Mol to an InChI.
+
+    Args:
+        mol: the RDKit Mol to convert to InChI.
+        extended_tautomer_check: include the options for additional tautomer
+            standardization.
+    """
+
+    options = ''
+    if extended_tautomer_check:
+        # https://pubs.acs.org/doi/10.1021/acs.jcim.9b01080
+        options = '-KET -15T'
+
+    return Chem.MolToInchi(mol, options=options)
 
 
 def inchify_smiles(smiles: str) -> str:
@@ -251,27 +273,6 @@ def inchify_smiles(smiles: str) -> str:
 
     try:
         return MolToSmiles(MolFromInchi(MolToInchi(MolFromSmiles(smiles))))
-    except Exception:
-        raise InvalidSmiles(smiles)
-
-
-def inchify_smiles_with_fragment_bonds(smiles: str, fragment_bond='~') -> str:
-    """
-    Inchify a SMILES string that contains fragment bonds for a molecule
-    """
-    # Raise for empty SMILES
-    if not smiles:
-        raise InvalidSmiles(smiles)
-
-    try:
-        return '.'.join(
-            sorted(
-                [
-                    inchify_smiles(_.replace(fragment_bond, '.')).replace('.', fragment_bond)
-                    for _ in smiles.split('.')
-                ]
-            )
-        )
     except Exception:
         raise InvalidSmiles(smiles)
 
