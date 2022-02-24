@@ -4,7 +4,9 @@ Functionality to handle different kinds of reaction SMILES with the same functio
 In a separate file than miscellaneous.py or conversion.py in order to avoid
 cyclic dependencies.
 """
-from enum import Enum, auto
+from enum import auto
+
+from rxn_utilities.rxn_types import RxnEnum
 
 from rxn_chemutils.extended_reaction_smiles import (
     parse_extended_reaction_smiles, to_extended_reaction_smiles
@@ -13,7 +15,7 @@ from rxn_chemutils.miscellaneous import remove_atom_mapping
 from rxn_chemutils.reaction_equation import ReactionEquation, canonicalize_compounds
 
 
-class ReactionFormat(Enum):
+class ReactionFormat(RxnEnum):
     """
     Existing reaction SMILES formats.
 
