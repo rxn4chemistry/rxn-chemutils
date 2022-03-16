@@ -41,11 +41,10 @@ setup(
     ],
     install_requires=['attrs>=21.2.0', 'click>=7.0', 'loguru>=0.5.3', 'rxn-utilities>=0.8.1'],
     extras_require={
-        'dev': [
-            'flake8>=3.8.4',
-            'mypy>=0.910',
-            'pytest>=5.3.4',
-            'yapf>=0.31.0',
-        ],
+        'dev':
+            [
+                'flake8>=3.8.4', 'mypy>=0.910', 'pytest>=5.3.4', 'yapf>=0.31.0',
+                'bump2version>=1.0.1'
+            ],
     },
 )
