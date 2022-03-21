@@ -4,11 +4,14 @@
 # ALL RIGHTS RESERVED
 """Utilities used in the RXN forward/retrosynthesis workers."""
 import contextlib
+import logging
 from io import StringIO
 from typing import Optional
 
-from loguru import logger
 from rdkit import Chem
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 RXN_SMILES_SEPARATOR = '>>'
 
