@@ -41,6 +41,9 @@ def test_canonicalize_multicomponent_smiles():
     assert canonicalize_multicomponent_smiles('C(C)O') == 'CCO'
     assert canonicalize_multicomponent_smiles('C.OCC.C(C)O') == 'C.CCO.CCO'
 
+    # Canonicalizing an empty string is valid - since this is a valid multi-component SMILES
+    assert canonicalize_multicomponent_smiles('') == ''
+
     # with fragment bond; may fail if fragment bond not specified
     assert canonicalize_multicomponent_smiles(
         'C.[Na+]~[H-].O', fragment_bond='~'
@@ -55,6 +58,7 @@ def test_canonicalize_multicomponent_smiles():
 
 
 def test_sort_multicomponent_smiles():
+    assert sort_multicomponent_smiles('') == ''
     assert sort_multicomponent_smiles('B.D.C.A') == 'A.B.C.D'
     assert sort_multicomponent_smiles('B.D.C~A') == 'B.C~A.D'
     assert sort_multicomponent_smiles('NCC(N).CCO.COCO') == 'CCO.COCO.NCC(N)'
