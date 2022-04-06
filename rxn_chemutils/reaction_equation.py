@@ -9,7 +9,7 @@ import attr
 from rxn_utilities.container_utilities import remove_duplicates
 
 from .conversion import canonicalize_smiles, cleanup_smiles
-from .molecule_list import molecule_list_from_string, molecule_list_to_string
+from .multicomponent_smiles import multicomponent_smiles_to_list, list_to_multicomponent_smiles
 
 T = TypeVar('T', bound='ReactionEquation')
 
@@ -50,7 +50,7 @@ class ReactionEquation:
         Convert a ReactionEquation to an "rxn" reaction SMILES.
         """
 
-        smiles_groups = (molecule_list_to_string(group, fragment_bond) for group in self)
+        smiles_groups = (list_to_multicomponent_smiles(group, fragment_bond) for group in self)
         return '>'.join(smiles_groups)
 
     @classmethod
@@ -60,7 +60,7 @@ class ReactionEquation:
         """
 
         groups = [
-            molecule_list_from_string(smiles_group, fragment_bond=fragment_bond)
+            multicomponent_smiles_to_list(smiles_group, fragment_bond=fragment_bond)
             for smiles_group in reaction_string.split('>')
         ]
 
