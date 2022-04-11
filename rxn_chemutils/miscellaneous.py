@@ -76,8 +76,8 @@ def remove_atom_mapping(smiles: str) -> str:
         A SMILES string without atom mapping information.
     """
 
-    # We look for ":" followed by digits before a "]"
-    return re.sub(r':\d+]', ']', smiles)
+    # We look for ":" followed by digits before a "]" not coming after an "*"
+    return re.sub(r'(?<=[^\*])(:\d+)]', ']', smiles)
 
 
 def remove_chiral_centers(smiles: str) -> str:
