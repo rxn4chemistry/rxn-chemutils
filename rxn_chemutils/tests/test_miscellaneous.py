@@ -7,10 +7,10 @@ from collections import Counter
 
 import pytest
 
-from rxn_chemutils.exceptions import InvalidSmiles
+from rxn_chemutils.exceptions import InvalidSmiles, InvalidReactionSmiles
 from rxn_chemutils.miscellaneous import (
-    equivalent_smiles, atom_type_counter, is_valid_smiles, remove_atom_mapping,
-    remove_chiral_centers, remove_double_bond_stereochemistry
+    equivalent_smiles, atom_type_counter, is_valid_smiles, remove_chiral_centers,
+    remove_double_bond_stereochemistry, canonicalize_any
 )
 
 
@@ -58,28 +58,6 @@ def test_atom_type_counter():
         _ = atom_type_counter('CC(')
 
 
-def test_remove_atom_mapping():
-    # Reaction with mapping
-    with_mapping = '[*:1]CCO.[CH3:1][C:2](=[O:3])[OH:4]>[H+]>CC[O:4][C:2](=[O:3])[CH3:1].O'
-    without_mapping = '[*:1]CCO.[CH3][C](=[O])[OH]>[H+]>CC[O][C](=[O])[CH3].O'
-    assert remove_atom_mapping(with_mapping) == without_mapping
-
-    # Reaction with mapping -> do nothing
-    rxn_without_mapping = '[*:1]CCO.CC(=O)O>[H+]>CCOC(C)=O.O'
-    assert remove_atom_mapping(rxn_without_mapping) == rxn_without_mapping
-
-    # Reaction with fragment info -> fragment info is not removed
-    fragment_with_mapping = (
-        '[*:1][Cl-].[Cl-].[Cl-].C(Cl)Cl>[CH3:9][CH:8]([CH3:10])[c:7]1[cH:11][cH:12][c:13]'
-        '([cH:14][cH:15]1)[C:5](=[O:6])[CH2:4][CH2:3][CH2:2][Cl:1] |f:2.3.4.5|'
-    )
-    fragment_without_mapping = (
-        '[*:1][Cl-].[Cl-].[Cl-].C(Cl)Cl>[CH3][CH]([CH3])[c]1[cH][cH][c]'
-        '([cH][cH]1)[C](=[O])[CH2][CH2][CH2][Cl] |f:2.3.4.5|'
-    )
-    assert remove_atom_mapping(fragment_with_mapping) == fragment_without_mapping
-
-
 def test_remove_chiral_centers():
     input_expected_dict = {
         'O[C@](Br)(C)N': 'O[C](Br)(C)N',
@@ -112,3 +90,49 @@ def test_remove_double_bond_stereochemistry():
         remove_double_bond_stereochemistry(smi) == expected
         for smi, expected in input_expected_dict.items()
     )
+
+
+def test_canonicalize_any_on_molecule_SMILES():
+    assert canonicalize_any('CC(C)') == 'CCC'
+    assert canonicalize_any('CF(C)', check_valence=False) == 'CFC'
+    with pytest.raises(InvalidSmiles):
+        _ = canonicalize_any('CF(C)')
+
+
+def test_canonicalize_any_on_multicomponent_smiles():
+    # Basic example
+    assert canonicalize_any('CC(C).C(O)') == 'CCC.CO'
+
+    # Note: does not reorder!
+    assert canonicalize_any('C(O).CC(C)') == 'CO.CCC'
+
+    # Note: within the same compound: reodering due to compound canonicalization
+    assert canonicalize_any('CO.C~O') == 'CO.C~O'
+    assert canonicalize_any('CO.O~C') == 'CO.C~O'
+
+    # Valence checking
+    assert canonicalize_any('C(O).CF(C)', check_valence=False) == 'CO.CFC'
+    with pytest.raises(InvalidSmiles):
+        _ = canonicalize_any('CO.CFC')
+
+
+def test_canonicalize_any_on_reaction_smiles():
+
+    # Basic examples
+    assert canonicalize_any('CC(C)>>C(O)') == 'CCC>>CO'
+    assert canonicalize_any('CC(C)>C(O)>C(O)') == 'CCC>CO>CO'
+
+    # Basic involving fragments
+    assert canonicalize_any('CO.O~C>>C(O)') == 'CO.C~O>>CO'
+    assert canonicalize_any('CO.O.C>>C(O) |f:1.2|') == 'CO.C.O>>CO |f:1.2|'
+    # Note here the slight reordering - due to fragment parsing
+    assert canonicalize_any('CC.CC.C.C>>CC |f:0.2|') == 'CC.C.C.CC>>CC |f:2.3|'
+
+    # Valence checking, and other potential exceptions
+    assert canonicalize_any('CF(C)>>C(O)', check_valence=False) == 'CFC>>CO'
+    with pytest.raises(InvalidSmiles):
+        _ = canonicalize_any('CFC>>CO')
+    with pytest.raises(InvalidReactionSmiles):
+        _ = canonicalize_any('CC>CO')
+    with pytest.raises(InvalidReactionSmiles):
+        _ = canonicalize_any('CC>>CC>>C(O)')

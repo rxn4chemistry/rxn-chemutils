@@ -11,6 +11,7 @@ from rxn_chemutils.multicomponent_smiles import (
 def test_multicomponent_smiles_to_list():
     assert multicomponent_smiles_to_list('') == []
     assert multicomponent_smiles_to_list('A.B.C') == ['A', 'B', 'C']
+    assert multicomponent_smiles_to_list('..A.B.C.') == ['A', 'B', 'C']
     assert multicomponent_smiles_to_list('A~B.C') == ['A~B', 'C']
     assert multicomponent_smiles_to_list('A~B.C', fragment_bond='~') == ['A.B', 'C']
     assert multicomponent_smiles_to_list('A#B.C', fragment_bond='#') == ['A.B', 'C']

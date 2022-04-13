@@ -7,7 +7,7 @@ from typing import Optional, List, Callable, Iterable
 
 from rxn_utilities.container_utilities import remove_duplicates
 
-from rxn_chemutils.conversion import canonicalize_smiles
+from .conversion import canonicalize_smiles
 
 
 def multicomponent_smiles_to_list(multicomponent_smiles: str,

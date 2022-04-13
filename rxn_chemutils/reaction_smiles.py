@@ -8,11 +8,9 @@ from enum import auto
 
 from rxn_utilities.rxn_types import RxnEnum
 
-from rxn_chemutils.extended_reaction_smiles import (
-    parse_extended_reaction_smiles, to_extended_reaction_smiles
-)
-from rxn_chemutils.miscellaneous import remove_atom_mapping
-from rxn_chemutils.reaction_equation import ReactionEquation, canonicalize_compounds
+from .extended_reaction_smiles import (parse_extended_reaction_smiles, to_extended_reaction_smiles)
+from .reaction_equation import ReactionEquation, canonicalize_compounds
+from .utils import remove_atom_mapping
 
 
 class ReactionFormat(RxnEnum):

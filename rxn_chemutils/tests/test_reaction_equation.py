@@ -8,7 +8,7 @@ from typing import List
 import pytest
 
 from rxn_chemutils.conversion import canonicalize_smiles
-from rxn_chemutils.exceptions import InvalidSmiles
+from rxn_chemutils.exceptions import InvalidSmiles, InvalidReactionSmiles
 from rxn_chemutils.reaction_equation import (
     ReactionEquation, merge_reactants_and_agents, sort_compounds, canonicalize_compounds,
     remove_duplicate_compounds, has_repeated_molecules, rxn_standardization, cleanup_compounds,
@@ -124,6 +124,19 @@ def test_equation_from_string():
     expected_reaction = ReactionEquation(expected_reactants, expected_agents, expected_products)
 
     assert reaction == expected_reaction
+
+
+def test_equation_from_string_ignores_additional_dots():
+    reaction_smiles = '..A.B.>.>C.D.'
+    expected = ReactionEquation(['A', 'B'], [], ['C', 'D'])
+    assert ReactionEquation.from_string(reaction_smiles) == expected
+
+
+def test_equation_from_string_with_invalid_strings():
+    invalid_reaction_smiles = ['A.B>C', 'A>>>C', 'A>>B>>C', 'A.B.C']
+    for reaction_smiles in invalid_reaction_smiles:
+        with pytest.raises(InvalidReactionSmiles):
+            _ = ReactionEquation.from_string(reaction_smiles)
 
 
 def test_equation_from_string_with_fragment_bond():

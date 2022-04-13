@@ -7,7 +7,7 @@ import random
 
 from rdkit import Chem
 
-from rxn_chemutils.conversion import smiles_to_mol, mol_to_smiles
+from .conversion import smiles_to_mol, mol_to_smiles
 
 
 def randomize_smiles_rotated(smiles: str, with_order_reversal: bool = True) -> str:

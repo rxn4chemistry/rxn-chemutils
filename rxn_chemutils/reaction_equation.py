@@ -9,6 +9,7 @@ import attr
 from rxn_utilities.container_utilities import remove_duplicates
 
 from .conversion import canonicalize_smiles, cleanup_smiles
+from .exceptions import InvalidReactionSmiles
 from .multicomponent_smiles import multicomponent_smiles_to_list, list_to_multicomponent_smiles
 
 T = TypeVar('T', bound='ReactionEquation')
@@ -64,7 +65,10 @@ class ReactionEquation:
             for smiles_group in reaction_string.split('>')
         ]
 
-        return cls(*groups)
+        try:
+            return cls(*groups)
+        except TypeError as e:
+            raise InvalidReactionSmiles(reaction_string) from e
 
 
 def merge_reactants_and_agents(reaction: ReactionEquation) -> ReactionEquation:

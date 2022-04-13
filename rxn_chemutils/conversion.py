@@ -15,7 +15,7 @@ from rdkit.Chem import (
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles, MolFromMolBlock, MolToMolBlock
 
-from rxn_chemutils.exceptions import InvalidSmiles, SanitizationError, InvalidMdl
+from .exceptions import InvalidSmiles, SanitizationError, InvalidMdl
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 

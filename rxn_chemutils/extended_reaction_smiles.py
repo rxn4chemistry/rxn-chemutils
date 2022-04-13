@@ -10,9 +10,9 @@ from rdkit.Chem import Mol
 
 from .chemical_reaction import ChemicalReaction
 from .conversion import mols_to_smiles, split_smiles_and_fragment_info
-from .miscellaneous import remove_atom_mapping
 from .rdkit_utils import clear_atom_mapping
 from .reaction_equation import ReactionEquation, cleanup_compounds
+from .utils import remove_atom_mapping
 
 # Regex pattern to extract the fragment info from the extended info of reaction SMILES
 EXTENDED_FRAGMENT_REGEX = re.compile(r'f:[\d\.,]+')

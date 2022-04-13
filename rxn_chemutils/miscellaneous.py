@@ -10,8 +10,12 @@ from typing import List
 
 from rdkit.Chem import Mol, Atom, AddHs
 
-from rxn_chemutils.conversion import canonicalize_smiles, smiles_to_mol
-from rxn_chemutils.exceptions import InvalidSmiles
+from .conversion import canonicalize_smiles, smiles_to_mol
+from .exceptions import InvalidSmiles
+from .multicomponent_smiles import canonicalize_multicomponent_smiles
+from .reaction_equation import canonicalize_compounds
+from .reaction_smiles import to_reaction_smiles, parse_reaction_smiles, determine_format
+from .utils import remove_atom_mapping  # noqa: users may still import it from miscellaneous
 
 CHIRAL_CENTER_PATTERN = re.compile(
     r'\[([^],@]+)@+([^]]*)]'
@@ -62,24 +66,6 @@ def atom_type_counter(smiles: str) -> typing.Counter[str]:
     return Counter(atom.GetSymbol() for atom in atoms)
 
 
-def remove_atom_mapping(smiles: str) -> str:
-    """
-    Remove the atom mapping of a reaction SMILES.
-
-    The resulting SMILES strings will still contain brackets and it may be
-    advisable to canonicalize them or clean them up as a postprocessing step.
-
-    Args:
-        smiles: SMILES string potentially containing mapping information.
-
-    Returns:
-        A SMILES string without atom mapping information.
-    """
-
-    # We look for ":" followed by digits before a "]" not coming after an "*"
-    return re.sub(r'(?<=[^\*])(:\d+)]', ']', smiles)
-
-
 def remove_chiral_centers(smiles: str) -> str:
     """
     Return SMILES where all the chiral centres are removed.
@@ -105,3 +91,32 @@ def remove_double_bond_stereochemistry(smiles: str) -> str:
         is not guaranteed to be canonical.
     """
     return smiles.replace('/', '').replace('\\', '')
+
+
+def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
+    """
+    Canonicalize any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).
+
+    In the case of reaction SMILES, the format is kept.
+
+    Args:
+        any_smiles: any kind of SMILES string.
+        check_valence: if False, will not do any valence check.
+
+    Raises:
+        InvalidSmiles: if the SMILES string is not valid.
+
+    Returns:
+        the canonical (molecule, multicomponent, or reaction) SMILES string.
+    """
+    if '>' in any_smiles:
+        # we have a reaction SMILES
+        reaction_format = determine_format(any_smiles)
+        reaction = parse_reaction_smiles(any_smiles, reaction_format)
+        reaction = canonicalize_compounds(reaction, check_valence=check_valence)
+        return to_reaction_smiles(reaction, reaction_format)
+    else:
+        # This covers both single molecule SMILES and multicomponent SMILES
+        return canonicalize_multicomponent_smiles(
+            any_smiles, fragment_bond='~', check_valence=check_valence
+        )
