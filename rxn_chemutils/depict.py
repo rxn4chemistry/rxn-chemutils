@@ -5,16 +5,16 @@
 
 import urllib.parse
 
-INTERNAL_RENDERING_SERVICE = 'http://depict.ava19.zc2.ibm.com:8080/depict/bow'
-EXTERNAL_RENDERING_SERVICE = 'https://www.simolecule.com/cdkdepict/depict/bow'
+INTERNAL_RENDERING_SERVICE = "http://depict.ava19.zc2.ibm.com:8080/depict/bow"
+EXTERNAL_RENDERING_SERVICE = "https://www.simolecule.com/cdkdepict/depict/bow"
 
 
 def smiles_depict_url(
     smiles: str,
-    format: str = 'svg',
+    format: str = "svg",
     use_internal_service: bool = True,
-    abbreviate: str = 'on',
-    annotate: str = 'none',
+    abbreviate: str = "on",
+    annotate: str = "none",
     zoom: float = 1.0,
 ) -> str:
     """
@@ -34,14 +34,18 @@ def smiles_depict_url(
     Returns:
         URL string
     """
-    rendering_service = INTERNAL_RENDERING_SERVICE if use_internal_service else EXTERNAL_RENDERING_SERVICE
+    rendering_service = (
+        INTERNAL_RENDERING_SERVICE
+        if use_internal_service
+        else EXTERNAL_RENDERING_SERVICE
+    )
     params = {
-        'smi': smiles,
-        'zoom': zoom,
-        'abbr': abbreviate,
-        'hdisp': 'bridgehead',
-        'showtitle': 'false',
-        'annotate': annotate
+        "smi": smiles,
+        "zoom": zoom,
+        "abbr": abbreviate,
+        "hdisp": "bridgehead",
+        "showtitle": "false",
+        "annotate": annotate,
     }
     params_str = urllib.parse.urlencode(params)
-    return f'{rendering_service}/{format}?{params_str}'
+    return f"{rendering_service}/{format}?{params_str}"

@@ -23,4 +23,4 @@ def remove_atom_mapping(smiles: str) -> str:
     """
 
     # We look for ":" followed by digits before a "]" not coming after an "*"
-    return re.sub(r'(?<=[^\*])(:\d+)]', ']', smiles)
+    return re.sub(r"(?<=[^\*])(:\d+)]", "]", smiles)

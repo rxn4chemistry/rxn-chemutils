@@ -8,7 +8,10 @@ from enum import auto
 
 from rxn_utilities.rxn_types import RxnEnum
 
-from .extended_reaction_smiles import (parse_extended_reaction_smiles, to_extended_reaction_smiles)
+from .extended_reaction_smiles import (
+    parse_extended_reaction_smiles,
+    to_extended_reaction_smiles,
+)
 from .reaction_equation import ReactionEquation, canonicalize_compounds
 from .utils import remove_atom_mapping
 
@@ -24,6 +27,7 @@ class ReactionFormat(RxnEnum):
         STANDARD_WITH_TILDE: standard reaction SMILES, where fragments are
             indicated with tilde symbols, "~".
     """
+
     EXTENDED = auto()
     STANDARD = auto()
     STANDARD_WITH_TILDE = auto()
@@ -33,10 +37,10 @@ def determine_format(reaction_smiles: str) -> ReactionFormat:
     """
     Determine the format of a reaction SMILES.
     """
-    if ' |f:' in reaction_smiles:
+    if " |f:" in reaction_smiles:
         return ReactionFormat.EXTENDED
 
-    if '~' in reaction_smiles:
+    if "~" in reaction_smiles:
         return ReactionFormat.STANDARD_WITH_TILDE
 
     return ReactionFormat.STANDARD
@@ -49,7 +53,9 @@ def parse_any_reaction_smiles(smiles: str) -> ReactionEquation:
     return parse_reaction_smiles(smiles, reaction_format=determine_format(smiles))
 
 
-def parse_reaction_smiles(smiles: str, reaction_format: ReactionFormat) -> ReactionEquation:
+def parse_reaction_smiles(
+    smiles: str, reaction_format: ReactionFormat
+) -> ReactionEquation:
     """
     Parse the reaction SMILES in a given format.
     """
@@ -60,9 +66,9 @@ def parse_reaction_smiles(smiles: str, reaction_format: ReactionFormat) -> React
         return ReactionEquation.from_string(smiles)
 
     if reaction_format is ReactionFormat.STANDARD_WITH_TILDE:
-        return ReactionEquation.from_string(smiles, fragment_bond='~')
+        return ReactionEquation.from_string(smiles, fragment_bond="~")
 
-    raise ValueError(f'Unsupported reaction format: {reaction_format}')
+    raise ValueError(f"Unsupported reaction format: {reaction_format}")
 
 
 def to_reaction_smiles(
@@ -78,9 +84,9 @@ def to_reaction_smiles(
         return reaction_equation.to_string()
 
     if reaction_format is ReactionFormat.STANDARD_WITH_TILDE:
-        return reaction_equation.to_string(fragment_bond='~')
+        return reaction_equation.to_string(fragment_bond="~")
 
-    raise ValueError(f'Unsupported reaction format: {reaction_format}')
+    raise ValueError(f"Unsupported reaction format: {reaction_format}")
 
 
 def canonicalize_reaction_smiles(reaction_smiles: str) -> str:

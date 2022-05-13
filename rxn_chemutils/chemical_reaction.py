@@ -4,7 +4,7 @@
 # ALL RIGHTS RESERVED
 """ Contains the class Reaction representing unidirectional reactions. """
 from enum import Enum
-from typing import Tuple, List, Any, overload
+from typing import Any, List, Tuple, overload
 
 from rdkit.Chem import AllChem as rdk
 from rdkit.Chem.rdchem import Mol
@@ -12,14 +12,14 @@ from rxn_utilities import container_utilities
 
 
 class ChemicalReactionPart(Enum):
-    """ An enum used to specify the three different parts of a chemical Reaction. """
+    """An enum used to specify the three different parts of a chemical Reaction."""
+
     reactants = 1
     agents = 2
     products = 3
 
 
 class ChemicalReaction:
-
     def __init__(
         self,
         reaction_smarts: str,
@@ -35,7 +35,7 @@ class ChemicalReaction:
             sanitize: Whether to pass the sanitize keyword argument to rdkit's MolFromSmiles.
             kwargs: Keyword arguments supplied to rdkit's MolToSmiles. Defaults: canonical=True
         """
-        kwargs.setdefault('canonical', True)
+        kwargs.setdefault("canonical", True)
 
         self.__reaction_smarts = reaction_smarts
         self.__remove_duplicates = remove_duplicates
@@ -63,12 +63,28 @@ class ChemicalReaction:
             The reaction SMARTS representing this instance.
         """
         return (
-            '.'.join(
-                [rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs) for m in self.reactants if m]
-            ) + '>' + '.'.join(
-                [rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs) for m in self.agents if m]
-            ) + '>' + '.'.join(
-                [rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs) for m in self.products if m]
+            ".".join(
+                [
+                    rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
+                    for m in self.reactants
+                    if m
+                ]
+            )
+            + ">"
+            + ".".join(
+                [
+                    rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
+                    for m in self.agents
+                    if m
+                ]
+            )
+            + ">"
+            + ".".join(
+                [
+                    rdk.MolToSmiles(m, **self.__smiles_to_mol_kwargs)
+                    for m in self.products
+                    if m
+                ]
             )
         )
 
@@ -109,8 +125,9 @@ class ChemicalReaction:
     # Private Methods
     #
 
-    def __reaction_to_mols(self, reaction_smarts: str,
-                           sanitize: bool) -> Tuple[List[Mol], List[Mol], List[Mol]]:
+    def __reaction_to_mols(
+        self, reaction_smarts: str, sanitize: bool
+    ) -> Tuple[List[Mol], List[Mol], List[Mol]]:
         """Creates a tuple of lists of reactants, agents, and products as rdkit Mol instances from a reaction SMARTS.
 
         Args:
@@ -123,11 +140,11 @@ class ChemicalReaction:
         Returns:
             A tuple of lists of reactants, agents, and products representing the reaction.
         """
-        if reaction_smarts.count('>') != 2:
+        if reaction_smarts.count(">") != 2:
             raise ValueError('A valid SMARTS reaction must contain two ">".')
 
         raw_reactants, raw_agents, raw_products = tuple(
-            [p.split('.') for p in reaction_smarts.split('>')]
+            [p.split(".") for p in reaction_smarts.split(">")]
         )
 
         if self.__remove_duplicates:
@@ -137,13 +154,19 @@ class ChemicalReaction:
 
         return (
             [
-                rdk.MolFromSmiles(reactant, sanitize=sanitize) for reactant in raw_reactants
-                if reactant != ''
+                rdk.MolFromSmiles(reactant, sanitize=sanitize)
+                for reactant in raw_reactants
+                if reactant != ""
             ],
-            [rdk.MolFromSmiles(agent, sanitize=sanitize) for agent in raw_agents if agent != ''],
             [
-                rdk.MolFromSmiles(product, sanitize=sanitize) for product in raw_products
-                if product != ''
+                rdk.MolFromSmiles(agent, sanitize=sanitize)
+                for agent in raw_agents
+                if agent != ""
+            ],
+            [
+                rdk.MolFromSmiles(product, sanitize=sanitize)
+                for product in raw_products
+                if product != ""
             ],
         )
 
@@ -172,7 +195,8 @@ class ChemicalReaction:
             A list of SMILES of the reactants.
         """
         return [
-            rdk.MolToSmiles(reactant, **self.__smiles_to_mol_kwargs) for reactant in self.reactants
+            rdk.MolToSmiles(reactant, **self.__smiles_to_mol_kwargs)
+            for reactant in self.reactants
             if reactant
         ]
 
@@ -183,7 +207,9 @@ class ChemicalReaction:
             A list of SMILES of the agents.
         """
         return [
-            rdk.MolToSmiles(agent, **self.__smiles_to_mol_kwargs) for agent in self.agents if agent
+            rdk.MolToSmiles(agent, **self.__smiles_to_mol_kwargs)
+            for agent in self.agents
+            if agent
         ]
 
     def get_products_as_smiles(self) -> List[str]:
@@ -193,7 +219,8 @@ class ChemicalReaction:
             A list of SMILES of the products.
         """
         return [
-            rdk.MolToSmiles(product, **self.__smiles_to_mol_kwargs) for product in self.products
+            rdk.MolToSmiles(product, **self.__smiles_to_mol_kwargs)
+            for product in self.products
             if product
         ]
 
@@ -212,12 +239,18 @@ class ChemicalReaction:
         # Avoid three method calls and do it directly
         return (
             [
-                i for i, m in enumerate(self.reactants)
+                i
+                for i, m in enumerate(self.reactants)
                 if m and len(list(m.GetSubstructMatch(p))) > 0
             ],
-            [i for i, m in enumerate(self.agents) if m and len(list(m.GetSubstructMatch(p))) > 0],
             [
-                i for i, m in enumerate(self.products)
+                i
+                for i, m in enumerate(self.agents)
+                if m and len(list(m.GetSubstructMatch(p))) > 0
+            ],
+            [
+                i
+                for i, m in enumerate(self.products)
                 if m and len(list(m.GetSubstructMatch(p))) > 0
             ],
         )
@@ -236,18 +269,22 @@ class ChemicalReaction:
 
         if reaction_part == ChemicalReactionPart.reactants:
             return [
-                i for i, m in enumerate(self.reactants)
+                i
+                for i, m in enumerate(self.reactants)
                 if m and len(list(m.GetSubstructMatch(p))) > 0
             ]
 
         if reaction_part == ChemicalReactionPart.agents:
             return [
-                i for i, m in enumerate(self.agents) if m and len(list(m.GetSubstructMatch(p))) > 0
+                i
+                for i, m in enumerate(self.agents)
+                if m and len(list(m.GetSubstructMatch(p))) > 0
             ]
 
         if reaction_part == ChemicalReactionPart.products:
             return [
-                i for i, m in enumerate(self.products)
+                i
+                for i, m in enumerate(self.products)
                 if m and len(list(m.GetSubstructMatch(p))) > 0
             ]
 

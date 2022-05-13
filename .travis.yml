@@ -12,11 +12,12 @@ install:
   - pip install rdkit-pypi==2021.3.2
 
 script:
-  # Style guide enforcement
-  - flake8
-  - yapf --diff --recursive .
-  # static typing
-  - mypy .
+  # Style enforcement
+  - python -m black --check --diff --color .
+  - python -m isort --check --diff .
+  - python -m flake8 .
+  # Static typing
+  - python -m mypy .
   # Test suite
   - pytest
 

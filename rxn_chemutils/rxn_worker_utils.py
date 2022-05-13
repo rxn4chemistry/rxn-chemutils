@@ -13,7 +13,7 @@ from rdkit import Chem
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
-RXN_SMILES_SEPARATOR = '>>'
+RXN_SMILES_SEPARATOR = ">>"
 
 
 class RDKitError(ValueError):
@@ -27,7 +27,7 @@ class RDKitError(ValueError):
             title (str): title of the error.
             detail (str): decscription of the error.
         """
-        self.type = 'RDKitError'
+        self.type = "RDKitError"
         self.title = title
         self.detail = detail
 
@@ -61,13 +61,14 @@ def standardize_smiles(
     molecule = Chem.MolFromSmiles(smiles, sanitize=sanitize)
     if molecule is None:
         raise RDKitError(
-            'UnknownMolFromSmilesError', 'Invalid molecule for SMILES: {}'.format(smiles)
+            "UnknownMolFromSmilesError",
+            "Invalid molecule for SMILES: {}".format(smiles),
         )
     if inchify:
         inchi_string = Chem.MolToInchi(molecule)
         if inchi_string is None:
             logger.warning(
-                'Inchification failure for SMILES: {}. Returning its canonical version.'
+                "Inchification failure for SMILES: {}. Returning its canonical version."
             )
             return Chem.MolToSmiles(molecule, isomericSmiles=True)
         else:
@@ -84,11 +85,11 @@ def standardize_molecules(
     canonicalize: bool = True,
     sanitize: bool = True,
     inchify: bool = False,
-    fragment_bond: str = '~',
+    fragment_bond: str = "~",
     ordered_precursors: bool = True,
     molecule_token_delimiter: Optional[str] = None,
     is_enzymatic: bool = False,
-    enzyme_separator: str = '|'
+    enzyme_separator: str = "|",
 ) -> str:
     """
     Ensure that a set of molecules represented by a string follows a desired standard.
@@ -128,33 +129,37 @@ def standardize_molecules(
     Chem.WrapLogs()
     with contextlib.redirect_stderr(sio):
         try:
-            enzyme = ''
+            enzyme = ""
             if is_enzymatic:
                 splitted_molecules = molecules.split(enzyme_separator)
                 molecules = splitted_molecules[0]
                 if len(splitted_molecules) > 1:
                     enzyme = splitted_molecules[1]
-                    enzyme = '{}{}'.format(enzyme_separator, enzyme)
+                    enzyme = "{}{}".format(enzyme_separator, enzyme)
             if molecule_token_delimiter is not None:
-                molecules = molecules.replace(molecule_token_delimiter, '')
+                molecules = molecules.replace(molecule_token_delimiter, "")
             if fragment_bond in molecules:
                 standardized_molecules_list = [
                     # make sure we remove the fragment to have valid SMILES
                     standardize_smiles(
-                        molecule.replace(fragment_bond, '.'),
+                        molecule.replace(fragment_bond, "."),
                         canonicalize=canonicalize,
                         sanitize=sanitize,
-                        inchify=inchify
-                    ).replace('.', fragment_bond) for molecule in molecules.split('.')
+                        inchify=inchify,
+                    ).replace(".", fragment_bond)
+                    for molecule in molecules.split(".")
                 ]
                 if ordered_precursors:
                     standardized_molecules_list = sorted(standardized_molecules_list)
-                standardized_molecules = '.'.join(standardized_molecules_list)
+                standardized_molecules = ".".join(standardized_molecules_list)
             else:
                 if ordered_precursors:
                     # RDKit guarantees ordered precursors
                     standardized_molecules = standardize_smiles(
-                        molecules, canonicalize=canonicalize, sanitize=sanitize, inchify=inchify
+                        molecules,
+                        canonicalize=canonicalize,
+                        sanitize=sanitize,
+                        inchify=inchify,
                     )
                 else:
                     standardized_molecules_list = [
@@ -162,37 +167,44 @@ def standardize_molecules(
                             molecule,
                             canonicalize=canonicalize,
                             sanitize=sanitize,
-                            inchify=inchify
-                        ) for molecule in molecules.split('.')
+                            inchify=inchify,
+                        )
+                        for molecule in molecules.split(".")
                     ]
-                    standardized_molecules = '.'.join(standardized_molecules_list)
+                    standardized_molecules = ".".join(standardized_molecules_list)
             # add optional enzyme information
-            standardized_molecules = '{}{}'.format(standardized_molecules, enzyme)
+            standardized_molecules = "{}{}".format(standardized_molecules, enzyme)
         except RDKitError:
             # If the caught exception is an RDKitError: re-raise directly
             raise
         except Exception:
             sio_str = str(sio.getvalue().strip())
-            if 'Explicit valence for atom' in sio_str:
+            if "Explicit valence for atom" in sio_str:
                 raise RDKitError(
-                    'ExplicitValenceError', '{} - molecules: {}'.format(sio_str, molecules)
+                    "ExplicitValenceError",
+                    "{} - molecules: {}".format(sio_str, molecules),
                 )
-            elif 'Could not sanitize molecule' in sio_str:
+            elif "Could not sanitize molecule" in sio_str:
                 raise RDKitError(
-                    'CouldNotSanitizeMoleculeError',
-                    '{} - molecules: {}'.format(sio_str, molecules)
+                    "CouldNotSanitizeMoleculeError",
+                    "{} - molecules: {}".format(sio_str, molecules),
                 )
-            elif 'unclosed ring' in sio_str:
+            elif "unclosed ring" in sio_str:
                 raise RDKitError(
-                    'UnclosedRingError', '{} - molecules: {}'.format(sio_str, molecules)
+                    "UnclosedRingError", "{} - molecules: {}".format(sio_str, molecules)
                 )
-            elif 'syntax error' in sio_str:
-                raise RDKitError('SyntaxError', '{} - molecules: {}'.format(sio_str, molecules))
-            elif "Can't kekulize mol" in '{} - molecules: {}'.format(sio_str, molecules):
-                raise RDKitError('KekulizeMolError', sio_str)
-            elif sio_str.startswith('RDKit ERROR:'):
+            elif "syntax error" in sio_str:
                 raise RDKitError(
-                    'UnknownStandardizationError', '{} - molecules: {}'.format(sio_str, molecules)
+                    "SyntaxError", "{} - molecules: {}".format(sio_str, molecules)
+                )
+            elif "Can't kekulize mol" in "{} - molecules: {}".format(
+                sio_str, molecules
+            ):
+                raise RDKitError("KekulizeMolError", sio_str)
+            elif sio_str.startswith("RDKit ERROR:"):
+                raise RDKitError(
+                    "UnknownStandardizationError",
+                    "{} - molecules: {}".format(sio_str, molecules),
                 )
             else:
                 raise

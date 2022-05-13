@@ -10,7 +10,9 @@ import fileinput
 from rxn_chemutils.miscellaneous import remove_atom_mapping
 from rxn_chemutils.reaction_equation import cleanup_compounds
 from rxn_chemutils.reaction_smiles import (
-    determine_format, parse_reaction_smiles, to_reaction_smiles
+    determine_format,
+    parse_reaction_smiles,
+    to_reaction_smiles,
 )
 
 

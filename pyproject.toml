@@ -13,9 +13,5 @@ module = [
 ]
 ignore_missing_imports = true
 
-[tool.yapf]
-based_on_style = "pep8"
-blank_line_before_nested_class_or_def = true
-column_limit = 99
-dedent_closing_brackets = true
-indent_dictionary_value = true
+[tool.isort]
+profile = "black"

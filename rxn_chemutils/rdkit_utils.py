@@ -15,8 +15,8 @@ def clear_atom_mapping(mols: Iterable[Mol]) -> None:
     """
     for mol in mols:
         for atom in mol.GetAtoms():
-            if atom.HasProp('molAtomMapNumber'):
-                atom.ClearProp('molAtomMapNumber')
+            if atom.HasProp("molAtomMapNumber"):
+                atom.ClearProp("molAtomMapNumber")
 
 
 def combine_mols(mols: Iterable[Mol]) -> Mol:

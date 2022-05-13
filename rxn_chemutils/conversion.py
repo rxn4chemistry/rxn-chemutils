@@ -6,21 +6,33 @@
 import operator
 import re
 from functools import reduce
-from typing import Sequence, List, Tuple, Optional, Union
+from typing import List, Optional, Sequence, Tuple, Union
 
-from rdkit import RDLogger, Chem
+from rdkit import Chem, RDLogger
 from rdkit.Chem import (
-    MolFromInchi, MolToInchi, SanitizeMol, SanitizeFlags, AssignStereochemistry, RemoveHs
+    AssignStereochemistry,
+    MolFromInchi,
+    MolToInchi,
+    RemoveHs,
+    SanitizeFlags,
+    SanitizeMol,
 )
 from rdkit.Chem.rdchem import Mol
-from rdkit.Chem.rdmolfiles import MolToSmiles, MolFromSmiles, MolFromMolBlock, MolToMolBlock
+from rdkit.Chem.rdmolfiles import (
+    MolFromMolBlock,
+    MolFromSmiles,
+    MolToMolBlock,
+    MolToSmiles,
+)
 
-from .exceptions import InvalidSmiles, SanitizationError, InvalidMdl
+from .exceptions import InvalidMdl, InvalidSmiles, SanitizationError
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
 
-def smiles_to_mol(smiles: str, sanitize: bool = True, find_radicals: bool = True) -> Mol:
+def smiles_to_mol(
+    smiles: str, sanitize: bool = True, find_radicals: bool = True
+) -> Mol:
     """
     Convert a SMILES string to an RDKit Mol.
 
@@ -134,7 +146,9 @@ def sanitize_mol(
     elif include_sanitizations is None and exclude_sanitizations is not None:
         sanitize_ops = reduce(operator.xor, exclude_sanitizations, Chem.SANITIZE_ALL)
     else:
-        raise ValueError('Cannot specify both include_sanitizations and exclude_sanitizations.')
+        raise ValueError(
+            "Cannot specify both include_sanitizations and exclude_sanitizations."
+        )
 
     try:
         SanitizeMol(mol, sanitizeOps=sanitize_ops)
@@ -197,7 +211,7 @@ def maybe_canonicalize(smiles: str, check_valence: bool = True) -> str:
         return smiles
 
 
-def canonicalize_smiles_with_fragment_bonds(smiles: str, fragment_bond='~') -> str:
+def canonicalize_smiles_with_fragment_bonds(smiles: str, fragment_bond="~") -> str:
     """
     Canonicalizes a SMILES string that contains fragment bonds
     """
@@ -206,11 +220,13 @@ def canonicalize_smiles_with_fragment_bonds(smiles: str, fragment_bond='~') -> s
         raise InvalidSmiles(smiles)
 
     try:
-        return '.'.join(
+        return ".".join(
             sorted(
                 [
-                    canonicalize_smiles(_.replace(fragment_bond, '.')).replace('.', fragment_bond)
-                    for _ in smiles.split('.')
+                    canonicalize_smiles(_.replace(fragment_bond, ".")).replace(
+                        ".", fragment_bond
+                    )
+                    for _ in smiles.split(".")
                 ]
             )
         )
@@ -255,10 +271,10 @@ def mol_to_inchi(mol: Mol, extended_tautomer_check: bool = False) -> str:
             standardization.
     """
 
-    options = ''
+    options = ""
     if extended_tautomer_check:
         # https://pubs.acs.org/doi/10.1021/acs.jcim.9b01080
-        options = '-KET -15T'
+        options = "-KET -15T"
 
     return Chem.MolToInchi(mol, options=options)
 
@@ -312,7 +328,7 @@ def convert_group_to_mols(smiles_group: str) -> List[Mol]:
     if not smiles_group:
         return []
 
-    smiles_list = smiles_group.split('.')
+    smiles_list = smiles_group.split(".")
     return [smiles_to_mol(smiles) for smiles in smiles_list]
 
 
@@ -329,6 +345,6 @@ def split_smiles_and_fragment_info(reaction_smiles: str) -> Tuple[str, str]:
         Tuple: ('pure' reaction SMILES, fragment information).
     """
 
-    m = re.search(r'^(\S+) ?(.*)$', reaction_smiles)
+    m = re.search(r"^(\S+) ?(.*)$", reaction_smiles)
     assert m is not None
     return m.group(1), m.group(2)

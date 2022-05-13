@@ -3,16 +3,28 @@
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
 from functools import partial
-from typing import List, Iterator, Optional, Generator, TypeVar, Type, Iterable, Callable
+from typing import (
+    Callable,
+    Generator,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Type,
+    TypeVar,
+)
 
 import attr
 from rxn_utilities.container_utilities import remove_duplicates
 
 from .conversion import canonicalize_smiles, cleanup_smiles
 from .exceptions import InvalidReactionSmiles
-from .multicomponent_smiles import multicomponent_smiles_to_list, list_to_multicomponent_smiles
+from .multicomponent_smiles import (
+    list_to_multicomponent_smiles,
+    multicomponent_smiles_to_list,
+)
 
-T = TypeVar('T', bound='ReactionEquation')
+T = TypeVar("T", bound="ReactionEquation")
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -26,11 +38,14 @@ class ReactionEquation:
             sometimes merged with the reactants.
         products: SMILES strings for compounds on the right of the reaction arrow.
     """
+
     reactants: List[str]
     agents: List[str]
     products: List[str]
 
-    def __init__(self, reactants: Iterable[str], agents: Iterable[str], products: Iterable[str]):
+    def __init__(
+        self, reactants: Iterable[str], agents: Iterable[str], products: Iterable[str]
+    ):
         """
         Overwrite init function in order to enable instantiation from any iterator and
         to force copying the lists.
@@ -51,18 +66,22 @@ class ReactionEquation:
         Convert a ReactionEquation to an "rxn" reaction SMILES.
         """
 
-        smiles_groups = (list_to_multicomponent_smiles(group, fragment_bond) for group in self)
-        return '>'.join(smiles_groups)
+        smiles_groups = (
+            list_to_multicomponent_smiles(group, fragment_bond) for group in self
+        )
+        return ">".join(smiles_groups)
 
     @classmethod
-    def from_string(cls: Type[T], reaction_string: str, fragment_bond: Optional[str] = None) -> T:
+    def from_string(
+        cls: Type[T], reaction_string: str, fragment_bond: Optional[str] = None
+    ) -> T:
         """
         Convert a ReactionEquation from an "rxn" reaction SMILES.
         """
 
         groups = [
             multicomponent_smiles_to_list(smiles_group, fragment_bond=fragment_bond)
-            for smiles_group in reaction_string.split('>')
+            for smiles_group in reaction_string.split(">")
         ]
 
         try:
@@ -73,7 +92,9 @@ class ReactionEquation:
 
 def merge_reactants_and_agents(reaction: ReactionEquation) -> ReactionEquation:
     return ReactionEquation(
-        reactants=reaction.reactants + reaction.agents, agents=[], products=reaction.products
+        reactants=reaction.reactants + reaction.agents,
+        agents=[],
+        products=reaction.products,
     )
 
 
@@ -85,7 +106,9 @@ def sort_compounds(reaction: ReactionEquation) -> ReactionEquation:
     return ReactionEquation(*sorted_compound_groups)
 
 
-def apply_to_compounds(reaction: ReactionEquation, fn: Callable[[str], str]) -> ReactionEquation:
+def apply_to_compounds(
+    reaction: ReactionEquation, fn: Callable[[str], str]
+) -> ReactionEquation:
     """
     Apply a function to the individual compounds in a ReactionEquation.
 
@@ -151,7 +174,9 @@ def remove_precursors_from_products(reaction: ReactionEquation) -> ReactionEquat
         product for product in reaction.products if product not in precursors
     ]
     return ReactionEquation(
-        reactants=reaction.reactants, agents=reaction.agents, products=products_without_precursors
+        reactants=reaction.reactants,
+        agents=reaction.agents,
+        products=products_without_precursors,
     )
 
 

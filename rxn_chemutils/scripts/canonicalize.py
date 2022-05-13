@@ -3,8 +3,8 @@
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(
-        'Does not exist anymore. '
-        'Use chemutils-canonicalize script instead (installed along the rxn_chemutils package).'
+        "Does not exist anymore. "
+        "Use chemutils-canonicalize script instead (installed along the rxn_chemutils package)."
     )

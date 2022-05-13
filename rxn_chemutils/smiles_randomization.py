@@ -7,7 +7,7 @@ import random
 
 from rdkit import Chem
 
-from .conversion import smiles_to_mol, mol_to_smiles
+from .conversion import mol_to_smiles, smiles_to_mol
 
 
 def randomize_smiles_rotated(smiles: str, with_order_reversal: bool = True) -> str:
@@ -37,7 +37,9 @@ def randomize_smiles_rotated(smiles: str, with_order_reversal: bool = True) -> s
 
     # Generate new atom indices order
     atoms = list(range(n_atoms))
-    new_atoms_order = (atoms[rotation_index % len(atoms):] + atoms[:rotation_index % len(atoms)])
+    new_atoms_order = (
+        atoms[rotation_index % len(atoms) :] + atoms[: rotation_index % len(atoms)]
+    )
     if reverse_order:
         new_atoms_order.reverse()
 
