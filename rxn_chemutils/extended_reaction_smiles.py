@@ -6,11 +6,7 @@
 import re
 from typing import List, Tuple
 
-from rdkit.Chem import Mol
-
-from .chemical_reaction import ChemicalReaction
-from .conversion import mols_to_smiles, split_smiles_and_fragment_info
-from .rdkit_utils import clear_atom_mapping
+from .conversion import split_smiles_and_fragment_info
 from .reaction_equation import ReactionEquation, cleanup_compounds
 from .utils import remove_atom_mapping
 
@@ -73,8 +69,7 @@ class _Importer:
         """
         Convert an extended SMILES to a reaction equation.
 
-        Used to rely more on RDKit (see convert_with_rdkit). Now does as few
-        RDKit operations as necessary.
+        Used to rely more on RDKit; now does as few RDKit operations as necessary.
 
         Args:
             extended_reaction_smiles: extended reaction SMILES
@@ -103,40 +98,6 @@ class _Importer:
             reaction_equation = cleanup_compounds(reaction_equation)
 
         return reaction_equation
-
-    @staticmethod
-    def convert_with_rdkit(reaction_smiles: str) -> ReactionEquation:
-        pure_smiles, fragment_info = split_smiles_and_fragment_info(reaction_smiles)
-
-        # Parse the reaction with RDKit
-        try:
-            rxn = ChemicalReaction(pure_smiles, sanitize=True)
-        except Exception:
-            raise UnsupportedExtendedReactionSmiles(reaction_smiles)
-
-        try:
-            return _Importer.process_reaction_participants(rxn, fragment_info)
-        except Exception:
-            raise UnsupportedExtendedReactionSmiles(reaction_smiles)
-
-    @staticmethod
-    def process_reaction_participants(
-        rxn: ChemicalReaction, fragment_info: str
-    ) -> ReactionEquation:
-        raw_mol_groups = [rxn.reactants, rxn.agents, rxn.products]
-        raw_smiles_groups = [
-            _Importer.convert_to_smiles(group) for group in raw_mol_groups
-        ]
-
-        fragment_groups = determine_fragment_groups(fragment_info)
-        groups = _Importer.group_fragments(raw_smiles_groups, fragment_groups)
-
-        return ReactionEquation(*groups)
-
-    @staticmethod
-    def convert_to_smiles(mols: List[Mol]) -> List[str]:
-        clear_atom_mapping(mols)
-        return mols_to_smiles(mols, canonical=False)
 
     @staticmethod
     def group_fragments(
