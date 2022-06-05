@@ -6,7 +6,7 @@ cyclic dependencies.
 """
 from enum import auto
 
-from rxn_utilities.rxn_types import RxnEnum
+from rxn.utilities.types import RxnEnum
 
 from .extended_reaction_smiles import (
     parse_extended_reaction_smiles,

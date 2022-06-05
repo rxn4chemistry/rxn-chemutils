@@ -5,7 +5,7 @@ in SMILES notation, which may include fragment bonds.
 from functools import partial
 from typing import Callable, Iterable, List, Optional
 
-from rxn_utilities.container_utilities import remove_duplicates
+from rxn.utilities.containers import remove_duplicates
 
 from .conversion import canonicalize_smiles
 

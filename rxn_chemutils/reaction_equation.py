@@ -15,7 +15,7 @@ from typing import (
 )
 
 import attr
-from rxn_utilities.container_utilities import remove_duplicates
+from rxn.utilities.containers import remove_duplicates
 
 from .conversion import canonicalize_smiles, cleanup_smiles
 from .exceptions import InvalidReactionSmiles
@@ -50,7 +50,9 @@ class ReactionEquation:
         Overwrite init function in order to enable instantiation from any iterator and
         to force copying the lists.
         """
-        self.__attrs_init__(list(reactants), list(agents), list(products))  # type: ignore
+        self.__attrs_init__(
+            list(reactants), list(agents), list(products)
+        )  # type: ignore
 
     def __iter__(self) -> Iterator[List[str]]:
         """Helper function to simplify functionality acting on all three
