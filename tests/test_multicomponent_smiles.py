@@ -1,7 +1,7 @@
 import pytest
 
-from rxn_chemutils.exceptions import InvalidSmiles
-from rxn_chemutils.multicomponent_smiles import (
+from rxn.chemutils.exceptions import InvalidSmiles
+from rxn.chemutils.multicomponent_smiles import (
     apply_to_multicomponent_smiles,
     canonicalize_multicomponent_smiles,
     list_to_multicomponent_smiles,

@@ -5,7 +5,7 @@
 
 import pytest
 
-from rxn_chemutils.tokenization import (
+from rxn.chemutils.tokenization import (
     TokenizationError,
     detokenize_smiles,
     to_tokens,

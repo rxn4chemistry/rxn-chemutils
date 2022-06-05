@@ -7,9 +7,9 @@ from typing import List
 
 import pytest
 
-from rxn_chemutils.conversion import canonicalize_smiles
-from rxn_chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
-from rxn_chemutils.reaction_equation import (
+from rxn.chemutils.conversion import canonicalize_smiles
+from rxn.chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
+from rxn.chemutils.reaction_equation import (
     ReactionEquation,
     apply_to_compounds,
     canonicalize_compounds,

@@ -7,7 +7,7 @@
 
 import fileinput
 
-from rxn_chemutils.tokenization import detokenize_smiles
+from rxn.chemutils.tokenization import detokenize_smiles
 
 
 def detokenize() -> None:

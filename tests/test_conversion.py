@@ -6,7 +6,7 @@
 import pytest
 from rdkit import Chem
 
-from rxn_chemutils.conversion import (
+from rxn.chemutils.conversion import (
     canonicalize_smiles,
     canonicalize_smiles_with_fragment_bonds,
     cleanup_smiles,
@@ -21,7 +21,7 @@ from rxn_chemutils.conversion import (
     smiles_to_mol,
     split_smiles_and_fragment_info,
 )
-from rxn_chemutils.exceptions import InvalidMdl, InvalidSmiles, SanitizationError
+from rxn.chemutils.exceptions import InvalidMdl, InvalidSmiles, SanitizationError
 
 WATER_MDL = """
      RDKit          2D

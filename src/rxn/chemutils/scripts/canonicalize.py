@@ -6,5 +6,5 @@
 if __name__ == "__main__":
     raise SystemExit(
         "Does not exist anymore. "
-        "Use chemutils-detokenize script instead (installed along the rxn_chemutils package)."
+        "Use chemutils-canonicalize script instead (installed along the rxn.chemutils package)."
     )

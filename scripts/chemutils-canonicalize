@@ -7,7 +7,7 @@
 
 import fileinput
 
-from rxn_chemutils.miscellaneous import canonicalize_any
+from rxn.chemutils.miscellaneous import canonicalize_any
 
 
 def canonicalize() -> None:

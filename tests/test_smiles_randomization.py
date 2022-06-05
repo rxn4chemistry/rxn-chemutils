@@ -5,7 +5,7 @@
 
 from typing import Callable, List
 
-from rxn_chemutils.smiles_randomization import (
+from rxn.chemutils.smiles_randomization import (
     randomize_smiles_restricted,
     randomize_smiles_rotated,
     randomize_smiles_unrestricted,

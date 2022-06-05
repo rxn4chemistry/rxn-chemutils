@@ -1,7 +1,7 @@
 import pytest
 
-from rxn_chemutils.reaction_equation import ReactionEquation
-from rxn_chemutils.reaction_smiles import (
+from rxn.chemutils.reaction_equation import ReactionEquation
+from rxn.chemutils.reaction_smiles import (
     ReactionFormat,
     canonicalize_reaction_smiles,
     determine_format,

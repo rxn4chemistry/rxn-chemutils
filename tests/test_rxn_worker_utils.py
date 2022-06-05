@@ -5,7 +5,7 @@
 
 import pytest
 
-from rxn_chemutils.rxn_worker_utils import (
+from rxn.chemutils.rxn_worker_utils import (
     RDKitError,
     standardize_molecules,
     standardize_smiles,

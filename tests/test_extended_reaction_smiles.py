@@ -3,13 +3,13 @@
 # (C) Copyright IBM Corp. 2021
 # ALL RIGHTS RESERVED
 
-from rxn_chemutils.extended_reaction_smiles import (
+from rxn.chemutils.extended_reaction_smiles import (
     determine_fragment_groups,
     merge_molecules_from_fragment_groups,
     parse_extended_reaction_smiles,
     to_extended_reaction_smiles,
 )
-from rxn_chemutils.reaction_equation import ReactionEquation
+from rxn.chemutils.reaction_equation import ReactionEquation
 
 
 def test_from_reaction_smiles():

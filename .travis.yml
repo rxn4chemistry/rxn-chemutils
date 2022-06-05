@@ -17,7 +17,8 @@ script:
   - python -m isort --check --diff .
   - python -m flake8 .
   # Static typing
-  - python -m mypy .
+  - python -m mypy --namespace-packages -p rxn.chemutils
+  - python -m mypy tests
   # Test suite
   - pytest
 

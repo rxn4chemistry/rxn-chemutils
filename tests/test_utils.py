@@ -1,4 +1,4 @@
-from rxn_chemutils.utils import remove_atom_mapping
+from rxn.chemutils.utils import remove_atom_mapping
 
 
 def test_remove_atom_mapping():

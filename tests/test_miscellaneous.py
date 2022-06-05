@@ -7,8 +7,8 @@ from collections import Counter
 
 import pytest
 
-from rxn_chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
-from rxn_chemutils.miscellaneous import (
+from rxn.chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
+from rxn.chemutils.miscellaneous import (
     atom_type_counter,
     canonicalize_any,
     equivalent_smiles,

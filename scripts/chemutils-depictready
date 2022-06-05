@@ -7,9 +7,9 @@
 
 import fileinput
 
-from rxn_chemutils.extended_reaction_smiles import to_extended_reaction_smiles
-from rxn_chemutils.reaction_equation import ReactionEquation
-from rxn_chemutils.tokenization import detokenize_smiles
+from rxn.chemutils.extended_reaction_smiles import to_extended_reaction_smiles
+from rxn.chemutils.reaction_equation import ReactionEquation
+from rxn.chemutils.tokenization import detokenize_smiles
 
 
 def depictready() -> None:

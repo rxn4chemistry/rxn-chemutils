@@ -1,5 +1,5 @@
-from rxn_chemutils.conversion import mol_to_smiles, smiles_to_mol
-from rxn_chemutils.rdkit_utils import combine_mols
+from rxn.chemutils.conversion import mol_to_smiles, smiles_to_mol
+from rxn.chemutils.rdkit_utils import combine_mols
 
 
 def test_combine_mols():
