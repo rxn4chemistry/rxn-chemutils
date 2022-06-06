@@ -1,19 +1,41 @@
-# rxn_chemutils
+# RXN chemisttry utilities package
 
-[![Build Status](https://travis.ibm.com/rxn/rxn_chemutils.svg?token=zJxfB9t9kgVLYHLdp5pG&branch=main)](https://travis.ibm.com/rxn/rxn_chemutils)
+This repository contains various chemistry-related Python utilities used in the RXN universe.
+For general utilities not related to chemistry, see our other repository [`rxn-utilities`](https://github.com/rxn4chemistry/rxn-utilities).
 
-Chemistry-related utilities
+## TODO for open-sourcing
 
-## Setup
+* GitHub actions
+* Add CI badge
+* Remove `.bumpversion.cfg`, `.whitesource`
+* Rename to `rxn-chem-utils` in `setup.cfg`
 
-The package is pip-installable. 
+## System Requirements
 
-`rdkit` is a dependency, but it must be installed separately, with:
+This package is supported on all operating systems. 
+It has been tested on the following systems:
++ macOS: Big Sur (11.1)
++ Linux: Ubuntu 18.04.4
+
+A Python version of 3.6 or greater is recommended.
+
+## Installation guide
+
+The package can be installed from Pypi:
 ```bash
-conda install -c conda-forge rdkit
+pip install rxn-chem-utils
 ```
 
-or (non-official RDKit version):
+For local development, the package can be installed with:
 ```bash
+pip install -e .[dev]
+```
+
+The `RDKit` dependency is not installed automatically and can be installed via Conda or Pypi:
+```bash
+# Install RDKit from Conda
+conda install -c conda-forge rdkit
+
+# Install RDKit from Pypi
 pip install rdkit-pypi
 ```
