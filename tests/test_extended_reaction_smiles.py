@@ -1,8 +1,3 @@
-# LICENSED INTERNAL CODE. PROPERTY OF IBM.
-# IBM Research Zurich Licensed Internal Code
-# (C) Copyright IBM Corp. 2021
-# ALL RIGHTS RESERVED
-
 from rxn.chemutils.extended_reaction_smiles import (
     determine_fragment_groups,
     merge_molecules_from_fragment_groups,
