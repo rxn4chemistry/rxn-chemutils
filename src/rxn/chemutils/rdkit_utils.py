@@ -4,16 +4,6 @@ from rdkit.Chem import CombineMols
 from rdkit.Chem.rdchem import Mol
 
 
-def clear_atom_mapping(mols: Iterable[Mol]) -> None:
-    """
-    Remove the mapping information in RDKit Mol objects.
-    """
-    for mol in mols:
-        for atom in mol.GetAtoms():
-            if atom.HasProp("molAtomMapNumber"):
-                atom.ClearProp("molAtomMapNumber")
-
-
 def combine_mols(mols: Iterable[Mol]) -> Mol:
     """Combine multiple RDKit Mols into one.
 

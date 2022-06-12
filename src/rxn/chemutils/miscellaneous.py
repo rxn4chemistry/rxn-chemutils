@@ -10,9 +10,6 @@ from .exceptions import InvalidSmiles
 from .multicomponent_smiles import canonicalize_multicomponent_smiles
 from .reaction_equation import canonicalize_compounds
 from .reaction_smiles import determine_format, parse_reaction_smiles, to_reaction_smiles
-from .utils import (  # noqa: users may still import it from miscellaneous
-    remove_atom_mapping,
-)
 
 CHIRAL_CENTER_PATTERN = re.compile(
     r"\[([^],@]+)@+([^]]*)]"

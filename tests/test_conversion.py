@@ -3,9 +3,7 @@ from rdkit import Chem
 
 from rxn.chemutils.conversion import (
     canonicalize_smiles,
-    canonicalize_smiles_with_fragment_bonds,
     cleanup_smiles,
-    inchify_smiles,
     maybe_canonicalize,
     mdl_to_mol,
     mol_to_mdl,
@@ -173,28 +171,6 @@ def test_remove_hydrogens():
     mol = smiles_to_mol(smiles, sanitize=False)
     mol = remove_hydrogens(mol)
     assert mol_to_smiles(mol, canonical=False) == smiles_without_h
-
-
-def test_inchify_smiles():
-    assert inchify_smiles("Clc1nc2sccc2c(=NCc2ccccc2)[nH]1") == inchify_smiles(
-        "Clc1nc(NCc2ccccc2)c2ccsc2n1"
-    )
-
-    # An empty SMILES string must raise an error
-    with pytest.raises(InvalidSmiles):
-        canonicalize_smiles("")
-
-    with pytest.raises(InvalidSmiles):
-        canonicalize_smiles("L")
-
-
-def test_canonicalize_smiles_with_fragment_bonds():
-    canonical_smiles = canonicalize_smiles_with_fragment_bonds(
-        "[Mg+2]~O=S(=O)([O-])[O-]"
-    )
-    assert canonical_smiles == canonicalize_smiles_with_fragment_bonds(
-        "O=S(=O)([O-])[O-]~[Mg+2]"
-    )
 
 
 def test_canonicalize():

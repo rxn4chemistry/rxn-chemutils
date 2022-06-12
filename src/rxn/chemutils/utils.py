@@ -1,4 +1,4 @@
-"""Simple utils not involving RDKit."""
+"""Simple utilities not involving RDKit."""
 
 
 import re

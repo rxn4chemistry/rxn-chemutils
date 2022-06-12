@@ -150,7 +150,7 @@ def cleanup_compounds(reaction: ReactionEquation) -> ReactionEquation:
 
 def rxn_standardization(reaction: ReactionEquation) -> ReactionEquation:
     """
-    Apply the standard rxn postprocessing of reaction equations.
+    Apply the standard RXN postprocessing of reaction equations.
 
     Consists in the following
     1. merge reactants and agents

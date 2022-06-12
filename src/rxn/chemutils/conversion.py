@@ -1,17 +1,10 @@
 import operator
 import re
 from functools import reduce
-from typing import List, Optional, Sequence, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from rdkit import Chem, RDLogger
-from rdkit.Chem import (
-    AssignStereochemistry,
-    MolFromInchi,
-    MolToInchi,
-    RemoveHs,
-    SanitizeFlags,
-    SanitizeMol,
-)
+from rdkit.Chem import AssignStereochemistry, RemoveHs, SanitizeFlags, SanitizeMol
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import (
     MolFromMolBlock,
@@ -104,7 +97,7 @@ def mol_to_mdl(mol: Mol) -> str:
     """
     Convert an RDKit Mol to an MDL Mol string.
 
-    Mainly a wrapper around MolToSmiles.
+    Mainly a wrapper around MolToMolBlock.
     """
     return MolToMolBlock(mol)
 
@@ -206,29 +199,6 @@ def maybe_canonicalize(smiles: str, check_valence: bool = True) -> str:
         return smiles
 
 
-def canonicalize_smiles_with_fragment_bonds(smiles: str, fragment_bond="~") -> str:
-    """
-    Canonicalizes a SMILES string that contains fragment bonds
-    """
-    # Raise for empty SMILES
-    if not smiles:
-        raise InvalidSmiles(smiles)
-
-    try:
-        return ".".join(
-            sorted(
-                [
-                    canonicalize_smiles(_.replace(fragment_bond, ".")).replace(
-                        ".", fragment_bond
-                    )
-                    for _ in smiles.split(".")
-                ]
-            )
-        )
-    except Exception:
-        raise InvalidSmiles(smiles)
-
-
 def smiles_to_inchi(smiles: str, extended_tautomer_check: bool = False) -> str:
     """
     Get the InChI string for a given SMILES.
@@ -274,20 +244,6 @@ def mol_to_inchi(mol: Mol, extended_tautomer_check: bool = False) -> str:
     return Chem.MolToInchi(mol, options=options)
 
 
-def inchify_smiles(smiles: str) -> str:
-    """
-    Inchify a SMILES string for a molecule
-    """
-    # Raise for empty SMILES
-    if not smiles:
-        raise InvalidSmiles(smiles)
-
-    try:
-        return MolToSmiles(MolFromInchi(MolToInchi(MolFromSmiles(smiles))))
-    except Exception:
-        raise InvalidSmiles(smiles)
-
-
 def cleanup_smiles(smiles: str) -> str:
     """
     Cleanup a SMILES string, doing the bare minimum.
@@ -308,23 +264,6 @@ def cleanup_smiles(smiles: str) -> str:
     mol = smiles_to_mol(smiles, sanitize=False)
     sanitize_mol(mol, include_sanitizations=[Chem.SANITIZE_FINDRADICALS])
     return mol_to_smiles(mol, canonical=False)
-
-
-def mols_to_smiles(mols: Sequence[Mol], canonical: bool = True) -> List[str]:
-    return [mol_to_smiles(mol, canonical) for mol in mols]
-
-
-def convert_group_to_mols(smiles_group: str) -> List[Mol]:
-    """
-    Args:
-        smiles_group: List of SMILES strings, separated by dots
-    """
-    # Handle empty strings:
-    if not smiles_group:
-        return []
-
-    smiles_list = smiles_group.split(".")
-    return [smiles_to_mol(smiles) for smiles in smiles_list]
 
 
 def split_smiles_and_fragment_info(reaction_smiles: str) -> Tuple[str, str]:

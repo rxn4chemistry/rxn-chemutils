@@ -12,8 +12,7 @@ from .extended_reaction_smiles import (
     parse_extended_reaction_smiles,
     to_extended_reaction_smiles,
 )
-from .reaction_equation import ReactionEquation, canonicalize_compounds
-from .utils import remove_atom_mapping
+from .reaction_equation import ReactionEquation
 
 
 class ReactionFormat(RxnEnum):
@@ -87,16 +86,3 @@ def to_reaction_smiles(
         return reaction_equation.to_string(fragment_bond="~")
 
     raise ValueError(f"Unsupported reaction format: {reaction_format}")
-
-
-def canonicalize_reaction_smiles(reaction_smiles: str) -> str:
-    """
-    Canonicalize a SMILES string for a reaction.
-    This will remove the atom mapping, but keep the fragment information.
-    """
-
-    reaction_smiles = remove_atom_mapping(reaction_smiles)
-    reaction_format = determine_format(reaction_smiles)
-    reaction_equation = parse_reaction_smiles(reaction_smiles, reaction_format)
-    reaction_equation = canonicalize_compounds(reaction_equation)
-    return to_reaction_smiles(reaction_equation, reaction_format)
