@@ -1,4 +1,7 @@
+import random
 from typing import Callable, List
+
+from rxn.utilities.containers import all_identical
 
 from rxn.chemutils.smiles_randomization import (
     randomize_smiles_restricted,
@@ -89,3 +92,16 @@ def test_number_generated_molecules():
     assert 18 < len(rotated) < 22
     assert 45 < len(restricted) < 60
     assert 90 < len(unrestricted)
+
+
+def test_reproducibility():
+    adenine = "Nc1ncnc2[nH]cnc12"
+
+    for fn in randomization_functions:
+
+        samples = []
+        for _ in range(10):
+            random.seed(42)
+            samples.append(fn(adenine))
+
+        assert all_identical(samples)
