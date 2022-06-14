@@ -1,14 +1,9 @@
 # RXN chemisttry utilities package
 
+[![Actions tests](https://github.com/rxn4chemistry/rxn-chemutils/actions/workflows/tests.yaml/badge.svg)](https://github.com/rxn4chemistry/rxn-chemutils/actions)
+
 This repository contains various chemistry-related Python utilities used in the RXN universe.
 For general utilities not related to chemistry, see our other repository [`rxn-utilities`](https://github.com/rxn4chemistry/rxn-utilities).
-
-## TODO for open-sourcing
-
-* GitHub actions
-* Add CI badge
-* Remove `.bumpversion.cfg`, `.whitesource`
-* Rename to `rxn-chem-utils` in `setup.cfg`
 
 ## System Requirements
 
