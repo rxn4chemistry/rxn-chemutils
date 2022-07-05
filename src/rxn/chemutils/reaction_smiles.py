@@ -36,7 +36,7 @@ def determine_format(reaction_smiles: str) -> ReactionFormat:
     """
     Determine the format of a reaction SMILES.
     """
-    if " |f:" in reaction_smiles:
+    if "f:" in reaction_smiles:
         return ReactionFormat.EXTENDED
 
     if "~" in reaction_smiles:
