@@ -23,7 +23,10 @@ def test_determine_format():
         determine_format("CC.O.[Na+]~[Cl-]>>CCO") is ReactionFormat.STANDARD_WITH_TILDE
     )
     assert determine_format("CC.O.[Na+].[Cl-]>>CCO |f:2.3|") is ReactionFormat.EXTENDED
-    assert determine_format(reaction_smiles_with_other_extended_information) is ReactionFormat.EXTENDED
+    assert (
+        determine_format(reaction_smiles_with_other_extended_information)
+        is ReactionFormat.EXTENDED
+    )
 
 
 def test_parse_any_reaction_smiles():
