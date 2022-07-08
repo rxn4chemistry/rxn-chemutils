@@ -33,4 +33,6 @@ conda install -c conda-forge rdkit
 
 # Install RDKit from Pypi
 pip install rdkit
+# for Python<3.7
+# pip install rdkit-pypi
 ```
