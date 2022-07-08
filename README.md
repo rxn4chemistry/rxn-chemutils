@@ -1,4 +1,4 @@
-# RXN chemisttry utilities package
+# RXN chemistry utilities package
 
 [![Actions tests](https://github.com/rxn4chemistry/rxn-chemutils/actions/workflows/tests.yaml/badge.svg)](https://github.com/rxn4chemistry/rxn-chemutils/actions)
 
@@ -32,5 +32,5 @@ The `RDKit` dependency is not installed automatically and can be installed via C
 conda install -c conda-forge rdkit
 
 # Install RDKit from Pypi
-pip install rdkit-pypi
+pip install rdkit
 ```
