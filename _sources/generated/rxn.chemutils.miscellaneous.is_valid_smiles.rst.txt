@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.is\_valid\_smiles
+=============================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: is_valid_smiles

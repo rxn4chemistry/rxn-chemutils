@@ -1,0 +1,41 @@
+rxn.chemutils.conversion
+========================
+
+.. automodule:: rxn.chemutils.conversion
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      canonicalize_smiles
+      cleanup_smiles
+      maybe_canonicalize
+      mdl_to_mol
+      mol_to_inchi
+      mol_to_mdl
+      mol_to_smiles
+      remove_hydrogens
+      sanitize_mol
+      smiles_to_inchi
+      smiles_to_mol
+      split_smiles_and_fragment_info
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

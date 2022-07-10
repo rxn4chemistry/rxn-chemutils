@@ -1,0 +1,6 @@
+rxn.chemutils.smiles\_randomization.randomize\_smiles\_rotated
+==============================================================
+
+.. currentmodule:: rxn.chemutils.smiles_randomization
+
+.. autofunction:: randomize_smiles_rotated

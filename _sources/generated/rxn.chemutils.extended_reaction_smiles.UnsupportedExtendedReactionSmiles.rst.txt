@@ -1,0 +1,6 @@
+rxn.chemutils.extended\_reaction\_smiles.UnsupportedExtendedReactionSmiles
+==========================================================================
+
+.. currentmodule:: rxn.chemutils.extended_reaction_smiles
+
+.. autoexception:: UnsupportedExtendedReactionSmiles

@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.remove\_chiral\_centers
+===================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: remove_chiral_centers

@@ -1,0 +1,40 @@
+rxn.chemutils.extended\_reaction\_smiles
+========================================
+
+.. automodule:: rxn.chemutils.extended_reaction_smiles
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      determine_fragment_groups
+      merge_molecules_from_fragment_groups
+      parse_extended_reaction_smiles
+      to_extended_reaction_smiles
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      UnsupportedExtendedReactionSmiles
+   
+   
+
+
+

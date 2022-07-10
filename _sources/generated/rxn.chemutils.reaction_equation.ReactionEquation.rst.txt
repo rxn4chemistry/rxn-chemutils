@@ -1,0 +1,36 @@
+rxn.chemutils.reaction\_equation.ReactionEquation
+=================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autoclass:: ReactionEquation
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ReactionEquation.__init__
+      ~ReactionEquation.from_string
+      ~ReactionEquation.iter_all_smiles
+      ~ReactionEquation.to_string
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ReactionEquation.reactants
+      ~ReactionEquation.agents
+      ~ReactionEquation.products
+   
+   

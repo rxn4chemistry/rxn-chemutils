@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.has\_repeated\_molecules
+=========================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: has_repeated_molecules

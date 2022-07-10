@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.equivalent\_smiles
+==============================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: equivalent_smiles

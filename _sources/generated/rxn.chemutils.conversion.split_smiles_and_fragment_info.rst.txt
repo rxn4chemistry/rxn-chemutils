@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.split\_smiles\_and\_fragment\_info
+===========================================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: split_smiles_and_fragment_info

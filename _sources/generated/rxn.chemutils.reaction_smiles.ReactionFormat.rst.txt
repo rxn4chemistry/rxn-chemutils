@@ -1,0 +1,27 @@
+rxn.chemutils.reaction\_smiles.ReactionFormat
+=============================================
+
+.. currentmodule:: rxn.chemutils.reaction_smiles
+
+.. autoclass:: ReactionFormat
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ReactionFormat.EXTENDED
+      ~ReactionFormat.STANDARD
+      ~ReactionFormat.STANDARD_WITH_TILDE
+   
+   

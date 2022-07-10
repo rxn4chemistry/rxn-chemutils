@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.detokenize\_smiles
+=============================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autofunction:: detokenize_smiles

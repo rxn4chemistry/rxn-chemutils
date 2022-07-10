@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.canonicalize\_any
+=============================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: canonicalize_any

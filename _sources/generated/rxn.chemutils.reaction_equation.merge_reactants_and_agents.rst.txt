@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.merge\_reactants\_and\_agents
+==============================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: merge_reactants_and_agents

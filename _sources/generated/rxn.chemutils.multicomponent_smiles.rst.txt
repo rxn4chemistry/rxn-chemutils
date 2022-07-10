@@ -1,0 +1,35 @@
+rxn.chemutils.multicomponent\_smiles
+====================================
+
+.. automodule:: rxn.chemutils.multicomponent_smiles
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      apply_to_multicomponent_smiles
+      canonicalize_multicomponent_smiles
+      list_to_multicomponent_smiles
+      multicomponent_smiles_to_list
+      remove_duplicates_in_multicomponent_smiles
+      sort_multicomponent_smiles
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

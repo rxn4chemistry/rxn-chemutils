@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.cleanup\_compounds
+===================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: cleanup_compounds

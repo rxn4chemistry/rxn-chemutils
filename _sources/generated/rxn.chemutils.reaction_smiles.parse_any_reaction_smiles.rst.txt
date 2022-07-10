@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_smiles.parse\_any\_reaction\_smiles
+===========================================================
+
+.. currentmodule:: rxn.chemutils.reaction_smiles
+
+.. autofunction:: parse_any_reaction_smiles

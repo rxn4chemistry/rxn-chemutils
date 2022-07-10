@@ -1,0 +1,6 @@
+rxn.chemutils.exceptions.InvalidMdl
+===================================
+
+.. currentmodule:: rxn.chemutils.exceptions
+
+.. autoexception:: InvalidMdl

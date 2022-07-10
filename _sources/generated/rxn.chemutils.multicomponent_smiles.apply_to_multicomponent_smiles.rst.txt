@@ -1,0 +1,6 @@
+rxn.chemutils.multicomponent\_smiles.apply\_to\_multicomponent\_smiles
+======================================================================
+
+.. currentmodule:: rxn.chemutils.multicomponent_smiles
+
+.. autofunction:: apply_to_multicomponent_smiles

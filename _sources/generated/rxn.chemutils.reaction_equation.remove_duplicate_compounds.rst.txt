@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.remove\_duplicate\_compounds
+=============================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: remove_duplicate_compounds

@@ -1,0 +1,39 @@
+rxn.chemutils.tokenization
+==========================
+
+.. automodule:: rxn.chemutils.tokenization
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      detokenize_smiles
+      to_tokens
+      tokenize_smiles
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      TokenizationError
+   
+   
+
+
+

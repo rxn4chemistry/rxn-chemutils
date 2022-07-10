@@ -1,0 +1,6 @@
+rxn.chemutils.utils.remove\_atom\_mapping
+=========================================
+
+.. currentmodule:: rxn.chemutils.utils
+
+.. autofunction:: remove_atom_mapping

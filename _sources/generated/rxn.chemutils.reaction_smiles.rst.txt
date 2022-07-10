@@ -1,0 +1,41 @@
+rxn.chemutils.reaction\_smiles
+==============================
+
+.. automodule:: rxn.chemutils.reaction_smiles
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      determine_format
+      parse_any_reaction_smiles
+      parse_reaction_smiles
+      to_reaction_smiles
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ReactionFormat
+   
+   
+
+   
+   
+   
+
+
+

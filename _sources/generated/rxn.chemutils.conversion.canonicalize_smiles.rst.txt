@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.canonicalize\_smiles
+=============================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: canonicalize_smiles

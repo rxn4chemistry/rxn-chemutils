@@ -1,0 +1,33 @@
+rxn.chemutils.exceptions
+========================
+
+.. automodule:: rxn.chemutils.exceptions
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      InvalidMdl
+      InvalidReactionSmiles
+      InvalidSmiles
+      SanitizationError
+   
+   
+
+
+

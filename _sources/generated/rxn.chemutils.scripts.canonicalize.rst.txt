@@ -1,0 +1,23 @@
+rxn.chemutils.scripts.canonicalize
+==================================
+
+.. automodule:: rxn.chemutils.scripts.canonicalize
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

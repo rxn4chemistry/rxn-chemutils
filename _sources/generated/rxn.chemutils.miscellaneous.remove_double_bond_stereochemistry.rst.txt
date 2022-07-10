@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.remove\_double\_bond\_stereochemistry
+=================================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: remove_double_bond_stereochemistry

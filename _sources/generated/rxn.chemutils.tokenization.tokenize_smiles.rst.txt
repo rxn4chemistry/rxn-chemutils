@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.tokenize\_smiles
+===========================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autofunction:: tokenize_smiles

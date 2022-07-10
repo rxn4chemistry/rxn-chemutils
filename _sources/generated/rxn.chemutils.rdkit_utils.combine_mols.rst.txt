@@ -1,0 +1,6 @@
+rxn.chemutils.rdkit\_utils.combine\_mols
+========================================
+
+.. currentmodule:: rxn.chemutils.rdkit_utils
+
+.. autofunction:: combine_mols

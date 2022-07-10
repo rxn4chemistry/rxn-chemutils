@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.smiles_randomization &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>rxn.chemutils.smiles_randomization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rxn.chemutils.smiles_randomization</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+
+<span class="kn">from</span> <span class="nn">.conversion</span> <span class="kn">import</span> <span class="n">mol_to_smiles</span><span class="p">,</span> <span class="n">smiles_to_mol</span>
+
+<span class="c1"># Highest value to give as a random seed for RDKit.</span>
+<span class="c1"># Any value higher than that will cause problems.</span>
+<span class="n">_MAX_RDKIT_RANDOM_SEED</span> <span class="o">=</span> <span class="mi">2147483647</span>
+
+
+<div class="viewcode-block" id="randomize_smiles_rotated"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_randomization.randomize_smiles_rotated.html#rxn.chemutils.smiles_randomization.randomize_smiles_rotated">[docs]</a><span class="k">def</span> <span class="nf">randomize_smiles_rotated</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">with_order_reversal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Randomize a SMILES string by doing a cyclic rotation of the atomic indices.</span>
+
+<span class="sd">    Adapted from https://github.com/GLambard/SMILES-X/blob/758478663030580a363a9ee61c11f6d6448e18a1/SMILESX/augm.py#L19.</span>
+
+<span class="sd">    The outputs of this function can be reproduced by setting the seed with random.seed().</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        InvalidSmiles: for invalid molecules.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles: SMILES string to randomize.</span>
+<span class="sd">        with_order_reversal: whether to reverse the atom order with 50% chance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Randomized SMILES string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+
+    <span class="c1"># Generate random values</span>
+    <span class="n">rotation_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_atoms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">reverse_order</span> <span class="o">=</span> <span class="n">with_order_reversal</span> <span class="ow">and</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+
+    <span class="c1"># Generate new atom indices order</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">))</span>
+    <span class="n">new_atoms_order</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">rotation_index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">atoms</span><span class="p">[:</span> <span class="n">rotation_index</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)]</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">reverse_order</span><span class="p">:</span>
+        <span class="n">new_atoms_order</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RenumberAtoms</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">new_atoms_order</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="randomize_smiles_restricted"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_randomization.randomize_smiles_restricted.html#rxn.chemutils.smiles_randomization.randomize_smiles_restricted">[docs]</a><span class="k">def</span> <span class="nf">randomize_smiles_restricted</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Randomize a SMILES string in a restricted fashion.</span>
+
+<span class="sd">    The outputs of this function can be reproduced by setting the seed with random.seed().</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        InvalidSmiles: for invalid molecules.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles: SMILES string to randomize.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Randomized SMILES string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">new_atom_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()))</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">new_atom_order</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RenumberAtoms</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">newOrder</span><span class="o">=</span><span class="n">new_atom_order</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="randomize_smiles_unrestricted"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_randomization.randomize_smiles_unrestricted.html#rxn.chemutils.smiles_randomization.randomize_smiles_unrestricted">[docs]</a><span class="k">def</span> <span class="nf">randomize_smiles_unrestricted</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Randomize a SMILES string in an unrestricted fashion.</span>
+
+<span class="sd">    The outputs of this function can be reproduced by setting the seed with random.seed().</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        InvalidSmiles: for invalid molecules.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles: SMILES string to randomize.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Randomized SMILES string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># We sample the seed to give to RDKit. This makes the call reproducible</span>
+    <span class="c1"># if one sets random.seed() outside this function.</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">_MAX_RDKIT_RANDOM_SEED</span><span class="p">)</span>
+
+    <span class="c1"># Note: to allow for reproducibility, we do not rely on</span>
+    <span class="c1">#       Chem.MolToSmiles(mol, canonical=False, doRandom=True)</span>
+    <span class="c1"># See https://www.rdkit.org/docs/Cookbook.html#enumerate-smiles</span>
+    <span class="k">return</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToRandomSmilesVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

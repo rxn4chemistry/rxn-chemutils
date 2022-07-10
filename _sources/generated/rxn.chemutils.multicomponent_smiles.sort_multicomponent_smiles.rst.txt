@@ -1,0 +1,6 @@
+rxn.chemutils.multicomponent\_smiles.sort\_multicomponent\_smiles
+=================================================================
+
+.. currentmodule:: rxn.chemutils.multicomponent_smiles
+
+.. autofunction:: sort_multicomponent_smiles

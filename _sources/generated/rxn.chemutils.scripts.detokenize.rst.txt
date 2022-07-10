@@ -1,0 +1,23 @@
+rxn.chemutils.scripts.detokenize
+================================
+
+.. automodule:: rxn.chemutils.scripts.detokenize
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

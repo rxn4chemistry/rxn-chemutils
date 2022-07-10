@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.sort\_compounds
+================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: sort_compounds

@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.apply\_to\_compounds
+=====================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: apply_to_compounds

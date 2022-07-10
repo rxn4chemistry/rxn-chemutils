@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.atom\_type\_counter
+===============================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: atom_type_counter

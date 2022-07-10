@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_smiles.determine\_format
+================================================
+
+.. currentmodule:: rxn.chemutils.reaction_smiles
+
+.. autofunction:: determine_format

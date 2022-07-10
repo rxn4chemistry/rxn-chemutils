@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.mdl\_to\_mol
+=====================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: mdl_to_mol

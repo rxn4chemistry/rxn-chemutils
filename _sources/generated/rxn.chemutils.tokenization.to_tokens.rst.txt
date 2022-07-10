@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.to\_tokens
+=====================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autofunction:: to_tokens

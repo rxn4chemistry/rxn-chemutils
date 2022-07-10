@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.rxn\_standardization
+=====================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: rxn_standardization

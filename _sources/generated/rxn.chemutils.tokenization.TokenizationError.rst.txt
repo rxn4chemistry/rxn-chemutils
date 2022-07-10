@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.TokenizationError
+============================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autoexception:: TokenizationError

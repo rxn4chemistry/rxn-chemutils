@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.smiles\_to\_mol
+========================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: smiles_to_mol

@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.sanitize\_mol
+======================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: sanitize_mol

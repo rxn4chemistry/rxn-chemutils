@@ -1,0 +1,6 @@
+rxn.chemutils.multicomponent\_smiles.remove\_duplicates\_in\_multicomponent\_smiles
+===================================================================================
+
+.. currentmodule:: rxn.chemutils.multicomponent_smiles
+
+.. autofunction:: remove_duplicates_in_multicomponent_smiles

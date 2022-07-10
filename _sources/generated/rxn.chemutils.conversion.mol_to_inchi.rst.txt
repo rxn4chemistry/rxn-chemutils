@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.mol\_to\_inchi
+=======================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: mol_to_inchi

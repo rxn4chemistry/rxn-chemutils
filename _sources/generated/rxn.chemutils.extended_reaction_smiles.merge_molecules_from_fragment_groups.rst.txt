@@ -1,0 +1,6 @@
+rxn.chemutils.extended\_reaction\_smiles.merge\_molecules\_from\_fragment\_groups
+=================================================================================
+
+.. currentmodule:: rxn.chemutils.extended_reaction_smiles
+
+.. autofunction:: merge_molecules_from_fragment_groups

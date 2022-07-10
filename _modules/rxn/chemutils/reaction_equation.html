@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.reaction_equation &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>rxn.chemutils.reaction_equation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rxn.chemutils.reaction_equation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Generator</span><span class="p">,</span>
+    <span class="n">Iterable</span><span class="p">,</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">from</span> <span class="nn">rxn.utilities.containers</span> <span class="kn">import</span> <span class="n">remove_duplicates</span>
+
+<span class="kn">from</span> <span class="nn">.conversion</span> <span class="kn">import</span> <span class="n">canonicalize_smiles</span><span class="p">,</span> <span class="n">cleanup_smiles</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidReactionSmiles</span>
+<span class="kn">from</span> <span class="nn">.multicomponent_smiles</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">list_to_multicomponent_smiles</span><span class="p">,</span>
+    <span class="n">multicomponent_smiles_to_list</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;ReactionEquation&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ReactionEquation"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a reaction equation, as given by the molecules involved in a reaction.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        reactants: SMILES strings for compounds on the left of the reaction arrow.</span>
+<span class="sd">        agents: SMILES strings for compounds above the reaction arrow. Are</span>
+<span class="sd">            sometimes merged with the reactants.</span>
+<span class="sd">        products: SMILES strings for compounds on the right of the reaction arrow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reactants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">agents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">products</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ReactionEquation.__init__"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">reactants</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">agents</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">products</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overwrite init function in order to enable instantiation from any iterator and</span>
+<span class="sd">        to force copying the lists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_init__</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">reactants</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">agents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">products</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to simplify functionality acting on all three</span>
+<span class="sd">        compound groups&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reactants</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">products</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ReactionEquation.iter_all_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation.iter_all_smiles">[docs]</a>    <span class="k">def</span> <span class="nf">iter_all_smiles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Helper function to iterate over all the SMILES in the reaction equation&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">molecule</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="n">group</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ReactionEquation.to_string"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a ReactionEquation to an &quot;rxn&quot; reaction SMILES.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">smiles_groups</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">list_to_multicomponent_smiles</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&gt;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">smiles_groups</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ReactionEquation.from_string"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">reaction_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a ReactionEquation from an &quot;rxn&quot; reaction SMILES.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">multicomponent_smiles_to_list</span><span class="p">(</span><span class="n">smiles_group</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="o">=</span><span class="n">fragment_bond</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">smiles_group</span> <span class="ow">in</span> <span class="n">reaction_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">groups</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidReactionSmiles</span><span class="p">(</span><span class="n">reaction_string</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div></div>
+
+
+<div class="viewcode-block" id="merge_reactants_and_agents"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.merge_reactants_and_agents.html#rxn.chemutils.reaction_equation.merge_reactants_and_agents">[docs]</a><span class="k">def</span> <span class="nf">merge_reactants_and_agents</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span>
+        <span class="n">reactants</span><span class="o">=</span><span class="n">reaction</span><span class="o">.</span><span class="n">reactants</span> <span class="o">+</span> <span class="n">reaction</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span>
+        <span class="n">agents</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">products</span><span class="o">=</span><span class="n">reaction</span><span class="o">.</span><span class="n">products</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="sort_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.sort_compounds.html#rxn.chemutils.reaction_equation.sort_compounds">[docs]</a><span class="k">def</span> <span class="nf">sort_compounds</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reorder the compounds of each group in alphabetic order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sorted_compound_groups</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">reaction</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_compound_groups</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="apply_to_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.apply_to_compounds.html#rxn.chemutils.reaction_equation.apply_to_compounds">[docs]</a><span class="k">def</span> <span class="nf">apply_to_compounds</span><span class="p">(</span>
+    <span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a function to the individual compounds in a ReactionEquation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        reaction: reaction equation to apply the function to.</span>
+<span class="sd">        fn: function to apply.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        New ReactionEquation instance after application of the function to the compounds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">updated_compound_groups</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">[</span><span class="n">fn</span><span class="p">(</span><span class="n">compound</span><span class="p">)</span> <span class="k">for</span> <span class="n">compound</span> <span class="ow">in</span> <span class="n">compound_group</span><span class="p">]</span> <span class="k">for</span> <span class="n">compound_group</span> <span class="ow">in</span> <span class="n">reaction</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">updated_compound_groups</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="canonicalize_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.canonicalize_compounds.html#rxn.chemutils.reaction_equation.canonicalize_compounds">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_compounds</span><span class="p">(</span>
+    <span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">,</span> <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Canonicalize the molecules of a ReactionEquation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">canonicalize_fn</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">canonicalize_smiles</span><span class="p">,</span> <span class="n">check_valence</span><span class="o">=</span><span class="n">check_valence</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">apply_to_compounds</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="n">canonicalize_fn</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="remove_duplicate_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.remove_duplicate_compounds.html#rxn.chemutils.reaction_equation.remove_duplicate_compounds">[docs]</a><span class="k">def</span> <span class="nf">remove_duplicate_compounds</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove compounds that are duplicated in the same category</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">groups_without_duplicates</span> <span class="o">=</span> <span class="p">(</span><span class="n">remove_duplicates</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">reaction</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">groups_without_duplicates</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cleanup_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.cleanup_compounds.html#rxn.chemutils.reaction_equation.cleanup_compounds">[docs]</a><span class="k">def</span> <span class="nf">cleanup_compounds</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic cleanup of the compounds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">apply_to_compounds</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="n">cleanup_smiles</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rxn_standardization"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.rxn_standardization.html#rxn.chemutils.reaction_equation.rxn_standardization">[docs]</a><span class="k">def</span> <span class="nf">rxn_standardization</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply the standard RXN postprocessing of reaction equations.</span>
+
+<span class="sd">    Consists in the following</span>
+<span class="sd">    1. merge reactants and agents</span>
+<span class="sd">    2. canonicalize all the SMILES</span>
+<span class="sd">    3. sort the compounds in each group</span>
+<span class="sd">    4. remove the duplicates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">remove_duplicate_compounds</span><span class="p">(</span>
+        <span class="n">sort_compounds</span><span class="p">(</span><span class="n">canonicalize_compounds</span><span class="p">(</span><span class="n">merge_reactants_and_agents</span><span class="p">(</span><span class="n">reaction</span><span class="p">)))</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="remove_precursors_from_products"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.remove_precursors_from_products.html#rxn.chemutils.reaction_equation.remove_precursors_from_products">[docs]</a><span class="k">def</span> <span class="nf">remove_precursors_from_products</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove compounds in products that are also present in the reactants or reagents.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">precursors</span> <span class="o">=</span> <span class="n">reaction</span><span class="o">.</span><span class="n">reactants</span> <span class="o">+</span> <span class="n">reaction</span><span class="o">.</span><span class="n">agents</span>
+    <span class="n">products_without_precursors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">product</span> <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">reaction</span><span class="o">.</span><span class="n">products</span> <span class="k">if</span> <span class="n">product</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">precursors</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span>
+        <span class="n">reactants</span><span class="o">=</span><span class="n">reaction</span><span class="o">.</span><span class="n">reactants</span><span class="p">,</span>
+        <span class="n">agents</span><span class="o">=</span><span class="n">reaction</span><span class="o">.</span><span class="n">agents</span><span class="p">,</span>
+        <span class="n">products</span><span class="o">=</span><span class="n">products_without_precursors</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="has_repeated_molecules"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.has_repeated_molecules.html#rxn.chemutils.reaction_equation.has_repeated_molecules">[docs]</a><span class="k">def</span> <span class="nf">has_repeated_molecules</span><span class="p">(</span><span class="n">reaction_equation</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">all_molecules</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reaction_equation</span><span class="o">.</span><span class="n">iter_all_smiles</span><span class="p">())</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_molecules</span><span class="p">))</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_molecules</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

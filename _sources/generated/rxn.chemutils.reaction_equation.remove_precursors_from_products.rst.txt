@@ -1,0 +1,6 @@
+rxn.chemutils.reaction\_equation.remove\_precursors\_from\_products
+===================================================================
+
+.. currentmodule:: rxn.chemutils.reaction_equation
+
+.. autofunction:: remove_precursors_from_products

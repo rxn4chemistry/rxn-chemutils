@@ -1,0 +1,6 @@
+rxn.chemutils.exceptions.SanitizationError
+==========================================
+
+.. currentmodule:: rxn.chemutils.exceptions
+
+.. autoexception:: SanitizationError

@@ -1,0 +1,30 @@
+rxn.chemutils.utils
+===================
+
+.. automodule:: rxn.chemutils.utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      remove_atom_mapping
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

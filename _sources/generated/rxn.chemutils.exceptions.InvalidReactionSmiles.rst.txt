@@ -1,0 +1,6 @@
+rxn.chemutils.exceptions.InvalidReactionSmiles
+==============================================
+
+.. currentmodule:: rxn.chemutils.exceptions
+
+.. autoexception:: InvalidReactionSmiles

@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.remove\_hydrogens
+==========================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: remove_hydrogens

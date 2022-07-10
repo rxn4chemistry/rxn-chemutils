@@ -1,0 +1,6 @@
+rxn.chemutils.multicomponent\_smiles.canonicalize\_multicomponent\_smiles
+=========================================================================
+
+.. currentmodule:: rxn.chemutils.multicomponent_smiles
+
+.. autofunction:: canonicalize_multicomponent_smiles

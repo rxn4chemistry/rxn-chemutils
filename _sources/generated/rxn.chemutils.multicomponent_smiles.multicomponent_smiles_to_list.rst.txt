@@ -1,0 +1,6 @@
+rxn.chemutils.multicomponent\_smiles.multicomponent\_smiles\_to\_list
+=====================================================================
+
+.. currentmodule:: rxn.chemutils.multicomponent_smiles
+
+.. autofunction:: multicomponent_smiles_to_list

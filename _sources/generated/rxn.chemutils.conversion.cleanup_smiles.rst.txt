@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.cleanup\_smiles
+========================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: cleanup_smiles

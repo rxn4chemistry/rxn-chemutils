@@ -1,0 +1,30 @@
+rxn.chemutils.rdkit\_utils
+==========================
+
+.. automodule:: rxn.chemutils.rdkit_utils
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      combine_mols
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

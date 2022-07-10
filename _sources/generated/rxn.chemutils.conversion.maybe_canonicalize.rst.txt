@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.maybe\_canonicalize
+============================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: maybe_canonicalize

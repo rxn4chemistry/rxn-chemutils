@@ -1,0 +1,35 @@
+rxn.chemutils.miscellaneous
+===========================
+
+.. automodule:: rxn.chemutils.miscellaneous
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      atom_type_counter
+      canonicalize_any
+      equivalent_smiles
+      is_valid_smiles
+      remove_chiral_centers
+      remove_double_bond_stereochemistry
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

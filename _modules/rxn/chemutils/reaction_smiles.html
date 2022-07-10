@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.reaction_smiles &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>rxn.chemutils.reaction_smiles</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rxn.chemutils.reaction_smiles</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functionality to handle different kinds of reaction SMILES with the same functions.</span>
+
+<span class="sd">In a separate file than miscellaneous.py or conversion.py in order to avoid</span>
+<span class="sd">cyclic dependencies.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">auto</span>
+
+<span class="kn">from</span> <span class="nn">rxn.utilities.types</span> <span class="kn">import</span> <span class="n">RxnEnum</span>
+
+<span class="kn">from</span> <span class="nn">.extended_reaction_smiles</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">parse_extended_reaction_smiles</span><span class="p">,</span>
+    <span class="n">to_extended_reaction_smiles</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.reaction_equation</span> <span class="kn">import</span> <span class="n">ReactionEquation</span>
+
+
+<div class="viewcode-block" id="ReactionFormat"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.ReactionFormat.html#rxn.chemutils.reaction_smiles.ReactionFormat">[docs]</a><span class="k">class</span> <span class="nc">ReactionFormat</span><span class="p">(</span><span class="n">RxnEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Existing reaction SMILES formats.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        EXTENDED: extended reaction SMILES with fragment info,</span>
+<span class="sd">            f.i. ``|f:0.2,3.4.5|``.</span>
+<span class="sd">        STANDARD: standard reaction SMILES.</span>
+<span class="sd">        STANDARD_WITH_TILDE: standard reaction SMILES, where fragments are</span>
+<span class="sd">            indicated with tilde symbols, &quot;~&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EXTENDED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">STANDARD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">STANDARD_WITH_TILDE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="determine_format"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.determine_format.html#rxn.chemutils.reaction_smiles.determine_format">[docs]</a><span class="k">def</span> <span class="nf">determine_format</span><span class="p">(</span><span class="n">reaction_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionFormat</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine the format of a reaction SMILES.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot; |&quot;</span> <span class="ow">in</span> <span class="n">reaction_smiles</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">EXTENDED</span>
+
+    <span class="k">if</span> <span class="s2">&quot;~&quot;</span> <span class="ow">in</span> <span class="n">reaction_smiles</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD_WITH_TILDE</span>
+
+    <span class="k">return</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD</span></div>
+
+
+<div class="viewcode-block" id="parse_any_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.parse_any_reaction_smiles.html#rxn.chemutils.reaction_smiles.parse_any_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">parse_any_reaction_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a reaction SMILES in any format (will be determined automatically).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">parse_reaction_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">reaction_format</span><span class="o">=</span><span class="n">determine_format</span><span class="p">(</span><span class="n">smiles</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="parse_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.parse_reaction_smiles.html#rxn.chemutils.reaction_smiles.parse_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">parse_reaction_smiles</span><span class="p">(</span>
+    <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reaction_format</span><span class="p">:</span> <span class="n">ReactionFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse the reaction SMILES in a given format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">EXTENDED</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">parse_extended_reaction_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">remove_atom_maps</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ReactionEquation</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD_WITH_TILDE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ReactionEquation</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported reaction format: </span><span class="si">{</span><span class="n">reaction_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="to_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.to_reaction_smiles.html#rxn.chemutils.reaction_smiles.to_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">to_reaction_smiles</span><span class="p">(</span>
+    <span class="n">reaction_equation</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">,</span> <span class="n">reaction_format</span><span class="p">:</span> <span class="n">ReactionFormat</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a reaction equation into a reaction SMILES of the specified format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">EXTENDED</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">to_extended_reaction_smiles</span><span class="p">(</span><span class="n">reaction_equation</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">reaction_equation</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD_WITH_TILDE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">reaction_equation</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">fragment_bond</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported reaction format: </span><span class="si">{</span><span class="n">reaction_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

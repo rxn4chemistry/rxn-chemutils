@@ -1,0 +1,46 @@
+rxn.chemutils.reaction\_equation
+================================
+
+.. automodule:: rxn.chemutils.reaction_equation
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      apply_to_compounds
+      canonicalize_compounds
+      cleanup_compounds
+      has_repeated_molecules
+      merge_reactants_and_agents
+      remove_duplicate_compounds
+      remove_precursors_from_products
+      rxn_standardization
+      sort_compounds
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ReactionEquation
+   
+   
+
+   
+   
+   
+
+
+
