@@ -13,7 +13,7 @@ jobs:
     - name: Build HTML
       uses: ammaraskar/sphinx-action@0.4
       with:
-        pre-build-command: "pip install -e ."
+        pre-build-command: "pip install -e .[rdkit]"
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
