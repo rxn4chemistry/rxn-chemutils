@@ -191,7 +191,7 @@ class _Exporter:
 
 def determine_fragment_groups(extended_reaction_info: str) -> List[List[int]]:
     """
-    From the fragment info string (such as '|f:0.2,5.6|'), determine the groups
+    From the fragment info string (such as ``|f:0.2,5.6|``), determine the groups
     of indices that must be grouped.
 
     Args:
