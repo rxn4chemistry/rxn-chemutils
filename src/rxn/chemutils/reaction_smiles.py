@@ -21,7 +21,7 @@ class ReactionFormat(RxnEnum):
 
     Attributes:
         EXTENDED: extended reaction SMILES with fragment info,
-            f.i. "|f:0.2,3.4.5|".
+            f.i. ``|f:0.2,3.4.5|``.
         STANDARD: standard reaction SMILES.
         STANDARD_WITH_TILDE: standard reaction SMILES, where fragments are
             indicated with tilde symbols, "~".
