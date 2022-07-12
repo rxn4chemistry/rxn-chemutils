@@ -3,6 +3,7 @@ from typing import Callable, List
 
 from rxn.utilities.containers import all_identical
 
+from rxn.chemutils.conversion import canonicalize_smiles
 from rxn.chemutils.smiles_randomization import (
     randomize_smiles_restricted,
     randomize_smiles_rotated,
@@ -105,3 +106,22 @@ def test_reproducibility():
             samples.append(fn(adenine))
 
         assert all_identical(samples)
+
+
+def test_multi_fragment_compounds():
+    # Check that no aromatization or cleanup is done
+    smiles = "CC[NH+].CC(=O)[O-]"
+
+    for fn in randomization_functions:
+        samples = {fn(smiles) for _ in range(20)}
+
+        # Make sure that some randomization is happening
+        assert len(samples) > 5
+
+        # make sure that the order of the fragments is shuffled; check that
+        # N is present sometimes in the first fragment, sometimes in the second.
+        assert any("N" in sample.split(".")[0] for sample in samples)
+        assert any("N" in sample.split(".")[1] for sample in samples)
+
+        # All of them should still have the same canonical representation
+        assert len({canonicalize_smiles(sample) for sample in samples}) == 1

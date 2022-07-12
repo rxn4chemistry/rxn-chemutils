@@ -85,13 +85,23 @@ def randomize_smiles_unrestricted(smiles: str) -> str:
     Returns:
         Randomized SMILES string.
     """
-    mol = smiles_to_mol(smiles, sanitize=False)
 
     # We sample the seed to give to RDKit. This makes the call reproducible
     # if one sets random.seed() outside this function.
     seed = random.randint(1, _MAX_RDKIT_RANDOM_SEED)
 
+    # unlike for the other randomizations, unrestricted randomization does not
+    # work on compounds with multiple fragments. Hence we first split them and
+    # then do the randomization individually
+    sub_smiles = smiles.split(".")
+
+    mols = [smiles_to_mol(s, sanitize=False) for s in sub_smiles]
+
     # Note: to allow for reproducibility, we do not rely on
     #       Chem.MolToSmiles(mol, canonical=False, doRandom=True)
     # See https://www.rdkit.org/docs/Cookbook.html#enumerate-smiles
-    return Chem.MolToRandomSmilesVect(mol, 1, seed)[0]
+    randomized_mols = [Chem.MolToRandomSmilesVect(mol, 1, seed)[0] for mol in mols]
+
+    # shuffle the order of the fragments and join them back
+    random.shuffle(randomized_mols)
+    return ".".join(randomized_mols)
