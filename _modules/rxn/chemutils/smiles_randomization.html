@@ -152,16 +152,26 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Randomized SMILES string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># We sample the seed to give to RDKit. This makes the call reproducible</span>
     <span class="c1"># if one sets random.seed() outside this function.</span>
     <span class="n">seed</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">_MAX_RDKIT_RANDOM_SEED</span><span class="p">)</span>
 
+    <span class="c1"># unlike for the other randomizations, unrestricted randomization does not</span>
+    <span class="c1"># work on compounds with multiple fragments. Hence we first split them and</span>
+    <span class="c1"># then do the randomization individually</span>
+    <span class="n">sub_smiles</span> <span class="o">=</span> <span class="n">smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+    <span class="n">mols</span> <span class="o">=</span> <span class="p">[</span><span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sub_smiles</span><span class="p">]</span>
+
     <span class="c1"># Note: to allow for reproducibility, we do not rely on</span>
     <span class="c1">#       Chem.MolToSmiles(mol, canonical=False, doRandom=True)</span>
     <span class="c1"># See https://www.rdkit.org/docs/Cookbook.html#enumerate-smiles</span>
-    <span class="k">return</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToRandomSmilesVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+    <span class="n">randomized_mols</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToRandomSmilesVect</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mol</span> <span class="ow">in</span> <span class="n">mols</span><span class="p">]</span>
+
+    <span class="c1"># shuffle the order of the fragments and join them back</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">randomized_mols</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">randomized_mols</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
