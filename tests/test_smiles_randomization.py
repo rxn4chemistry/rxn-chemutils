@@ -125,4 +125,3 @@ def test_multi_fragment_compounds():
 
         # All of them should still have the same canonical representation
         assert len({canonicalize_smiles(sample) for sample in samples}) == 1
-
