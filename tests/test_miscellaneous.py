@@ -4,12 +4,14 @@ import pytest
 
 from rxn.chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
 from rxn.chemutils.miscellaneous import (
+    apply_to_any_smiles,
     atom_type_counter,
     canonicalize_any,
     equivalent_smiles,
     is_valid_smiles,
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
+    sort_any,
 )
 
 
@@ -92,8 +94,26 @@ def test_remove_double_bond_stereochemistry():
     )
 
 
-def test_canonicalize_any_on_molecule_SMILES():
+def test_apply_to_any_smiles():
+    def dummy(smiles: str) -> str:
+        return smiles + "0"
+
+    # Single-component SMILES
+    # Note: the first one is not considered to be a multi-component SMILES!
+    assert apply_to_any_smiles("A.C.C.B", dummy) == "A.C.C.B0"
+    assert apply_to_any_smiles("CBA", dummy) == "CBA0"
+
+    # Multi-component SMILES (note that here, the fragments are not reordered)
+    assert apply_to_any_smiles("A.D~C.B", dummy) == "A0.D~C0.B0"
+
+    # reaction SMILES
+    assert apply_to_any_smiles("B.A.E~D.A>>C.B", dummy) == "B0.A0.E~D0.A0>>C0.B0"
+    assert apply_to_any_smiles("A.E.D.A>>C |f:1.2|", dummy) == "A0.A0.E.D0>>C0 |f:2.3|"
+
+
+def test_canonicalize_any_on_molecule_smiles():
     assert canonicalize_any("CC(C)") == "CCC"
+    assert canonicalize_any("[Na+].[Cl-]") == "[Cl-].[Na+]"
     assert canonicalize_any("CF(C)", check_valence=False) == "CFC"
     with pytest.raises(InvalidSmiles):
         _ = canonicalize_any("CF(C)")
@@ -103,15 +123,16 @@ def test_canonicalize_any_on_multicomponent_smiles():
     # Basic example
     assert canonicalize_any("CC(C).C(O)") == "CCC.CO"
 
-    # Note: does not reorder!
-    assert canonicalize_any("C(O).CC(C)") == "CO.CCC"
+    # Note: this will be assumed to be a single-compound SMILES -> reordered!
+    assert canonicalize_any("C(O).CC(C)") == "CCC.CO"
 
-    # Note: within the same compound: reodering due to compound canonicalization
-    assert canonicalize_any("CO.C~O") == "CO.C~O"
-    assert canonicalize_any("CO.O~C") == "CO.C~O"
+    # Note: within the same compound: reordering due to compound canonicalization
+    # Although "CCC" comes first alphabetically, it stays at the end.
+    assert canonicalize_any("CO.C~O.CCC") == "CO.C~O.CCC"
+    assert canonicalize_any("CO.O~C.CCC") == "CO.C~O.CCC"
 
     # Valence checking
-    assert canonicalize_any("C(O).CF(C)", check_valence=False) == "CO.CFC"
+    assert canonicalize_any("C(O)~CF(C)", check_valence=False) == "CFC~CO"
     with pytest.raises(InvalidSmiles):
         _ = canonicalize_any("CO.CFC")
 
@@ -136,3 +157,16 @@ def test_canonicalize_any_on_reaction_smiles():
         _ = canonicalize_any("CC>CO")
     with pytest.raises(InvalidReactionSmiles):
         _ = canonicalize_any("CC>>CC>>C(O)")
+
+
+def test_sort_any():
+    # Single-component SMILES
+    assert sort_any("A.C.C.B") == "A.B.C.C"
+    assert sort_any("CBA") == "CBA"
+
+    # Multi-component SMILES (note that here, the fragments are not reordered)
+    assert sort_any("A.D~C.B") == "A.B.D~C"
+
+    # reaction SMILES
+    assert sort_any("B.A.E~D.A>>C.B") == "A.A.B.E~D>>B.C"
+    assert sort_any("B.A.E.D.A>>C.B |f:2.3|") == "A.A.B.E.D>>B.C |f:3.4|"
