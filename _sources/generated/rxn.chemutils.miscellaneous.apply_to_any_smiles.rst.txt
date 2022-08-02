@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.apply\_to\_any\_smiles
+==================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: apply_to_any_smiles

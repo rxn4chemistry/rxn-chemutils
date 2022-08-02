@@ -14,12 +14,14 @@ rxn.chemutils.miscellaneous
    .. autosummary::
       :toctree:
    
+      apply_to_any_smiles
       atom_type_counter
       canonicalize_any
       equivalent_smiles
       is_valid_smiles
       remove_chiral_centers
       remove_double_bond_stereochemistry
+      sort_any
    
    
 

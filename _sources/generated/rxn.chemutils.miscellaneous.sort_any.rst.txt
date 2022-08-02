@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.sort\_any
+=====================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: sort_any
