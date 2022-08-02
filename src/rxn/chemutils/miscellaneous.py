@@ -1,14 +1,18 @@
 import re
 import typing
 from collections import Counter
-from typing import List
+from functools import partial
+from typing import Callable, List
 
 from rdkit.Chem import AddHs, Atom, Mol
 
 from .conversion import canonicalize_smiles, smiles_to_mol
 from .exceptions import InvalidSmiles
-from .multicomponent_smiles import canonicalize_multicomponent_smiles
-from .reaction_equation import canonicalize_compounds
+from .multicomponent_smiles import (
+    apply_to_multicomponent_smiles,
+    sort_multicomponent_smiles,
+)
+from .reaction_equation import apply_to_compounds, sort_compounds
 from .reaction_smiles import determine_format, parse_reaction_smiles, to_reaction_smiles
 
 CHIRAL_CENTER_PATTERN = re.compile(
@@ -89,6 +93,39 @@ def remove_double_bond_stereochemistry(smiles: str) -> str:
     return smiles.replace("/", "").replace("\\", "")
 
 
+def apply_to_any_smiles(any_smiles: str, fn: Callable[[str], str]) -> str:
+    """
+    Apply a given function to individual compound SMILES strings given in any kind
+    of SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).
+
+    In the case of reaction SMILES, the format is kept.
+
+    Args:
+        any_smiles: any kind of SMILES string.
+        fn: callback to apply to every compound SMILES.
+
+    Raises:
+        Exception: different kinds of exception may be raised during parsing,
+            or during execution of the callback.
+
+    Returns:
+        the new (molecule, multicomponent, or reaction) SMILES string after
+        application of the callback to all the component SMILES.
+    """
+    if ">" in any_smiles:
+        # we have a reaction SMILES
+        reaction_format = determine_format(any_smiles)
+        reaction = parse_reaction_smiles(any_smiles, reaction_format)
+        reaction = apply_to_compounds(reaction, fn)
+        return to_reaction_smiles(reaction, reaction_format)
+    elif "~" in any_smiles:
+        # we have a multicomponent SMILES
+        return apply_to_multicomponent_smiles(any_smiles, fn=fn, fragment_bond="~")
+    else:
+        # we have a single-component SMILES
+        return fn(any_smiles)
+
+
 def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
     """
     Canonicalize any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).
@@ -100,19 +137,38 @@ def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
         check_valence: if False, will not do any valence check.
 
     Raises:
-        InvalidSmiles: if the SMILES string is not valid.
+        Exception: different kinds of exception may be raised during parsing.
+        InvalidSmiles: for canonicalization errors.
 
     Returns:
         the canonical (molecule, multicomponent, or reaction) SMILES string.
+    """
+    fn = partial(canonicalize_smiles, check_valence=check_valence)
+    return apply_to_any_smiles(any_smiles, fn)
+
+
+def sort_any(any_smiles: str) -> str:
+    """
+    Sort any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).
+
+    For single-component SMILES, the fragments will be reorderd.
+    In the case of reaction SMILES, the format is kept.
+
+    Args:
+        any_smiles: any kind of SMILES string.
+
+    Raises:
+        Exception: different kinds of exception may be raised during parsing.
+
+    Returns:
+        the sorted SMILES string.
     """
     if ">" in any_smiles:
         # we have a reaction SMILES
         reaction_format = determine_format(any_smiles)
         reaction = parse_reaction_smiles(any_smiles, reaction_format)
-        reaction = canonicalize_compounds(reaction, check_valence=check_valence)
+        reaction = sort_compounds(reaction)
         return to_reaction_smiles(reaction, reaction_format)
     else:
-        # This covers both single molecule SMILES and multicomponent SMILES
-        return canonicalize_multicomponent_smiles(
-            any_smiles, fragment_bond="~", check_valence=check_valence
-        )
+        # we call the same function for single- and multi-component SMILES
+        return sort_multicomponent_smiles(any_smiles)
