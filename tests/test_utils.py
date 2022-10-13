@@ -1,7 +1,7 @@
 from rxn.chemutils.utils import remove_atom_mapping
 
 
-def test_remove_atom_mapping():
+def test_remove_atom_mapping() -> None:
     # Reaction with mapping
     with_mapping = (
         "[*:1]CCO.[CH3:1][C:2](=[O:3])[OH:4]>[H+]>CC[O:4][C:2](=[O:3])[CH3:1].O"

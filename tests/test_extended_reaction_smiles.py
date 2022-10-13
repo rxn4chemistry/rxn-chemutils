@@ -7,7 +7,7 @@ from rxn.chemutils.extended_reaction_smiles import (
 from rxn.chemutils.reaction_equation import ReactionEquation
 
 
-def test_from_reaction_smiles():
+def test_from_reaction_smiles() -> None:
     reaction_smiles = (
         "[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)Br)[F:8]"
         ">[Li]CCCC.C1CCOC1"
@@ -21,7 +21,7 @@ def test_from_reaction_smiles():
     assert reaction.products == ["CC1=CC(F)=C(C(=O)O)C=C1"]
 
 
-def test_from_reaction_smiles_keep_atom_maps():
+def test_from_reaction_smiles_keep_atom_maps() -> None:
     reaction_smiles = (
         "[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)Br)[F:8]"
         ">[Li]CCCC.C1CCOC1"
@@ -39,7 +39,7 @@ def test_from_reaction_smiles_keep_atom_maps():
     ]
 
 
-def test_from_reaction_smiles_with_fragments():
+def test_from_reaction_smiles_with_fragments() -> None:
     reaction_smiles = (
         "BrC1=C(C(=O)O)C=C(C=C1)COC.C1(O)=CC(O)=CC=C1.[OH-].[Na+]"
         ">S(=O)(=O)([O-])[O-].[Cu+2].O"
@@ -58,7 +58,7 @@ def test_from_reaction_smiles_with_fragments():
     assert reaction.products == ["OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3"]
 
 
-def test_from_reaction_smiles_with_other_extended_information():
+def test_from_reaction_smiles_with_other_extended_information() -> None:
     # the part with "&1:", "c:", "H:", must not be considered for determination of fragments
     reaction_smiles = (
         "[CH3:1][C:2](=[O:3])[NH:4][C@H:5]([C:6](=[O:7])[OH:8])[C:9]([CH3:10])"
@@ -74,7 +74,7 @@ def test_from_reaction_smiles_with_other_extended_information():
     assert reaction.products == ["CC(=O)N[C@H](C(=O)O)C(C)(C)SN=O"]
 
 
-def test_from_reaction_smiles_does_not_sanitize():
+def test_from_reaction_smiles_does_not_sanitize() -> None:
     # In earlier code, molecules were canonicalized if they were part of a fragment
     reaction_smiles = "C1=CC=CC=C1.[N+](=O)(O)[O-]>>C1=CC=CC=C1N(=O)=O |f:0.1|"
 
@@ -85,7 +85,7 @@ def test_from_reaction_smiles_does_not_sanitize():
     assert reaction.products == ["C1=CC=CC=C1N(=O)=O"]
 
 
-def test_from_reaction_smiles_with_NaH():
+def test_from_reaction_smiles_with_NaH() -> None:
     """
     In the original implementation using RDKit's ChemicalReaction, some molecules were parsed incorrectly, and this
     test would not have passed
@@ -110,7 +110,7 @@ def test_from_reaction_smiles_with_NaH():
     assert reaction.products == ["C(C)OC(=O)C1=C(N)C2=C(O1)CCCC2"]
 
 
-def test_from_reaction_smiles_with_rdkit_problem():
+def test_from_reaction_smiles_with_rdkit_problem() -> None:
     # A previous version relying more on RDKit returned, as a reactant, 'C.[Pd]'.
     reaction_smiles = "[C].[Pd]>CC>CCO |f:0.1|"
     reaction = parse_extended_reaction_smiles(reaction_smiles)
@@ -136,7 +136,7 @@ def test_from_reaction_smiles_with_rdkit_problem():
     ]
 
 
-def test_to_reaction_smiles():
+def test_to_reaction_smiles() -> None:
     reactants = ["CC1=CC(F)=C(Br)C=C1"]
     agents = ["[Li]CCCC", "C1CCOC1"]
     products = ["CC1=CC(F)=C(C(=O)O)C=C1"]
@@ -149,7 +149,7 @@ def test_to_reaction_smiles():
     assert reaction_smiles == expected
 
 
-def test_to_reaction_smiles_with_fragments():
+def test_to_reaction_smiles_with_fragments() -> None:
     reactants = ["BrC1=C(C(=O)O)C=C(COC)C=C1", "C1(O)=CC(O)=CC=C1", "[Na+].[OH-]"]
     agents = ["O", "O=S(=O)([O-])[O-].[Cu+2]"]
     products = ["OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3"]
@@ -167,7 +167,7 @@ def test_to_reaction_smiles_with_fragments():
     assert reaction_smiles == expected
 
 
-def test_to_reaction_smiles_with_dummy_fragments():
+def test_to_reaction_smiles_with_dummy_fragments() -> None:
     reactants = ["A", "B.C", "D", "E"]
     agents = ["F.G", "H"]
     products = ["I", "J", "K", "L.M.N"]
@@ -180,7 +180,7 @@ def test_to_reaction_smiles_with_dummy_fragments():
     assert reaction_smiles == expected
 
 
-def test_fragment_groups():
+def test_fragment_groups() -> None:
     assert determine_fragment_groups("") == []
 
     # Cases with only f involved
@@ -196,7 +196,7 @@ def test_fragment_groups():
     assert determine_fragment_groups("|m:0,22,f:2.3,4,&2:3,55,6|") == [[2, 3], [4]]
 
 
-def test_merge_molecules_from_fragment_groups():
+def test_merge_molecules_from_fragment_groups() -> None:
     # We consider, as an example, the following reaction
     # C.CC.CCC.CCCC > N.NN.NNN.NNNN.NNNNN > O.OO.OOO.OOOO
     # with fragmentation info |f:0.2.3,4.6,5.8|

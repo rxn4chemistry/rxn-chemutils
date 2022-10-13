@@ -1,5 +1,6 @@
 import pytest
 from rdkit import Chem
+from rdkit.Chem import Mol
 
 from rxn.chemutils.conversion import (
     canonicalize_smiles,
@@ -37,7 +38,7 @@ M  END
 """
 
 
-def test_smiles_to_mol():
+def test_smiles_to_mol() -> None:
     mol = smiles_to_mol("COC")
     assert mol.GetNumAtoms() == 3
     assert mol.GetAtomWithIdx(0).GetSymbol() == "C"
@@ -60,7 +61,7 @@ def test_smiles_to_mol():
     assert mol_to_smiles(smiles_to_mol("CC[C]CC")) == "CC[C]CC"
 
 
-def test_smiles_to_mol_without_sanitization():
+def test_smiles_to_mol_without_sanitization() -> None:
     # With sanitization, this would fail
     mol = smiles_to_mol("CFC", sanitize=False)
     assert mol.GetNumAtoms() == 3
@@ -81,7 +82,7 @@ def test_smiles_to_mol_without_sanitization():
     assert mol_to_smiles(smiles_to_mol("CC[C]CC", sanitize=False)) == "CC[C]CC"
 
 
-def test_mdl_to_mol():
+def test_mdl_to_mol() -> None:
     # NB: we assert that the molecules are correct with their SMILES notation
     assert mol_to_smiles(mdl_to_mol(WATER_MDL)) == "O"
 
@@ -101,8 +102,8 @@ def test_mdl_to_mol():
     assert mol_to_mdl(mdl_to_mol(CFC_MDL, sanitize=False)) == CFC_MDL
 
 
-def test_sanitize_mol():
-    def example_mol():
+def test_sanitize_mol() -> None:
+    def example_mol() -> Mol:
         return smiles_to_mol("C1=CC=CC=C1N(=O)=O", sanitize=False)
 
     # Example 1: do only aromatization
@@ -155,7 +156,7 @@ def test_sanitize_mol():
         )
 
 
-def test_remove_hydrogens():
+def test_remove_hydrogens() -> None:
     smiles = "[H]C([H])([H])Oc1ccc2cccc(C([H])([H])C#N)c2c1"
     smiles_without_h = "COc1ccc2cccc(CC#N)c2c1"
 
@@ -173,7 +174,7 @@ def test_remove_hydrogens():
     assert mol_to_smiles(mol, canonical=False) == smiles_without_h
 
 
-def test_canonicalize():
+def test_canonicalize() -> None:
     assert canonicalize_smiles("CCO") == canonicalize_smiles("OCC")
 
     # An empty SMILES string must raise an error
@@ -203,7 +204,7 @@ def test_canonicalize():
     ) == canonicalize_smiles("[se]1C=CC=C1", check_valence=False)
 
 
-def test_canonicalize_rotation():
+def test_canonicalize_rotation() -> None:
     # In an earlier version, the following SMILES kept switching between two
     # SMILES variants when canonicalizing (back-and-forth between aromatic and
     # non-aromatic.
@@ -213,7 +214,7 @@ def test_canonicalize_rotation():
     assert canonical_2 == canonical_1
 
 
-def test_canonicalize_removes_unnecessary_hydrogens():
+def test_canonicalize_removes_unnecessary_hydrogens() -> None:
     # in an earlier version, canonicalize_smiles(x) did not behave the same as
     # Chem.MolToSmiles(Chem.MolFromSmiles(x)) when there were implicit hydrogens.
     smiles = "[H]C([H])([H])Oc1ccc2cccc(C([H])([H])C#N)c2c1"
@@ -221,7 +222,7 @@ def test_canonicalize_removes_unnecessary_hydrogens():
     assert canonicalize_smiles(smiles) == "COc1ccc2cccc(CC#N)c2c1"
 
 
-def test_maybe_canonicalize():
+def test_maybe_canonicalize() -> None:
     # basic example
     assert maybe_canonicalize("C(C)C") == "CCC"
 
@@ -233,7 +234,7 @@ def test_maybe_canonicalize():
     assert maybe_canonicalize("F(C)C", check_valence=False) == "CFC"
 
 
-def test_cleanup_smiles():
+def test_cleanup_smiles() -> None:
     # Basic checks
     assert cleanup_smiles("C") == "C"
     assert cleanup_smiles("[C]") == "[C]"
@@ -282,7 +283,7 @@ def test_cleanup_smiles():
         cleanup_smiles("")
 
 
-def test_split_reaction_smiles():
+def test_split_reaction_smiles() -> None:
     reaction_smiles = (
         "BrC1=C(C(=O)O)C=C(C=C1)COC.C1(O)=CC(O)=CC=C1.[OH-].[Na+]"
         ">S(=O)(=O)([O-])[O-].[Cu+2].O"
@@ -299,7 +300,7 @@ def test_split_reaction_smiles():
     assert fragment_info == "|f:2.3,4.5|"
 
 
-def test_split_reaction_smiles_with_no_fragment_info():
+def test_split_reaction_smiles_with_no_fragment_info() -> None:
     reaction_smiles = (
         "[CH3:7][C:4]1=[CH:3][C:2](=[C:1]([CH:6]=[CH:5]1)Br)[F:8]"
         ">[Li]CCCC.C1CCOC1"
@@ -311,7 +312,7 @@ def test_split_reaction_smiles_with_no_fragment_info():
     assert fragment_info == ""
 
 
-def test_smiles_to_inchi():
+def test_smiles_to_inchi() -> None:
     # different SMILES representations for phenol (aromatic, non-aromatic)
     # should be converted to the same InChI
     phenol_inchi = "InChI=1S/C6H6O/c7-6-4-2-1-3-5-6/h1-5,7H"
