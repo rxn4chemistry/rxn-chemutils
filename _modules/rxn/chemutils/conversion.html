@@ -133,7 +133,7 @@
 
 <span class="sd">    Mainly a wrapper around MolToSmiles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonical</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonical</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
 
 <div class="viewcode-block" id="mdl_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mdl_to_mol.html#rxn.chemutils.conversion.mdl_to_mol">[docs]</a><span class="k">def</span> <span class="nf">mdl_to_mol</span><span class="p">(</span><span class="n">mdl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
@@ -166,7 +166,7 @@
 
 <span class="sd">    Mainly a wrapper around MolToMolBlock.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MolToMolBlock</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">MolToMolBlock</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
 
 <div class="viewcode-block" id="sanitize_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.sanitize_mol.html#rxn.chemutils.conversion.sanitize_mol">[docs]</a><span class="k">def</span> <span class="nf">sanitize_mol</span><span class="p">(</span>
@@ -308,7 +308,7 @@
         <span class="c1"># https://pubs.acs.org/doi/10.1021/acs.jcim.9b01080</span>
         <span class="n">options</span> <span class="o">=</span> <span class="s2">&quot;-KET -15T&quot;</span>
 
-    <span class="k">return</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToInchi</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToInchi</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
 
 <div class="viewcode-block" id="cleanup_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.cleanup_smiles.html#rxn.chemutils.conversion.cleanup_smiles">[docs]</a><span class="k">def</span> <span class="nf">cleanup_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
