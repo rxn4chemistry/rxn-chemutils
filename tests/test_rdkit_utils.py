@@ -2,7 +2,7 @@ from rxn.chemutils.conversion import mol_to_smiles, smiles_to_mol
 from rxn.chemutils.rdkit_utils import combine_mols
 
 
-def test_combine_mols():
+def test_combine_mols() -> None:
     # No molecule -> empty Mol
     assert mol_to_smiles(combine_mols([])) == ""
 

@@ -66,7 +66,7 @@ def mol_to_smiles(mol: Mol, canonical: bool = True) -> str:
 
     Mainly a wrapper around MolToSmiles.
     """
-    return MolToSmiles(mol, canonical=canonical)
+    return MolToSmiles(mol, canonical=canonical)  # type: ignore
 
 
 def mdl_to_mol(mdl: str, sanitize: bool = True) -> Mol:
@@ -99,7 +99,7 @@ def mol_to_mdl(mol: Mol) -> str:
 
     Mainly a wrapper around MolToMolBlock.
     """
-    return MolToMolBlock(mol)
+    return MolToMolBlock(mol)  # type: ignore
 
 
 def sanitize_mol(
@@ -241,7 +241,7 @@ def mol_to_inchi(mol: Mol, extended_tautomer_check: bool = False) -> str:
         # https://pubs.acs.org/doi/10.1021/acs.jcim.9b01080
         options = "-KET -15T"
 
-    return Chem.MolToInchi(mol, options=options)
+    return Chem.MolToInchi(mol, options=options)  # type: ignore
 
 
 def cleanup_smiles(smiles: str) -> str:

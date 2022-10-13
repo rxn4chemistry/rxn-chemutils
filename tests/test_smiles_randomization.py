@@ -17,7 +17,7 @@ randomization_functions: List[Callable[[str], str]] = [
 ]
 
 
-def test_generates_all_randomizations_for_simple_example():
+def test_generates_all_randomizations_for_simple_example() -> None:
     # Check that everything is recovered in a simple example with all methods
     smiles = "C1ON1"
 
@@ -39,7 +39,7 @@ def test_generates_all_randomizations_for_simple_example():
     )
 
 
-def test_does_not_sanitize_molecules():
+def test_does_not_sanitize_molecules() -> None:
     # Check that no aromatization or cleanup is done
     smiles = "C1=CC=CC=C1N(=O)=O"
 
@@ -55,7 +55,7 @@ def test_does_not_sanitize_molecules():
         assert all("[C]" in sample for sample in samples)
 
 
-def test_does_not_change_aromaticity():
+def test_does_not_change_aromaticity() -> None:
     # Check that there is no conversion of aromatic vs kekulized representation
     # (Selenium caused a few problems in other contexts)
     smiles = "c1cc[se]c1"
@@ -68,7 +68,7 @@ def test_does_not_change_aromaticity():
         assert all("[Se]" in sample for sample in samples)
 
 
-def test_keeps_stereochemistry():
+def test_keeps_stereochemistry() -> None:
     # Simple molecule with a stereocenter
     smiles = "COC[C@](CNC)(Cl)Br"
 
@@ -78,7 +78,7 @@ def test_keeps_stereochemistry():
         assert all("@" in sample for sample in samples)
 
 
-def test_number_generated_molecules():
+def test_number_generated_molecules() -> None:
     # For a test molecule, verify that the unrestricted randomization generates
     # most molecules, followed by the restricted one, followed by the rotated one.
     # NB: the exact values below depend on the number of samples.
@@ -95,7 +95,7 @@ def test_number_generated_molecules():
     assert 90 < len(unrestricted)
 
 
-def test_reproducibility():
+def test_reproducibility() -> None:
     adenine = "Nc1ncnc2[nH]cnc12"
 
     for fn in randomization_functions:
@@ -108,7 +108,7 @@ def test_reproducibility():
         assert all_identical(samples)
 
 
-def test_multi_fragment_compounds():
+def test_multi_fragment_compounds() -> None:
     # Check that no aromatization or cleanup is done
     smiles = "CC[NH+].CC(=O)[O-]"
 

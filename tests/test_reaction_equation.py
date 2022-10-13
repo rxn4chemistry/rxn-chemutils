@@ -18,7 +18,7 @@ from rxn.chemutils.reaction_equation import (
 )
 
 
-def test_merge_reactants_and_agents():
+def test_merge_reactants_and_agents() -> None:
     reactants = ["COCO", "CCOC", "OCC"]
     agents = ["O", "C", "N"]
     products = ["NCOC", "CCNO", "NCCC"]
@@ -31,7 +31,7 @@ def test_merge_reactants_and_agents():
     assert merged_reaction == expected
 
 
-def test_sort_compounds():
+def test_sort_compounds() -> None:
     reactants = ["COCO", "CCOC", "OCC"]
     agents = ["O", "C", "N"]
     products = ["NCOC", "CCNO", "NCCC"]
@@ -44,7 +44,7 @@ def test_sort_compounds():
     assert sorted_reaction == expected
 
 
-def test_canonicalize_compounds():
+def test_canonicalize_compounds() -> None:
     reactants = ["COCO", "CCOC", "OCC"]
     agents = ["O", "C", "N"]
     products = ["NCOC", "CCNO", "NCCC"]
@@ -61,7 +61,7 @@ def test_canonicalize_compounds():
     assert canonicalized_reaction == expected
 
 
-def test_canonicalize_compounds_with_invalid_valence():
+def test_canonicalize_compounds_with_invalid_valence() -> None:
     reaction = ReactionEquation(reactants=["F", "CC"], agents=[], products=["CFC"])
 
     with pytest.raises(InvalidSmiles):
@@ -71,7 +71,7 @@ def test_canonicalize_compounds_with_invalid_valence():
     assert canonicalize_compounds(reaction, check_valence=False) == reaction
 
 
-def test_cleanup_compounds():
+def test_cleanup_compounds() -> None:
     reaction = ReactionEquation(["CC[CH2]C", "C-C"], [], ["[C].[Pd]"])
 
     clean_reaction = cleanup_compounds(reaction)
@@ -80,7 +80,7 @@ def test_cleanup_compounds():
     assert clean_reaction == expected
 
 
-def test_remove_duplicate_compounds():
+def test_remove_duplicate_compounds() -> None:
     reaction = ReactionEquation(
         ["A", "B", "C", "A", "B"], ["D", "D", "E"], ["A", "B", "G", "H", "H"]
     )
@@ -92,7 +92,7 @@ def test_remove_duplicate_compounds():
     assert reaction_without_duplicates == expected
 
 
-def test_equation_to_string():
+def test_equation_to_string() -> None:
     reactants = ["COCO", "[Na+].[OH-]", "OCC"]
     agents = ["O", "C"]
     products = ["NCOC"]
@@ -104,7 +104,7 @@ def test_equation_to_string():
     assert reaction_string == expected
 
 
-def test_equation_to_string_with_fragment_bond():
+def test_equation_to_string_with_fragment_bond() -> None:
     reactants = ["COCO", "[Na+].[OH-]", "OCC"]
     agents = ["O", "C"]
     products = ["NCOC"]
@@ -116,7 +116,7 @@ def test_equation_to_string_with_fragment_bond():
     assert reaction_string == expected
 
 
-def test_equation_from_string():
+def test_equation_from_string() -> None:
     reaction_string = "COCO.[Na+].[OH-].OCC>O.C>NCOC"
 
     reaction = ReactionEquation.from_string(reaction_string)
@@ -131,20 +131,20 @@ def test_equation_from_string():
     assert reaction == expected_reaction
 
 
-def test_equation_from_string_ignores_additional_dots():
+def test_equation_from_string_ignores_additional_dots() -> None:
     reaction_smiles = "..A.B.>.>C.D."
     expected = ReactionEquation(["A", "B"], [], ["C", "D"])
     assert ReactionEquation.from_string(reaction_smiles) == expected
 
 
-def test_equation_from_string_with_invalid_strings():
+def test_equation_from_string_with_invalid_strings() -> None:
     invalid_reaction_smiles = ["A.B>C", "A>>>C", "A>>B>>C", "A.B.C"]
     for reaction_smiles in invalid_reaction_smiles:
         with pytest.raises(InvalidReactionSmiles):
             _ = ReactionEquation.from_string(reaction_smiles)
 
 
-def test_equation_from_string_with_fragment_bond():
+def test_equation_from_string_with_fragment_bond() -> None:
     reaction_string = "COCO.[Na+]~[OH-].OCC>O.C>NCOC"
 
     reaction = ReactionEquation.from_string(reaction_string, fragment_bond="~")
@@ -159,7 +159,7 @@ def test_equation_from_string_with_fragment_bond():
     assert reaction == expected_reaction
 
 
-def test_equation_from_string_with_no_agent():
+def test_equation_from_string_with_no_agent() -> None:
     reaction_string = "COCO.[Na+].[OH-].OCC>>NCOC"
 
     reaction = ReactionEquation.from_string(reaction_string)
@@ -174,13 +174,13 @@ def test_equation_from_string_with_no_agent():
     assert reaction == expected_reaction
 
 
-def test_iter_all_smiles():
+def test_iter_all_smiles() -> None:
     reaction_string = "COCO.[Na+].[OH-]>O>NCOC"
     reaction = ReactionEquation.from_string(reaction_string)
     assert list(reaction.iter_all_smiles()) == ["COCO", "[Na+]", "[OH-]", "O", "NCOC"]
 
 
-def test_has_repeated_molecules():
+def test_has_repeated_molecules() -> None:
     assert not has_repeated_molecules(ReactionEquation(["A", "B"], ["C"], ["D", "E"]))
 
     assert has_repeated_molecules(ReactionEquation(["A", "A"], ["C"], ["D", "E"]))
@@ -190,7 +190,7 @@ def test_has_repeated_molecules():
     assert has_repeated_molecules(ReactionEquation(["A", "B"], ["C"], ["B", "E"]))
 
 
-def test_apply_to_compounds():
+def test_apply_to_compounds() -> None:
     def dummy_fn(smiles: str) -> str:
         # add a 'C' to the SMILES
         return smiles + "C"
@@ -200,7 +200,7 @@ def test_apply_to_compounds():
     ) == ReactionEquation(["CC", "NC", "OC"], ["PC"], ["CNOC"])
 
 
-def test_rxn_standardization():
+def test_rxn_standardization() -> None:
     initial_reaction_equation = ReactionEquation(
         reactants=["OCC", "O", "C"],
         agents=["CCO"],
@@ -221,7 +221,7 @@ def test_rxn_standardization():
     assert rxn_standardization(initial_reaction_equation) == expected
 
 
-def test_remove_precursors_from_products():
+def test_remove_precursors_from_products() -> None:
     reactants = ["COCO", "[Na+].[OH-]", "OCC"]
     agents = ["O", "C"]
     products = ["NCOC", "C", "COCO"]
@@ -235,7 +235,7 @@ def test_remove_precursors_from_products():
     assert reaction == expected_reaction
 
 
-def test_can_be_instantiated_from_any_iterator():
+def test_can_be_instantiated_from_any_iterator() -> None:
     a = {"C", "O"}
     b = (m for m in ["CO", "OC"])
     reaction_equation = ReactionEquation(a, [], b)
@@ -247,7 +247,7 @@ def test_can_be_instantiated_from_any_iterator():
     assert reaction_equation.products == ["CO", "OC"]
 
 
-def test_list_objects_are_not_shared():
+def test_list_objects_are_not_shared() -> None:
     a = ["C", "O"]
     b = ["CO"]
     reaction_equation = ReactionEquation(a, [], b)

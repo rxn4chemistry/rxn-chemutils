@@ -11,7 +11,7 @@ from rxn.chemutils.multicomponent_smiles import (
 )
 
 
-def test_multicomponent_smiles_to_list():
+def test_multicomponent_smiles_to_list() -> None:
     assert multicomponent_smiles_to_list("") == []
     assert multicomponent_smiles_to_list("A.B.C") == ["A", "B", "C"]
     assert multicomponent_smiles_to_list("..A.B.C.") == ["A", "B", "C"]
@@ -20,7 +20,7 @@ def test_multicomponent_smiles_to_list():
     assert multicomponent_smiles_to_list("A#B.C", fragment_bond="#") == ["A.B", "C"]
 
 
-def test_list_to_multicomponent_smiles():
+def test_list_to_multicomponent_smiles() -> None:
     assert list_to_multicomponent_smiles([]) == ""
     assert list_to_multicomponent_smiles(["A", "B", "C"]) == "A.B.C"
     assert list_to_multicomponent_smiles(["A.B", "C"]) == "A.B.C"
@@ -28,7 +28,7 @@ def test_list_to_multicomponent_smiles():
     assert list_to_multicomponent_smiles(["A.B", "C"], fragment_bond="#") == "A#B.C"
 
 
-def test_apply_to_multicomponent_smiles():
+def test_apply_to_multicomponent_smiles() -> None:
     def dummy(smiles: str) -> str:
         """Dummy function that appends the number of fragments in a SMILES string to it."""
         return smiles + str(smiles.count(".") + 1)
@@ -44,7 +44,7 @@ def test_apply_to_multicomponent_smiles():
     )
 
 
-def test_canonicalize_multicomponent_smiles():
+def test_canonicalize_multicomponent_smiles() -> None:
     # A few basic examples
     assert canonicalize_multicomponent_smiles("C(C)O") == "CCO"
     assert canonicalize_multicomponent_smiles("C.OCC.C(C)O") == "C.CCO.CCO"
@@ -69,14 +69,14 @@ def test_canonicalize_multicomponent_smiles():
         _ = canonicalize_multicomponent_smiles("C.CF(C).O")
 
 
-def test_sort_multicomponent_smiles():
+def test_sort_multicomponent_smiles() -> None:
     assert sort_multicomponent_smiles("") == ""
     assert sort_multicomponent_smiles("B.D.C.A") == "A.B.C.D"
     assert sort_multicomponent_smiles("B.D.C~A") == "B.C~A.D"
     assert sort_multicomponent_smiles("NCC(N).CCO.COCO") == "CCO.COCO.NCC(N)"
 
 
-def test_remove_duplicates_in_multicomponent_smiles():
+def test_remove_duplicates_in_multicomponent_smiles() -> None:
     assert remove_duplicates_in_multicomponent_smiles("B.D.A.E") == "B.D.A.E"
     assert remove_duplicates_in_multicomponent_smiles("B.D.A.A.D.E") == "B.D.A.E"
     assert remove_duplicates_in_multicomponent_smiles("CC.C.O.N.O") == "CC.C.O.N"

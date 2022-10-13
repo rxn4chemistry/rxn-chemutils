@@ -10,7 +10,7 @@ from rxn.chemutils.reaction_smiles import (
 )
 
 
-def test_determine_format():
+def test_determine_format() -> None:
     reaction_smiles_with_other_extended_information = (
         "[CH3:1][C:2](=[O:3])[NH:4][C@H:5]([C:6](=[O:7])[OH:8])[C:9]([CH3:10])"
         "([CH3:11])[SH:12].[O:13]=[N:14]O[Na]>O.Cl.CO>[CH3:1][C:2](=[O:3])[NH:4]"
@@ -51,7 +51,7 @@ def test_determine_format():
     )
 
 
-def test_parse_any_reaction_smiles():
+def test_parse_any_reaction_smiles() -> None:
     assert parse_any_reaction_smiles("CC.O>>CCO") == ReactionEquation(
         ["CC", "O"], [], ["CCO"]
     )
@@ -63,7 +63,7 @@ def test_parse_any_reaction_smiles():
     ) == ReactionEquation(["CC", "O", "[Na+].[Cl-]"], [], ["CCO"])
 
 
-def test_parse_any_reaction_smiles_with_mapping():
+def test_parse_any_reaction_smiles_with_mapping() -> None:
     # Molecules with mapping
     reactant_1 = "[CH3:1][CH3:2]"
     reactant_2 = "[OH2:3]"
@@ -84,7 +84,7 @@ def test_parse_any_reaction_smiles_with_mapping():
     )
 
 
-def test_parse_reaction_smiles():
+def test_parse_reaction_smiles() -> None:
     assert parse_reaction_smiles(
         "CC.O>>CCO", ReactionFormat.STANDARD
     ) == ReactionEquation(["CC", "O"], [], ["CCO"])
@@ -99,7 +99,7 @@ def test_parse_reaction_smiles():
         _ = parse_reaction_smiles("CC.O>>CCO", "standard")  # type: ignore
 
 
-def test_to_reaction_smiles():
+def test_to_reaction_smiles() -> None:
     reaction_equation = ReactionEquation(["CC", "O", "[Na+].[Cl-]"], [], ["CCO"])
     assert (
         to_reaction_smiles(reaction_equation, ReactionFormat.STANDARD)

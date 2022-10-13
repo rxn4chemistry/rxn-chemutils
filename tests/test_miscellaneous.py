@@ -15,7 +15,7 @@ from rxn.chemutils.miscellaneous import (
 )
 
 
-def test_equivalent_smiles():
+def test_equivalent_smiles() -> None:
     assert equivalent_smiles("CCO", "C(C)O")
     assert not equivalent_smiles("CCO", "O(C)C")
 
@@ -31,7 +31,7 @@ def test_equivalent_smiles():
     assert not equivalent_smiles("CFC", "F(C)C", check_valence=True)
 
 
-def test_is_valid_smiles():
+def test_is_valid_smiles() -> None:
     assert is_valid_smiles("CCO")
     assert is_valid_smiles("C")
     assert is_valid_smiles("NOOOOO")
@@ -47,7 +47,7 @@ def test_is_valid_smiles():
     assert not is_valid_smiles("CC(CC", check_valence=False)
 
 
-def test_atom_type_counter():
+def test_atom_type_counter() -> None:
     assert atom_type_counter("CCO") == Counter({"C": 2, "H": 6, "O": 1})
     assert atom_type_counter("CC=O") == Counter({"C": 2, "H": 4, "O": 1})
     assert atom_type_counter("[Na+].[Cl-]") == Counter({"Na": 1, "Cl": 1})
@@ -59,7 +59,7 @@ def test_atom_type_counter():
         _ = atom_type_counter("CC(")
 
 
-def test_remove_chiral_centers():
+def test_remove_chiral_centers() -> None:
     input_expected_dict = {
         "O[C@](Br)(C)N": "O[C](Br)(C)N",
         "C[C@@](Br)(O)N": "C[C](Br)(O)N",
@@ -78,7 +78,7 @@ def test_remove_chiral_centers():
     )
 
 
-def test_remove_double_bond_stereochemistry():
+def test_remove_double_bond_stereochemistry() -> None:
     input_expected_dict = {
         "C/C=C/C": "CC=CC",
         r"C/C=C\C": "CC=CC",
@@ -94,7 +94,7 @@ def test_remove_double_bond_stereochemistry():
     )
 
 
-def test_apply_to_any_smiles():
+def test_apply_to_any_smiles() -> None:
     def dummy(smiles: str) -> str:
         return smiles + "0"
 
@@ -111,7 +111,7 @@ def test_apply_to_any_smiles():
     assert apply_to_any_smiles("A.E.D.A>>C |f:1.2|", dummy) == "A0.A0.E.D0>>C0 |f:2.3|"
 
 
-def test_canonicalize_any_on_molecule_smiles():
+def test_canonicalize_any_on_molecule_smiles() -> None:
     assert canonicalize_any("CC(C)") == "CCC"
     assert canonicalize_any("[Na+].[Cl-]") == "[Cl-].[Na+]"
     assert canonicalize_any("CF(C)", check_valence=False) == "CFC"
@@ -119,7 +119,7 @@ def test_canonicalize_any_on_molecule_smiles():
         _ = canonicalize_any("CF(C)")
 
 
-def test_canonicalize_any_on_multicomponent_smiles():
+def test_canonicalize_any_on_multicomponent_smiles() -> None:
     # Basic example
     assert canonicalize_any("CC(C).C(O)") == "CCC.CO"
 
@@ -137,7 +137,7 @@ def test_canonicalize_any_on_multicomponent_smiles():
         _ = canonicalize_any("CO.CFC")
 
 
-def test_canonicalize_any_on_reaction_smiles():
+def test_canonicalize_any_on_reaction_smiles() -> None:
 
     # Basic examples
     assert canonicalize_any("CC(C)>>C(O)") == "CCC>>CO"
@@ -159,7 +159,7 @@ def test_canonicalize_any_on_reaction_smiles():
         _ = canonicalize_any("CC>>CC>>C(O)")
 
 
-def test_sort_any():
+def test_sort_any() -> None:
     # Single-component SMILES
     assert sort_any("A.C.C.B") == "A.B.C.C"
     assert sort_any("CBA") == "CBA"
