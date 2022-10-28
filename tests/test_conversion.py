@@ -93,8 +93,8 @@ def test_inchi_to_mol() -> None:
     mol = inchi_to_mol("InChI=1S/C2H6O/c1-3-2/h1-2H3")
     assert mol.GetNumAtoms() == 3
     assert mol.GetAtomWithIdx(0).GetSymbol() == "C"
-    assert mol.GetAtomWithIdx(1).GetSymbol() == "O"
-    assert mol.GetAtomWithIdx(2).GetSymbol() == "C"
+    assert mol.GetAtomWithIdx(1).GetSymbol() == "C"
+    assert mol.GetAtomWithIdx(2).GetSymbol() == "O"
 
     # must raise for invalid InChI (RDKit's default: return None)
     with pytest.raises(InvalidInchi):
