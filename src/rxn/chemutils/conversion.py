@@ -60,13 +60,13 @@ def smiles_to_mol(
     return mol
 
 
-def mol_to_smiles(mol: Mol, canonical: bool = True) -> str:
+def mol_to_smiles(mol: Mol, canonical: bool = True, isomericSmiles: bool = True) -> str:
     """
     Convert an RDKit Mol to a SMILES string.
 
     Mainly a wrapper around MolToSmiles.
     """
-    return MolToSmiles(mol, canonical=canonical)  # type: ignore
+    return MolToSmiles(mol, canonical=canonical, isomericSmiles=isomericSmiles)  # type: ignore
 
 
 def mdl_to_mol(mdl: str, sanitize: bool = True) -> Mol:
