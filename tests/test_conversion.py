@@ -88,15 +88,17 @@ def test_smiles_to_mol_without_sanitization() -> None:
     # radicals - smiles_to_mol takes care of this
     assert mol_to_smiles(smiles_to_mol("CC[C]CC", sanitize=False)) == "CC[C]CC"
 
+
 def test_mol_to_smiles_with_isomeric_smiles() -> None:
-    mol = smiles_to_mol('N[C@@](F)(C)C(=O)O')
+    mol = smiles_to_mol("N[C@@](F)(C)C(=O)O")
 
     # Test without isomeric smiles
-    assert mol_to_smiles(mol, isomericSmiles=False) == 'CC(N)(F)C(=O)O'
+    assert mol_to_smiles(mol, isomericSmiles=False) == "CC(N)(F)C(=O)O"
 
     # Test with isomeric smiles
-    assert mol_to_smiles(mol, isomericSmiles=True) == 'C[C@@](N)(F)C(=O)O'
-    
+    assert mol_to_smiles(mol, isomericSmiles=True) == "C[C@@](N)(F)C(=O)O"
+
+
 def test_inchi_to_mol() -> None:
     mol = inchi_to_mol("InChI=1S/C2H6O/c1-3-2/h1-2H3")
     assert mol.GetNumAtoms() == 3
