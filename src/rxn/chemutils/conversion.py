@@ -73,7 +73,7 @@ def inchi_to_mol(inchi: str, sanitize: bool = True, removeHs: bool = True) -> Mo
     Mainly a wrapper around MolFromInchi that raises MolFromInchi when necessary.
 
     Raises:
-        InvalidSmiles for empty or invalid SMILES strings.
+        InvalidInchi for empty or invalid InChI strings.
 
     Args:
         inchi: InChI string to convert.
@@ -265,6 +265,9 @@ def mol_to_inchi(mol: Mol, extended_tautomer_check: bool = False) -> str:
         mol: the RDKit Mol to convert to InChI.
         extended_tautomer_check: include the options for additional tautomer
             standardization.
+
+    Returns:
+        InChI string.
     """
 
     options = ""
