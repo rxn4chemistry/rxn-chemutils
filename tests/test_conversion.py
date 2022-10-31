@@ -5,8 +5,10 @@ from rdkit.Chem import Mol
 from rxn.chemutils.conversion import (
     canonicalize_smiles,
     cleanup_smiles,
+    inchi_to_mol,
     maybe_canonicalize,
     mdl_to_mol,
+    mol_to_inchi,
     mol_to_mdl,
     mol_to_smiles,
     remove_hydrogens,
@@ -15,7 +17,12 @@ from rxn.chemutils.conversion import (
     smiles_to_mol,
     split_smiles_and_fragment_info,
 )
-from rxn.chemutils.exceptions import InvalidMdl, InvalidSmiles, SanitizationError
+from rxn.chemutils.exceptions import (
+    InvalidInchi,
+    InvalidMdl,
+    InvalidSmiles,
+    SanitizationError,
+)
 
 WATER_MDL = """
      RDKit          2D
@@ -80,6 +87,38 @@ def test_smiles_to_mol_without_sanitization() -> None:
     # Doing strictly no sanitization with the RDKit functions messes up the
     # radicals - smiles_to_mol takes care of this
     assert mol_to_smiles(smiles_to_mol("CC[C]CC", sanitize=False)) == "CC[C]CC"
+
+
+def test_mol_to_smiles_with_isomeric_smiles() -> None:
+    mol = smiles_to_mol("N[C@@](F)(C)C(=O)O")
+
+    # Test without isomeric smiles
+    assert mol_to_smiles(mol, isomericSmiles=False) == "CC(N)(F)C(=O)O"
+
+    # Test with isomeric smiles
+    assert mol_to_smiles(mol, isomericSmiles=True) == "C[C@@](N)(F)C(=O)O"
+
+
+def test_inchi_to_mol() -> None:
+    mol = inchi_to_mol("InChI=1S/C2H6O/c1-3-2/h1-2H3")
+    assert mol.GetNumAtoms() == 3
+    assert mol.GetAtomWithIdx(0).GetSymbol() == "C"
+    assert mol.GetAtomWithIdx(1).GetSymbol() == "C"
+    assert mol.GetAtomWithIdx(2).GetSymbol() == "O"
+
+    # must raise for invalid InChI (RDKit's default: return None)
+    with pytest.raises(InvalidInchi):
+        inchi_to_mol("")
+
+    # Invalid InChI symbol
+    with pytest.raises(InvalidInchi):
+        inchi_to_mol("L")
+
+    # Test conversion to and from mol
+    assert (
+        mol_to_inchi(inchi_to_mol("InChI=1S/C2H6O/c1-3-2/h1-2H3"))
+        == "InChI=1S/C2H6O/c1-3-2/h1-2H3"
+    )
 
 
 def test_mdl_to_mol() -> None:

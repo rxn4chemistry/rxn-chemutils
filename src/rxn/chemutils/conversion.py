@@ -4,7 +4,13 @@ from functools import reduce
 from typing import List, Optional, Tuple, Union
 
 from rdkit import Chem, RDLogger
-from rdkit.Chem import AssignStereochemistry, RemoveHs, SanitizeFlags, SanitizeMol
+from rdkit.Chem import (
+    AssignStereochemistry,
+    MolFromInchi,
+    RemoveHs,
+    SanitizeFlags,
+    SanitizeMol,
+)
 from rdkit.Chem.rdchem import Mol
 from rdkit.Chem.rdmolfiles import (
     MolFromMolBlock,
@@ -13,7 +19,7 @@ from rdkit.Chem.rdmolfiles import (
     MolToSmiles,
 )
 
-from .exceptions import InvalidMdl, InvalidSmiles, SanitizationError
+from .exceptions import InvalidInchi, InvalidMdl, InvalidSmiles, SanitizationError
 
 RDLogger.logger().setLevel(RDLogger.CRITICAL)
 
@@ -60,13 +66,38 @@ def smiles_to_mol(
     return mol
 
 
-def mol_to_smiles(mol: Mol, canonical: bool = True) -> str:
+def inchi_to_mol(inchi: str, sanitize: bool = True, removeHs: bool = True) -> Mol:
+    """
+    Convert an InChI string to an RDKit Mol.
+
+    Mainly a wrapper around MolFromInchi that raises MolFromInchi when necessary.
+
+    Raises:
+        InvalidSmiles for empty or invalid SMILES strings.
+
+    Args:
+        inchi: InChI string to convert.
+        sanitize: whether to sanitize the molecules or not. Note: sanitization here
+            corresponds to doing a sanitization with SANITIZE_ALL.
+        removeHs: set to True to remove Hydrogens from a molecule
+
+    Returns:
+        Mol instance.
+    """
+    mol = MolFromInchi(inchi, sanitize=sanitize, removeHs=removeHs)
+    if not inchi or mol is None:
+        raise InvalidInchi(inchi)
+
+    return mol
+
+
+def mol_to_smiles(mol: Mol, canonical: bool = True, isomericSmiles: bool = True) -> str:
     """
     Convert an RDKit Mol to a SMILES string.
 
     Mainly a wrapper around MolToSmiles.
     """
-    return MolToSmiles(mol, canonical=canonical)  # type: ignore
+    return MolToSmiles(mol, canonical=canonical, isomericSmiles=isomericSmiles)  # type: ignore
 
 
 def mdl_to_mol(mdl: str, sanitize: bool = True) -> Mol:

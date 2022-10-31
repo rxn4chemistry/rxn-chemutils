@@ -12,6 +12,16 @@ class InvalidSmiles(ValueError):
         self.smiles = smiles
 
 
+class InvalidInchi(ValueError):
+    """
+    Exception raised when converting invalid InChI strings.
+    """
+
+    def __init__(self, inchi: str):
+        super().__init__(f"The following InChI string cannot be converted: {inchi}")
+        self.inchi = inchi
+
+
 class InvalidReactionSmiles(InvalidSmiles):
     def __init__(self, reaction_smiles: str, msg: Optional[str] = None):
         if msg is None:
