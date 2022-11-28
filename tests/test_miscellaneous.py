@@ -1,4 +1,5 @@
 from collections import Counter
+from typing import List
 
 import pytest
 
@@ -12,6 +13,7 @@ from rxn.chemutils.miscellaneous import (
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
     sort_any,
+    apply_to_smiles_groups,
 )
 
 
@@ -109,6 +111,21 @@ def test_apply_to_any_smiles() -> None:
     # reaction SMILES
     assert apply_to_any_smiles("B.A.E~D.A>>C.B", dummy) == "B0.A0.E~D0.A0>>C0.B0"
     assert apply_to_any_smiles("A.E.D.A>>C |f:1.2|", dummy) == "A0.A0.E.D0>>C0 |f:2.3|"
+
+
+def test_apply_to_smiles_groups() -> None:
+    def dummy(smiles_list: List[str]) -> List[str]:
+        return list(reversed(smiles_list))
+
+    # Multi-component SMILES (note that here, the fragments are not reordered)
+    # Note: Even if there is no "~", we consider the input to be a multicomponent SMILES
+    assert apply_to_smiles_groups("A.D~C.B", dummy) == "B.D~C.A"
+    assert apply_to_smiles_groups("A.C.C.B", dummy) == "B.C.C.A"
+    assert apply_to_smiles_groups("CBA", dummy) == "CBA"
+
+    # reaction SMILES
+    assert apply_to_smiles_groups("B.A.E~D.A>>C.B", dummy) == "A.E~D.A.B>>B.C"
+    assert apply_to_smiles_groups("A.B.E.D>>C |f:2.3|", dummy) == "E.D.B.A>>C |f:0.1|"
 
 
 def test_canonicalize_any_on_molecule_smiles() -> None:
