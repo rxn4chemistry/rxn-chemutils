@@ -45,6 +45,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="rxn.chemutils.conversion.html">rxn.chemutils.conversion</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.canonicalize_smiles.html">rxn.chemutils.conversion.canonicalize_smiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.cleanup_smiles.html">rxn.chemutils.conversion.cleanup_smiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.inchi_to_mol.html">rxn.chemutils.conversion.inchi_to_mol</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.maybe_canonicalize.html">rxn.chemutils.conversion.maybe_canonicalize</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.mdl_to_mol.html">rxn.chemutils.conversion.mdl_to_mol</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.mol_to_inchi.html">rxn.chemutils.conversion.mol_to_inchi</a></li>
@@ -105,7 +106,7 @@
 <h1>rxn.chemutils.conversion.mol_to_smiles<a class="headerlink" href="#rxn-chemutils-conversion-mol-to-smiles" title="Permalink to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="rxn.chemutils.conversion.mol_to_smiles">
-<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.conversion.</span></span><span class="sig-name descname"><span class="pre">mol_to_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/conversion.html#mol_to_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.conversion.mol_to_smiles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.conversion.</span></span><span class="sig-name descname"><span class="pre">mol_to_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isomericSmiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/conversion.html#mol_to_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.conversion.mol_to_smiles" title="Permalink to this definition"></a></dt>
 <dd><p>Convert an RDKit Mol to a SMILES string.</p>
 <p>Mainly a wrapper around MolToSmiles.</p>
 <dl class="field-list simple">
@@ -113,6 +114,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mol</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Mol</span></code>) – </p></li>
 <li><p><strong>canonical</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) – </p></li>
+<li><p><strong>isomericSmiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>

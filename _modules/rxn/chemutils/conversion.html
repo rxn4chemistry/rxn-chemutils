@@ -71,7 +71,13 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span><span class="p">,</span> <span class="n">RDLogger</span>
-<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AssignStereochemistry</span><span class="p">,</span> <span class="n">RemoveHs</span><span class="p">,</span> <span class="n">SanitizeFlags</span><span class="p">,</span> <span class="n">SanitizeMol</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AssignStereochemistry</span><span class="p">,</span>
+    <span class="n">MolFromInchi</span><span class="p">,</span>
+    <span class="n">RemoveHs</span><span class="p">,</span>
+    <span class="n">SanitizeFlags</span><span class="p">,</span>
+    <span class="n">SanitizeMol</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem.rdchem</span> <span class="kn">import</span> <span class="n">Mol</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem.rdmolfiles</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">MolFromMolBlock</span><span class="p">,</span>
@@ -80,7 +86,7 @@
     <span class="n">MolToSmiles</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidMdl</span><span class="p">,</span> <span class="n">InvalidSmiles</span><span class="p">,</span> <span class="n">SanitizationError</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidInchi</span><span class="p">,</span> <span class="n">InvalidMdl</span><span class="p">,</span> <span class="n">InvalidSmiles</span><span class="p">,</span> <span class="n">SanitizationError</span>
 
 <span class="n">RDLogger</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">RDLogger</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
 
@@ -127,13 +133,38 @@
     <span class="k">return</span> <span class="n">mol</span></div>
 
 
-<div class="viewcode-block" id="mol_to_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mol_to_smiles.html#rxn.chemutils.conversion.mol_to_smiles">[docs]</a><span class="k">def</span> <span class="nf">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">,</span> <span class="n">canonical</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="inchi_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.inchi_to_mol.html#rxn.chemutils.conversion.inchi_to_mol">[docs]</a><span class="k">def</span> <span class="nf">inchi_to_mol</span><span class="p">(</span><span class="n">inchi</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">removeHs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert an InChI string to an RDKit Mol.</span>
+
+<span class="sd">    Mainly a wrapper around MolFromInchi that raises MolFromInchi when necessary.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        InvalidInchi for empty or invalid InChI strings.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inchi: InChI string to convert.</span>
+<span class="sd">        sanitize: whether to sanitize the molecules or not. Note: sanitization here</span>
+<span class="sd">            corresponds to doing a sanitization with SANITIZE_ALL.</span>
+<span class="sd">        removeHs: set to True to remove Hydrogens from a molecule</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Mol instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">MolFromInchi</span><span class="p">(</span><span class="n">inchi</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span> <span class="n">removeHs</span><span class="o">=</span><span class="n">removeHs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">inchi</span> <span class="ow">or</span> <span class="n">mol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidInchi</span><span class="p">(</span><span class="n">inchi</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mol</span></div>
+
+
+<div class="viewcode-block" id="mol_to_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mol_to_smiles.html#rxn.chemutils.conversion.mol_to_smiles">[docs]</a><span class="k">def</span> <span class="nf">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">,</span> <span class="n">canonical</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an RDKit Mol to a SMILES string.</span>
 
 <span class="sd">    Mainly a wrapper around MolToSmiles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonical</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+    <span class="k">return</span> <span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonical</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="n">isomericSmiles</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
 
 <div class="viewcode-block" id="mdl_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mdl_to_mol.html#rxn.chemutils.conversion.mdl_to_mol">[docs]</a><span class="k">def</span> <span class="nf">mdl_to_mol</span><span class="p">(</span><span class="n">mdl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
@@ -301,6 +332,9 @@
 <span class="sd">        mol: the RDKit Mol to convert to InChI.</span>
 <span class="sd">        extended_tautomer_check: include the options for additional tautomer</span>
 <span class="sd">            standardization.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        InChI string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">options</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>

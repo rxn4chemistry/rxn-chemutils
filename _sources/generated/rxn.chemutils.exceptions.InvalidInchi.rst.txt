@@ -1,0 +1,6 @@
+rxn.chemutils.exceptions.InvalidInchi
+=====================================
+
+.. currentmodule:: rxn.chemutils.exceptions
+
+.. autoexception:: InvalidInchi

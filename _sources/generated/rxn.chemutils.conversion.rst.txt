@@ -16,6 +16,7 @@ rxn.chemutils.conversion
    
       canonicalize_smiles
       cleanup_smiles
+      inchi_to_mol
       maybe_canonicalize
       mdl_to_mol
       mol_to_inchi

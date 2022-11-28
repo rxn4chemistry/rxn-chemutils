@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.exceptions.InvalidMdl" href="rxn.chemutils.exceptions.InvalidMdl.html" />
+    <link rel="next" title="rxn.chemutils.exceptions.InvalidInchi" href="rxn.chemutils.exceptions.InvalidInchi.html" />
     <link rel="prev" title="rxn.chemutils.conversion.split_smiles_and_fragment_info" href="rxn.chemutils.conversion.split_smiles_and_fragment_info.html" /> 
 </head>
 
@@ -44,6 +44,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="rxn.chemutils.html">rxn.chemutils</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.conversion.html">rxn.chemutils.conversion</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rxn.chemutils.exceptions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidInchi.html">rxn.chemutils.exceptions.InvalidInchi</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidMdl.html">rxn.chemutils.exceptions.InvalidMdl</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidReactionSmiles.html">rxn.chemutils.exceptions.InvalidReactionSmiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidSmiles.html">rxn.chemutils.exceptions.InvalidSmiles</a></li>
@@ -101,24 +102,27 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidMdl.html#rxn.chemutils.exceptions.InvalidMdl" title="rxn.chemutils.exceptions.InvalidMdl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidMdl</span></code></a>(mdl)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidInchi.html#rxn.chemutils.exceptions.InvalidInchi" title="rxn.chemutils.exceptions.InvalidInchi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidInchi</span></code></a>(inchi)</p></td>
+<td><p>Exception raised when converting invalid InChI strings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidMdl.html#rxn.chemutils.exceptions.InvalidMdl" title="rxn.chemutils.exceptions.InvalidMdl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidMdl</span></code></a>(mdl)</p></td>
 <td><p>Exception raised when converting invalid MDL Mol strings.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidReactionSmiles.html#rxn.chemutils.exceptions.InvalidReactionSmiles" title="rxn.chemutils.exceptions.InvalidReactionSmiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidReactionSmiles</span></code></a>(reaction_smiles[, msg])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidReactionSmiles.html#rxn.chemutils.exceptions.InvalidReactionSmiles" title="rxn.chemutils.exceptions.InvalidReactionSmiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidReactionSmiles</span></code></a>(reaction_smiles[, msg])</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">param reaction_smiles</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidSmiles.html#rxn.chemutils.exceptions.InvalidSmiles" title="rxn.chemutils.exceptions.InvalidSmiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidSmiles</span></code></a>(smiles[, msg])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidSmiles.html#rxn.chemutils.exceptions.InvalidSmiles" title="rxn.chemutils.exceptions.InvalidSmiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InvalidSmiles</span></code></a>(smiles[, msg])</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">param smiles</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.SanitizationError.html#rxn.chemutils.exceptions.SanitizationError" title="rxn.chemutils.exceptions.SanitizationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SanitizationError</span></code></a>(mol)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.exceptions.SanitizationError.html#rxn.chemutils.exceptions.SanitizationError" title="rxn.chemutils.exceptions.SanitizationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SanitizationError</span></code></a>(mol)</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">param mol</dt>
 <dd class="field-odd"><p></p></dd>
@@ -134,7 +138,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="rxn.chemutils.conversion.split_smiles_and_fragment_info.html" class="btn btn-neutral float-left" title="rxn.chemutils.conversion.split_smiles_and_fragment_info" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.exceptions.InvalidMdl.html" class="btn btn-neutral float-right" title="rxn.chemutils.exceptions.InvalidMdl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.exceptions.InvalidInchi.html" class="btn btn-neutral float-right" title="rxn.chemutils.exceptions.InvalidInchi" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

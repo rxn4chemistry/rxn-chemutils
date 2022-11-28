@@ -22,6 +22,7 @@ rxn.chemutils.exceptions
    .. autosummary::
       :toctree:
    
+      InvalidInchi
       InvalidMdl
       InvalidReactionSmiles
       InvalidSmiles

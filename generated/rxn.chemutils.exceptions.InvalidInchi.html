@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rxn.chemutils.conversion.cleanup_smiles &mdash; RXN chemutils 0.1 documentation</title>
+  <title>rxn.chemutils.exceptions.InvalidInchi &mdash; RXN chemutils 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.conversion.inchi_to_mol" href="rxn.chemutils.conversion.inchi_to_mol.html" />
-    <link rel="prev" title="rxn.chemutils.conversion.canonicalize_smiles" href="rxn.chemutils.conversion.canonicalize_smiles.html" /> 
+    <link rel="next" title="rxn.chemutils.exceptions.InvalidMdl" href="rxn.chemutils.exceptions.InvalidMdl.html" />
+    <link rel="prev" title="rxn.chemutils.exceptions" href="rxn.chemutils.exceptions.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,23 +42,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../README.html">README</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">Python API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="rxn.chemutils.html">rxn.chemutils</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="rxn.chemutils.conversion.html">rxn.chemutils.conversion</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.canonicalize_smiles.html">rxn.chemutils.conversion.canonicalize_smiles</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.conversion.cleanup_smiles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.inchi_to_mol.html">rxn.chemutils.conversion.inchi_to_mol</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.maybe_canonicalize.html">rxn.chemutils.conversion.maybe_canonicalize</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.mdl_to_mol.html">rxn.chemutils.conversion.mdl_to_mol</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.mol_to_inchi.html">rxn.chemutils.conversion.mol_to_inchi</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.mol_to_mdl.html">rxn.chemutils.conversion.mol_to_mdl</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.mol_to_smiles.html">rxn.chemutils.conversion.mol_to_smiles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.remove_hydrogens.html">rxn.chemutils.conversion.remove_hydrogens</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.sanitize_mol.html">rxn.chemutils.conversion.sanitize_mol</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.smiles_to_inchi.html">rxn.chemutils.conversion.smiles_to_inchi</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.smiles_to_mol.html">rxn.chemutils.conversion.smiles_to_mol</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.conversion.split_smiles_and_fragment_info.html">rxn.chemutils.conversion.split_smiles_and_fragment_info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.conversion.html">rxn.chemutils.conversion</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="rxn.chemutils.exceptions.html">rxn.chemutils.exceptions</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.exceptions.InvalidInchi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidMdl.html">rxn.chemutils.exceptions.InvalidMdl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidReactionSmiles.html">rxn.chemutils.exceptions.InvalidReactionSmiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidSmiles.html">rxn.chemutils.exceptions.InvalidSmiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.SanitizationError.html">rxn.chemutils.exceptions.SanitizationError</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.exceptions.html">rxn.chemutils.exceptions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.extended_reaction_smiles.html">rxn.chemutils.extended_reaction_smiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.miscellaneous.html">rxn.chemutils.miscellaneous</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.multicomponent_smiles.html">rxn.chemutils.multicomponent_smiles</a></li>
@@ -91,10 +83,10 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
           <li><a href="rxn.chemutils.html">rxn.chemutils</a> &raquo;</li>
-          <li><a href="rxn.chemutils.conversion.html">rxn.chemutils.conversion</a> &raquo;</li>
-      <li>rxn.chemutils.conversion.cleanup_smiles</li>
+          <li><a href="rxn.chemutils.exceptions.html">rxn.chemutils.exceptions</a> &raquo;</li>
+      <li>rxn.chemutils.exceptions.InvalidInchi</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/rxn.chemutils.conversion.cleanup_smiles.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/rxn.chemutils.exceptions.InvalidInchi.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -102,26 +94,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="rxn-chemutils-conversion-cleanup-smiles">
-<h1>rxn.chemutils.conversion.cleanup_smiles<a class="headerlink" href="#rxn-chemutils-conversion-cleanup-smiles" title="Permalink to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="rxn.chemutils.conversion.cleanup_smiles">
-<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.conversion.</span></span><span class="sig-name descname"><span class="pre">cleanup_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/conversion.html#cleanup_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.conversion.cleanup_smiles" title="Permalink to this definition"></a></dt>
-<dd><p>Cleanup a SMILES string, doing the bare minimum.</p>
-<p>This means that no canonicalization, no valence check, no kekulization, etc,
-will be done.
-See the unit tests for examples.</p>
-<p>A minimal sanitization (SANITIZE_FINDRADICALS) is necessary, otherwise
-“[C]” is converted to “C”.</p>
+  <section id="rxn-chemutils-exceptions-invalidinchi">
+<h1>rxn.chemutils.exceptions.InvalidInchi<a class="headerlink" href="#rxn-chemutils-exceptions-invalidinchi" title="Permalink to this heading"></a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="rxn.chemutils.exceptions.InvalidInchi">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rxn.chemutils.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidInchi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inchi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/exceptions.html#InvalidInchi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.exceptions.InvalidInchi" title="Permalink to this definition"></a></dt>
+<dd><p>Exception raised when converting invalid InChI strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – SMILES to clean up.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A cleaned-up SMILES string.</p>
+<dd class="field-odd"><p><strong>inchi</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -132,8 +113,8 @@ See the unit tests for examples.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rxn.chemutils.conversion.canonicalize_smiles.html" class="btn btn-neutral float-left" title="rxn.chemutils.conversion.canonicalize_smiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.conversion.inchi_to_mol.html" class="btn btn-neutral float-right" title="rxn.chemutils.conversion.inchi_to_mol" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.exceptions.html" class="btn btn-neutral float-left" title="rxn.chemutils.exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rxn.chemutils.exceptions.InvalidMdl.html" class="btn btn-neutral float-right" title="rxn.chemutils.exceptions.InvalidMdl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
