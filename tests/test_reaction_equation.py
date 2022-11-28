@@ -15,6 +15,7 @@ from rxn.chemutils.reaction_equation import (
     remove_precursors_from_products,
     rxn_standardization,
     sort_compounds,
+    apply_to_compound_groups,
 )
 
 
@@ -198,6 +199,16 @@ def test_apply_to_compounds() -> None:
     assert apply_to_compounds(
         ReactionEquation(["C", "N", "O"], ["P"], ["CNO"]), dummy_fn
     ) == ReactionEquation(["CC", "NC", "OC"], ["PC"], ["CNOC"])
+
+
+def test_apply_to_compound_groups() -> None:
+    def dummy_fn(compound_group: List[str]) -> List[str]:
+        # as a test: reverse the order of the compounds
+        return list(reversed(compound_group))
+
+    assert apply_to_compound_groups(
+        ReactionEquation(["C", "N", "O"], ["P"], ["CNO", "C"]), dummy_fn
+    ) == ReactionEquation(["O", "N", "C"], ["P"], ["C", "CNO"])
 
 
 def test_rxn_standardization() -> None:

@@ -123,6 +123,24 @@ def apply_to_compounds(
     return ReactionEquation(*updated_compound_groups)
 
 
+def apply_to_compound_groups(
+    reaction: ReactionEquation, fn: Callable[[List[str]], List[str]]
+) -> ReactionEquation:
+    """
+    Apply a function to the groups of compounds in a ReactionEquation.
+
+    Args:
+        reaction: reaction equation to apply the function to.
+        fn: function to apply.
+
+    Returns:
+        New ReactionEquation instance after application of the function to the
+        compound groups.
+    """
+    updated_compound_groups = (fn(compound_group) for compound_group in reaction)
+    return ReactionEquation(*updated_compound_groups)
+
+
 def canonicalize_compounds(
     reaction: ReactionEquation, check_valence: bool = True
 ) -> ReactionEquation:
