@@ -46,9 +46,7 @@ class ReactionEquation:
         Overwrite init function in order to enable instantiation from any iterator and
         to force copying the lists.
         """
-        self.__attrs_init__(  # type: ignore
-            list(reactants), list(agents), list(products)
-        )
+        self.__attrs_init__(list(reactants), list(agents), list(products))
 
     def __iter__(self) -> Iterator[List[str]]:
         """Helper function to simplify functionality acting on all three
@@ -100,8 +98,7 @@ def sort_compounds(reaction: ReactionEquation) -> ReactionEquation:
     """
     Reorder the compounds of each group in alphabetic order.
     """
-    sorted_compound_groups = (sorted(group) for group in reaction)
-    return ReactionEquation(*sorted_compound_groups)
+    return apply_to_compound_groups(reaction, sorted)
 
 
 def apply_to_compounds(
@@ -123,6 +120,24 @@ def apply_to_compounds(
     return ReactionEquation(*updated_compound_groups)
 
 
+def apply_to_compound_groups(
+    reaction: ReactionEquation, fn: Callable[[List[str]], List[str]]
+) -> ReactionEquation:
+    """
+    Apply a function to the groups of compounds in a ReactionEquation.
+
+    Args:
+        reaction: reaction equation to apply the function to.
+        fn: function to apply.
+
+    Returns:
+        New ReactionEquation instance after application of the function to the
+        compound groups.
+    """
+    updated_compound_groups = (fn(compound_group) for compound_group in reaction)
+    return ReactionEquation(*updated_compound_groups)
+
+
 def canonicalize_compounds(
     reaction: ReactionEquation, check_valence: bool = True
 ) -> ReactionEquation:
@@ -137,8 +152,7 @@ def remove_duplicate_compounds(reaction: ReactionEquation) -> ReactionEquation:
     """
     Remove compounds that are duplicated in the same category
     """
-    groups_without_duplicates = (remove_duplicates(group) for group in reaction)
-    return ReactionEquation(*groups_without_duplicates)
+    return apply_to_compound_groups(reaction, remove_duplicates)
 
 
 def cleanup_compounds(reaction: ReactionEquation) -> ReactionEquation:

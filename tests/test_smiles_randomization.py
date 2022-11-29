@@ -107,6 +107,10 @@ def test_reproducibility() -> None:
 
         assert all_identical(samples)
 
+        # sampling one more time without resetting the seed -> different
+        samples.append(fn(adenine))
+        assert not all_identical(samples)
+
 
 def test_multi_fragment_compounds() -> None:
     # Check that no aromatization or cleanup is done

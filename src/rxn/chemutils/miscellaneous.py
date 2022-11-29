@@ -10,9 +10,15 @@ from .conversion import canonicalize_smiles, smiles_to_mol
 from .exceptions import InvalidSmiles
 from .multicomponent_smiles import (
     apply_to_multicomponent_smiles,
+    list_to_multicomponent_smiles,
+    multicomponent_smiles_to_list,
     sort_multicomponent_smiles,
 )
-from .reaction_equation import apply_to_compounds, sort_compounds
+from .reaction_equation import (
+    apply_to_compound_groups,
+    apply_to_compounds,
+    sort_compounds,
+)
 from .reaction_smiles import determine_format, parse_reaction_smiles, to_reaction_smiles
 
 CHIRAL_CENTER_PATTERN = re.compile(
@@ -93,7 +99,9 @@ def remove_double_bond_stereochemistry(smiles: str) -> str:
     return smiles.replace("/", "").replace("\\", "")
 
 
-def apply_to_any_smiles(any_smiles: str, fn: Callable[[str], str]) -> str:
+def apply_to_any_smiles(
+    any_smiles: str, fn: Callable[[str], str], force_multicomponent: bool = False
+) -> str:
     """
     Apply a given function to individual compound SMILES strings given in any kind
     of SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).
@@ -103,6 +111,10 @@ def apply_to_any_smiles(any_smiles: str, fn: Callable[[str], str]) -> str:
     Args:
         any_smiles: any kind of SMILES string.
         fn: callback to apply to every compound SMILES.
+        force_multicomponent: by default, when a SMILES string contains no ">" or "~",
+            it is assumed to just be a normal single-component SMILES string. Providing
+            force_multicomponent=True leads to an interpretation as a multismiles string,
+            i.e. splitting at all the dots.
 
     Raises:
         Exception: different kinds of exception may be raised during parsing,
@@ -118,12 +130,48 @@ def apply_to_any_smiles(any_smiles: str, fn: Callable[[str], str]) -> str:
         reaction = parse_reaction_smiles(any_smiles, reaction_format)
         reaction = apply_to_compounds(reaction, fn)
         return to_reaction_smiles(reaction, reaction_format)
-    elif "~" in any_smiles:
+    elif "~" in any_smiles or force_multicomponent:
         # we have a multicomponent SMILES
         return apply_to_multicomponent_smiles(any_smiles, fn=fn, fragment_bond="~")
     else:
         # we have a single-component SMILES
         return fn(any_smiles)
+
+
+def apply_to_smiles_groups(
+    any_smiles: str, fn: Callable[[List[str]], List[str]]
+) -> str:
+    """
+    Apply a given function to groups of SMILES strings given in any
+    multicomponent SMILES or reaction SMILES.
+
+    This function can typically be used for sorting or shuffling precursors,
+    products, etc.
+
+    In the case of reaction SMILES, the format is kept.
+
+    Args:
+        any_smiles: any kind of SMILES string.
+        fn: callback to apply to every compound SMILES.
+
+    Raises:
+        Exception: different kinds of exception may be raised during parsing,
+            or during execution of the callback.
+
+    Returns:
+        the new (multicomponent, or reaction) SMILES string after
+        application of the callback to all the groups of SMILES.
+    """
+    if ">" in any_smiles:
+        # we have a reaction SMILES
+        reaction_format = determine_format(any_smiles)
+        reaction = parse_reaction_smiles(any_smiles, reaction_format)
+        reaction = apply_to_compound_groups(reaction, fn)
+        return to_reaction_smiles(reaction, reaction_format)
+    else:
+        # we have a multicomponent SMILES
+        compounds = multicomponent_smiles_to_list(any_smiles, fragment_bond="~")
+        return list_to_multicomponent_smiles(fn(compounds), fragment_bond="~")
 
 
 def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
