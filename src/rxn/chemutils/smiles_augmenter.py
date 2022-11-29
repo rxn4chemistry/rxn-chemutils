@@ -37,7 +37,7 @@ class SmilesAugmenter:
             number_augmentations: how many times to do the augmentation.
         """
 
-        # SMILES augmentation
+        # augmentation of the individual compound SMILES
         augmented = [
             apply_to_any_smiles(
                 smiles, self._augment_with_probability, force_multicomponent=True
@@ -45,6 +45,7 @@ class SmilesAugmenter:
             for _ in range(number_augmentations)
         ]
 
+        # shuffle the order of the compounds
         if self.shuffle:
             augmented = [
                 apply_to_smiles_groups(s, SmilesAugmenter._shuffle) for s in augmented
@@ -53,7 +54,7 @@ class SmilesAugmenter:
         return augmented
 
     def _augment_with_probability(self, smiles: str) -> str:
-        """Augmentation a SMILES, with the probability given by the member variable."""
+        """Augmentat a SMILES, with the probability given by the member variable."""
 
         # Note: no need to call random.uniform if the augmentation probability is 1.0.
         if (
@@ -62,6 +63,7 @@ class SmilesAugmenter:
         ):
             return self.augmentation_fn(smiles)
 
+        # no augmentation
         return smiles
 
     @staticmethod
