@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.apply\_to\_smiles\_groups
+=====================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: apply_to_smiles_groups

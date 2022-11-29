@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.smiles_augmenter &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>rxn.chemutils.smiles_augmenter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rxn.chemutils.smiles_augmenter</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">.miscellaneous</span> <span class="kn">import</span> <span class="n">apply_to_any_smiles</span><span class="p">,</span> <span class="n">apply_to_smiles_groups</span>
+
+
+<div class="viewcode-block" id="SmilesAugmenter"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_augmenter.SmilesAugmenter.html#rxn.chemutils.smiles_augmenter.SmilesAugmenter">[docs]</a><span class="k">class</span> <span class="nc">SmilesAugmenter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to augment any kind of SMILES string with the help of randomization</span>
+<span class="sd">    and shuffling.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmilesAugmenter.__init__"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_augmenter.SmilesAugmenter.html#rxn.chemutils.smiles_augmenter.SmilesAugmenter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">augmentation_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">augmentation_probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            augmentation_fn: Function for augmenting the individual SMILES strings,</span>
+<span class="sd">                such as the functions provided in smiles_randomization.py.</span>
+<span class="sd">            augmentation_probability: Probability with which to augment individual</span>
+<span class="sd">                SMILES strings.</span>
+<span class="sd">            shuffle: Whether to shuffle the order of the compounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">augmentation_fn</span> <span class="o">=</span> <span class="n">augmentation_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">augmentation_probability</span> <span class="o">=</span> <span class="n">augmentation_probability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span></div>
+
+<div class="viewcode-block" id="SmilesAugmenter.augment"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_augmenter.SmilesAugmenter.html#rxn.chemutils.smiles_augmenter.SmilesAugmenter.augment">[docs]</a>    <span class="k">def</span> <span class="nf">augment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">number_augmentations</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Augment one SMILES string (of any kind).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            smiles: SMILES string to augment.</span>
+<span class="sd">            number_augmentations: how many times to do the augmentation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># augmentation of the individual compound SMILES</span>
+        <span class="n">augmented</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">apply_to_any_smiles</span><span class="p">(</span>
+                <span class="n">smiles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_augment_with_probability</span><span class="p">,</span> <span class="n">force_multicomponent</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_augmentations</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># shuffle the order of the compounds</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+            <span class="n">augmented</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">apply_to_smiles_groups</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">SmilesAugmenter</span><span class="o">.</span><span class="n">_shuffle</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">augmented</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">augmented</span></div>
+
+    <span class="k">def</span> <span class="nf">_augment_with_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Augmentat a SMILES, with the probability given by the member variable.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Note: no need to call random.uniform if the augmentation probability is 1.0.</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">augmentation_probability</span> <span class="o">==</span> <span class="mf">1.0</span>
+            <span class="ow">or</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">augmentation_probability</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">augmentation_fn</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+
+        <span class="c1"># no augmentation</span>
+        <span class="k">return</span> <span class="n">smiles</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_shuffle</span><span class="p">(</span><span class="n">smiles_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">smiles_list</span> <span class="o">=</span> <span class="n">smiles_list</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">smiles_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">smiles_list</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

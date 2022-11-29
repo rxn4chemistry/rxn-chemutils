@@ -1,0 +1,31 @@
+rxn.chemutils.smiles\_augmenter
+===============================
+
+.. automodule:: rxn.chemutils.smiles_augmenter
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      SmilesAugmenter
+   
+   
+
+   
+   
+   
+
+
+

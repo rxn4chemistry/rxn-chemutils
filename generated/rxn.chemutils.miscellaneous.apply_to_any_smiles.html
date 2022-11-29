@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.miscellaneous.atom_type_counter" href="rxn.chemutils.miscellaneous.atom_type_counter.html" />
+    <link rel="next" title="rxn.chemutils.miscellaneous.apply_to_smiles_groups" href="rxn.chemutils.miscellaneous.apply_to_smiles_groups.html" />
     <link rel="prev" title="rxn.chemutils.miscellaneous" href="rxn.chemutils.miscellaneous.html" /> 
 </head>
 
@@ -47,6 +47,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.extended_reaction_smiles.html">rxn.chemutils.extended_reaction_smiles</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="rxn.chemutils.miscellaneous.html">rxn.chemutils.miscellaneous</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.miscellaneous.apply_to_any_smiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_smiles_groups.html">rxn.chemutils.miscellaneous.apply_to_smiles_groups</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.atom_type_counter.html">rxn.chemutils.miscellaneous.atom_type_counter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_any.html">rxn.chemutils.miscellaneous.canonicalize_any</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.equivalent_smiles.html">rxn.chemutils.miscellaneous.equivalent_smiles</a></li>
@@ -61,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_equation.html">rxn.chemutils.reaction_equation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_smiles.html">rxn.chemutils.reaction_smiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.scripts.html">rxn.chemutils.scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_augmenter.html">rxn.chemutils.smiles_augmenter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_randomization.html">rxn.chemutils.smiles_randomization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.tokenization.html">rxn.chemutils.tokenization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.utils.html">rxn.chemutils.utils</a></li>
@@ -101,7 +103,7 @@
 <h1>rxn.chemutils.miscellaneous.apply_to_any_smiles<a class="headerlink" href="#rxn-chemutils-miscellaneous-apply-to-any-smiles" title="Permalink to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="rxn.chemutils.miscellaneous.apply_to_any_smiles">
-<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">apply_to_any_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">any_smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/miscellaneous.html#apply_to_any_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.miscellaneous.apply_to_any_smiles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">apply_to_any_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">any_smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_multicomponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/miscellaneous.html#apply_to_any_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.miscellaneous.apply_to_any_smiles" title="Permalink to this definition"></a></dt>
 <dd><p>Apply a given function to individual compound SMILES strings given in any kind
 of SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</p>
 <p>In the case of reaction SMILES, the format is kept.</p>
@@ -110,6 +112,10 @@ of SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>any_smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – any kind of SMILES string.</p></li>
 <li><p><strong>fn</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – callback to apply to every compound SMILES.</p></li>
+<li><p><strong>force_multicomponent</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – by default, when a SMILES string contains no “&gt;” or “~”,
+it is assumed to just be a normal single-component SMILES string. Providing
+force_multicomponent=True leads to an interpretation as a multismiles string,
+i.e. splitting at all the dots.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -133,7 +139,7 @@ application of the callback to all the component SMILES.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="rxn.chemutils.miscellaneous.html" class="btn btn-neutral float-left" title="rxn.chemutils.miscellaneous" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.miscellaneous.atom_type_counter.html" class="btn btn-neutral float-right" title="rxn.chemutils.miscellaneous.atom_type_counter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.miscellaneous.apply_to_smiles_groups.html" class="btn btn-neutral float-right" title="rxn.chemutils.miscellaneous.apply_to_smiles_groups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

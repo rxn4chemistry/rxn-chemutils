@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.reaction_equation.apply_to_compounds" href="rxn.chemutils.reaction_equation.apply_to_compounds.html" />
+    <link rel="next" title="rxn.chemutils.reaction_equation.apply_to_compound_groups" href="rxn.chemutils.reaction_equation.apply_to_compound_groups.html" />
     <link rel="prev" title="rxn.chemutils.rdkit_utils.combine_mols" href="rxn.chemutils.rdkit_utils.combine_mols.html" /> 
 </head>
 
@@ -49,6 +49,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.multicomponent_smiles.html">rxn.chemutils.multicomponent_smiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.rdkit_utils.html">rxn.chemutils.rdkit_utils</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rxn.chemutils.reaction_equation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.reaction_equation.apply_to_compound_groups.html">rxn.chemutils.reaction_equation.apply_to_compound_groups</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.reaction_equation.apply_to_compounds.html">rxn.chemutils.reaction_equation.apply_to_compounds</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.reaction_equation.canonicalize_compounds.html">rxn.chemutils.reaction_equation.canonicalize_compounds</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.reaction_equation.cleanup_compounds.html">rxn.chemutils.reaction_equation.cleanup_compounds</a></li>
@@ -63,6 +64,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_smiles.html">rxn.chemutils.reaction_smiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.scripts.html">rxn.chemutils.scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_augmenter.html">rxn.chemutils.smiles_augmenter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_randomization.html">rxn.chemutils.smiles_randomization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.tokenization.html">rxn.chemutils.tokenization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.utils.html">rxn.chemutils.utils</a></li>
@@ -107,39 +109,42 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.apply_to_compounds.html#rxn.chemutils.reaction_equation.apply_to_compounds" title="rxn.chemutils.reaction_equation.apply_to_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_compounds</span></code></a>(reaction, fn)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.apply_to_compound_groups.html#rxn.chemutils.reaction_equation.apply_to_compound_groups" title="rxn.chemutils.reaction_equation.apply_to_compound_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_compound_groups</span></code></a>(reaction, fn)</p></td>
+<td><p>Apply a function to the groups of compounds in a ReactionEquation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.apply_to_compounds.html#rxn.chemutils.reaction_equation.apply_to_compounds" title="rxn.chemutils.reaction_equation.apply_to_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_compounds</span></code></a>(reaction, fn)</p></td>
 <td><p>Apply a function to the individual compounds in a ReactionEquation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.canonicalize_compounds.html#rxn.chemutils.reaction_equation.canonicalize_compounds" title="rxn.chemutils.reaction_equation.canonicalize_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_compounds</span></code></a>(reaction[, check_valence])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.canonicalize_compounds.html#rxn.chemutils.reaction_equation.canonicalize_compounds" title="rxn.chemutils.reaction_equation.canonicalize_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_compounds</span></code></a>(reaction[, check_valence])</p></td>
 <td><p>Canonicalize the molecules of a ReactionEquation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.cleanup_compounds.html#rxn.chemutils.reaction_equation.cleanup_compounds" title="rxn.chemutils.reaction_equation.cleanup_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup_compounds</span></code></a>(reaction)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.cleanup_compounds.html#rxn.chemutils.reaction_equation.cleanup_compounds" title="rxn.chemutils.reaction_equation.cleanup_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup_compounds</span></code></a>(reaction)</p></td>
 <td><p>Basic cleanup of the compounds.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.has_repeated_molecules.html#rxn.chemutils.reaction_equation.has_repeated_molecules" title="rxn.chemutils.reaction_equation.has_repeated_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_repeated_molecules</span></code></a>(reaction_equation)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.has_repeated_molecules.html#rxn.chemutils.reaction_equation.has_repeated_molecules" title="rxn.chemutils.reaction_equation.has_repeated_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_repeated_molecules</span></code></a>(reaction_equation)</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">param reaction_equation</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 </p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.merge_reactants_and_agents.html#rxn.chemutils.reaction_equation.merge_reactants_and_agents" title="rxn.chemutils.reaction_equation.merge_reactants_and_agents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_reactants_and_agents</span></code></a>(reaction)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.merge_reactants_and_agents.html#rxn.chemutils.reaction_equation.merge_reactants_and_agents" title="rxn.chemutils.reaction_equation.merge_reactants_and_agents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_reactants_and_agents</span></code></a>(reaction)</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">param reaction</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 </p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.remove_duplicate_compounds.html#rxn.chemutils.reaction_equation.remove_duplicate_compounds" title="rxn.chemutils.reaction_equation.remove_duplicate_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_duplicate_compounds</span></code></a>(reaction)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.remove_duplicate_compounds.html#rxn.chemutils.reaction_equation.remove_duplicate_compounds" title="rxn.chemutils.reaction_equation.remove_duplicate_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_duplicate_compounds</span></code></a>(reaction)</p></td>
 <td><p>Remove compounds that are duplicated in the same category</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.remove_precursors_from_products.html#rxn.chemutils.reaction_equation.remove_precursors_from_products" title="rxn.chemutils.reaction_equation.remove_precursors_from_products"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_precursors_from_products</span></code></a>(reaction)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.remove_precursors_from_products.html#rxn.chemutils.reaction_equation.remove_precursors_from_products" title="rxn.chemutils.reaction_equation.remove_precursors_from_products"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_precursors_from_products</span></code></a>(reaction)</p></td>
 <td><p>Remove compounds in products that are also present in the reactants or reagents.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.rxn_standardization.html#rxn.chemutils.reaction_equation.rxn_standardization" title="rxn.chemutils.reaction_equation.rxn_standardization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rxn_standardization</span></code></a>(reaction)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.rxn_standardization.html#rxn.chemutils.reaction_equation.rxn_standardization" title="rxn.chemutils.reaction_equation.rxn_standardization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rxn_standardization</span></code></a>(reaction)</p></td>
 <td><p>Apply the standard RXN postprocessing of reaction equations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.sort_compounds.html#rxn.chemutils.reaction_equation.sort_compounds" title="rxn.chemutils.reaction_equation.sort_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sort_compounds</span></code></a>(reaction)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.reaction_equation.sort_compounds.html#rxn.chemutils.reaction_equation.sort_compounds" title="rxn.chemutils.reaction_equation.sort_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sort_compounds</span></code></a>(reaction)</p></td>
 <td><p>Reorder the compounds of each group in alphabetic order.</p></td>
 </tr>
 </tbody>
@@ -163,7 +168,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="rxn.chemutils.rdkit_utils.combine_mols.html" class="btn btn-neutral float-left" title="rxn.chemutils.rdkit_utils.combine_mols" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.reaction_equation.apply_to_compounds.html" class="btn btn-neutral float-right" title="rxn.chemutils.reaction_equation.apply_to_compounds" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.reaction_equation.apply_to_compound_groups.html" class="btn btn-neutral float-right" title="rxn.chemutils.reaction_equation.apply_to_compound_groups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -47,6 +47,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.extended_reaction_smiles.html">rxn.chemutils.extended_reaction_smiles</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rxn.chemutils.miscellaneous</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_any_smiles.html">rxn.chemutils.miscellaneous.apply_to_any_smiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_smiles_groups.html">rxn.chemutils.miscellaneous.apply_to_smiles_groups</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.atom_type_counter.html">rxn.chemutils.miscellaneous.atom_type_counter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_any.html">rxn.chemutils.miscellaneous.canonicalize_any</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.equivalent_smiles.html">rxn.chemutils.miscellaneous.equivalent_smiles</a></li>
@@ -61,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_equation.html">rxn.chemutils.reaction_equation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_smiles.html">rxn.chemutils.reaction_smiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.scripts.html">rxn.chemutils.scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_augmenter.html">rxn.chemutils.smiles_augmenter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_randomization.html">rxn.chemutils.smiles_randomization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.tokenization.html">rxn.chemutils.tokenization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.utils.html">rxn.chemutils.utils</a></li>
@@ -105,28 +107,31 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_any_smiles.html#rxn.chemutils.miscellaneous.apply_to_any_smiles" title="rxn.chemutils.miscellaneous.apply_to_any_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_any_smiles</span></code></a>(any_smiles, fn)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_any_smiles.html#rxn.chemutils.miscellaneous.apply_to_any_smiles" title="rxn.chemutils.miscellaneous.apply_to_any_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_any_smiles</span></code></a>(any_smiles, fn[, ...])</p></td>
 <td><p>Apply a given function to individual compound SMILES strings given in any kind of SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.atom_type_counter.html#rxn.chemutils.miscellaneous.atom_type_counter" title="rxn.chemutils.miscellaneous.atom_type_counter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atom_type_counter</span></code></a>(smiles)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_smiles_groups.html#rxn.chemutils.miscellaneous.apply_to_smiles_groups" title="rxn.chemutils.miscellaneous.apply_to_smiles_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_to_smiles_groups</span></code></a>(any_smiles, fn)</p></td>
+<td><p>Apply a given function to groups of SMILES strings given in any multicomponent SMILES or reaction SMILES.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.atom_type_counter.html#rxn.chemutils.miscellaneous.atom_type_counter" title="rxn.chemutils.miscellaneous.atom_type_counter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atom_type_counter</span></code></a>(smiles)</p></td>
 <td><p>Return a counter of atom types (as symbols).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_any.html#rxn.chemutils.miscellaneous.canonicalize_any" title="rxn.chemutils.miscellaneous.canonicalize_any"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_any</span></code></a>(any_smiles[, check_valence])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_any.html#rxn.chemutils.miscellaneous.canonicalize_any" title="rxn.chemutils.miscellaneous.canonicalize_any"><code class="xref py py-obj docutils literal notranslate"><span class="pre">canonicalize_any</span></code></a>(any_smiles[, check_valence])</p></td>
 <td><p>Canonicalize any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.equivalent_smiles.html#rxn.chemutils.miscellaneous.equivalent_smiles" title="rxn.chemutils.miscellaneous.equivalent_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent_smiles</span></code></a>(*smiles[, check_valence])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.equivalent_smiles.html#rxn.chemutils.miscellaneous.equivalent_smiles" title="rxn.chemutils.miscellaneous.equivalent_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equivalent_smiles</span></code></a>(*smiles[, check_valence])</p></td>
 <td><p>Returns true if all the given SMILES strings are equivalent.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.is_valid_smiles.html#rxn.chemutils.miscellaneous.is_valid_smiles" title="rxn.chemutils.miscellaneous.is_valid_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_smiles</span></code></a>(smiles[, check_valence])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.is_valid_smiles.html#rxn.chemutils.miscellaneous.is_valid_smiles" title="rxn.chemutils.miscellaneous.is_valid_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid_smiles</span></code></a>(smiles[, check_valence])</p></td>
 <td><p>Whether a given string corresponds to a valid SMILES string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.remove_chiral_centers.html#rxn.chemutils.miscellaneous.remove_chiral_centers" title="rxn.chemutils.miscellaneous.remove_chiral_centers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_chiral_centers</span></code></a>(smiles)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.remove_chiral_centers.html#rxn.chemutils.miscellaneous.remove_chiral_centers" title="rxn.chemutils.miscellaneous.remove_chiral_centers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_chiral_centers</span></code></a>(smiles)</p></td>
 <td><p>Return SMILES where all the chiral centres are removed.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry.html#rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry" title="rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_double_bond_stereochemistry</span></code></a>(smiles)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry.html#rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry" title="rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_double_bond_stereochemistry</span></code></a>(smiles)</p></td>
 <td><p>Return SMILES where all the E/Z information on double bonds is removed.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.sort_any.html#rxn.chemutils.miscellaneous.sort_any" title="rxn.chemutils.miscellaneous.sort_any"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sort_any</span></code></a>(any_smiles)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.miscellaneous.sort_any.html#rxn.chemutils.miscellaneous.sort_any" title="rxn.chemutils.miscellaneous.sort_any"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sort_any</span></code></a>(any_smiles)</p></td>
 <td><p>Sort any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</p></td>
 </tr>
 </tbody>

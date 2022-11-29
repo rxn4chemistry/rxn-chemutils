@@ -113,9 +113,7 @@
 <span class="sd">        Overwrite init function in order to enable instantiation from any iterator and</span>
 <span class="sd">        to force copying the lists.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_init__</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
-            <span class="nb">list</span><span class="p">(</span><span class="n">reactants</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">agents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">products</span><span class="p">)</span>
-        <span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_init__</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">reactants</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">agents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">products</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Helper function to simplify functionality acting on all three</span>
@@ -167,8 +165,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reorder the compounds of each group in alphabetic order.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sorted_compound_groups</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">reaction</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_compound_groups</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">apply_to_compound_groups</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="apply_to_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.apply_to_compounds.html#rxn.chemutils.reaction_equation.apply_to_compounds">[docs]</a><span class="k">def</span> <span class="nf">apply_to_compounds</span><span class="p">(</span>
@@ -190,6 +187,24 @@
     <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">updated_compound_groups</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="apply_to_compound_groups"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.apply_to_compound_groups.html#rxn.chemutils.reaction_equation.apply_to_compound_groups">[docs]</a><span class="k">def</span> <span class="nf">apply_to_compound_groups</span><span class="p">(</span>
+    <span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a function to the groups of compounds in a ReactionEquation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        reaction: reaction equation to apply the function to.</span>
+<span class="sd">        fn: function to apply.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        New ReactionEquation instance after application of the function to the</span>
+<span class="sd">        compound groups.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">updated_compound_groups</span> <span class="o">=</span> <span class="p">(</span><span class="n">fn</span><span class="p">(</span><span class="n">compound_group</span><span class="p">)</span> <span class="k">for</span> <span class="n">compound_group</span> <span class="ow">in</span> <span class="n">reaction</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">updated_compound_groups</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="canonicalize_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.canonicalize_compounds.html#rxn.chemutils.reaction_equation.canonicalize_compounds">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_compounds</span><span class="p">(</span>
     <span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">,</span> <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
@@ -204,8 +219,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove compounds that are duplicated in the same category</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">groups_without_duplicates</span> <span class="o">=</span> <span class="p">(</span><span class="n">remove_duplicates</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">reaction</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="o">*</span><span class="n">groups_without_duplicates</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">apply_to_compound_groups</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="cleanup_compounds"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_equation.cleanup_compounds.html#rxn.chemutils.reaction_equation.cleanup_compounds">[docs]</a><span class="k">def</span> <span class="nf">cleanup_compounds</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>

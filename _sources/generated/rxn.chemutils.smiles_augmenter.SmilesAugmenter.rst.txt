@@ -1,0 +1,26 @@
+rxn.chemutils.smiles\_augmenter.SmilesAugmenter
+===============================================
+
+.. currentmodule:: rxn.chemutils.smiles_augmenter
+
+.. autoclass:: SmilesAugmenter
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SmilesAugmenter.__init__
+      ~SmilesAugmenter.augment
+   
+   
+
+   
+   
+   

@@ -15,6 +15,7 @@ rxn.chemutils.miscellaneous
       :toctree:
    
       apply_to_any_smiles
+      apply_to_smiles_groups
       atom_type_counter
       canonicalize_any
       equivalent_smiles
