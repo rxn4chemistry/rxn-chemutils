@@ -28,23 +28,23 @@ def test_do_nothing() -> None:
         rxn_smiles_3,
     ]
     for test_smiles in test_strings:
-        assert augmenter.augment_one(test_smiles, 4) == 4 * [test_smiles]
+        assert augmenter.augment(test_smiles, 4) == 4 * [test_smiles]
 
 
 def test_shuffling_only() -> None:
     augmenter = SmilesAugmenter(augmentation_fn=identity, shuffle=True)
 
     # On single compound: no change at all
-    assert augmenter.augment_one(single_compound, 4) == 4 * [single_compound]
+    assert augmenter.augment(single_compound, 4) == 4 * [single_compound]
 
     # On salt compound: just reorders it -> 2 possible combinations
-    assert len(set(augmenter.augment_one(salt_compound, 20))) == 2
+    assert len(set(augmenter.augment(salt_compound, 20))) == 2
 
     # On multismiles: fragments stay together; this leads to a total of 6 combinations
-    assert len(set(augmenter.augment_one(multismiles, 60))) == 6
+    assert len(set(augmenter.augment(multismiles, 60))) == 6
 
     # On reaction SMILES with two products: 6 combinations for precursors, 2 for products
-    assert len(set(augmenter.augment_one(rxn_smiles_3, 150))) == 12
+    assert len(set(augmenter.augment(rxn_smiles_3, 150))) == 12
 
 
 def test_smiles_augmentation_only() -> None:
@@ -65,7 +65,7 @@ def test_smiles_augmentation_only() -> None:
     for query, expected in query_and_expected:
         # Note: no randomness, as the dummy augmentation is not random, and
         # there is no shuffling
-        assert augmenter.augment_one(query, 4) == 4 * [expected]
+        assert augmenter.augment(query, 4) == 4 * [expected]
 
 
 def test_smiles_augmentation_only_with_probability() -> None:
@@ -78,11 +78,11 @@ def test_smiles_augmentation_only_with_probability() -> None:
     )
 
     # On single compound: either augmented or not
-    assert set(augmenter.augment_one(single_compound, 10)) == {"21", single_compound}
+    assert set(augmenter.augment(single_compound, 10)) == {"21", single_compound}
 
     # To illustrate the behavior on strings with multiple SMILES, we just test it on
     # the multismiles input. There will be a mix of replaced and not replaced
-    assert set(augmenter.augment_one(multismiles, 50)) == {
+    assert set(augmenter.augment(multismiles, 50)) == {
         "O=C(C)Oc1ccccc1C(=O)O.Cl.[Na+]~[Cl-]",
         "21.Cl.[Na+]~[Cl-]",
         "O=C(C)Oc1ccccc1C(=O)O.2.[Na+]~[Cl-]",
@@ -97,7 +97,7 @@ def test_smiles_augmentation_only_with_probability() -> None:
     augmenter = SmilesAugmenter(
         augmentation_fn=dummy_augmentation, augmentation_probability=0.0, shuffle=False
     )
-    assert set(augmenter.augment_one(multismiles, 10)) == {multismiles}
+    assert set(augmenter.augment(multismiles, 10)) == {multismiles}
 
 
 def test_mix_augmentation_and_shuffling() -> None:
@@ -117,13 +117,13 @@ def test_mix_augmentation_and_shuffling() -> None:
     # maximal variability when the probability is high (already with a probability
     # of 0.5, all the strings will likely be different).
     augmenter.augmentation_probability = 0.0
-    assert 10 < len(set(augmenter.augment_one(rxn_smiles_3, 100))) < 14
+    assert 10 < len(set(augmenter.augment(rxn_smiles_3, 100))) < 14
     augmenter.augmentation_probability = 0.05
-    assert 20 < len(set(augmenter.augment_one(rxn_smiles_3, 100))) < 30
+    assert 20 < len(set(augmenter.augment(rxn_smiles_3, 100))) < 30
     augmenter.augmentation_probability = 0.1
-    assert 40 < len(set(augmenter.augment_one(rxn_smiles_3, 100))) < 60
+    assert 40 < len(set(augmenter.augment(rxn_smiles_3, 100))) < 60
     augmenter.augmentation_probability = 0.5
-    assert 90 < len(set(augmenter.augment_one(rxn_smiles_3, 100)))
+    assert 90 < len(set(augmenter.augment(rxn_smiles_3, 100)))
 
 
 def test_reproducibility() -> None:
@@ -138,9 +138,9 @@ def test_reproducibility() -> None:
     results = []
     for _ in range(10):
         random.seed(42)
-        results.append(augmenter.augment_one(rxn_smiles_3, 5))
+        results.append(augmenter.augment(rxn_smiles_3, 5))
     assert all_identical(results)
 
     # sampling one more time without resetting the seed -> results change
-    results.append(augmenter.augment_one(rxn_smiles_3, 5))
+    results.append(augmenter.augment(rxn_smiles_3, 5))
     assert not all_identical(results)

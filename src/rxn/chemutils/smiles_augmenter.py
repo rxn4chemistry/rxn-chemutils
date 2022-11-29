@@ -28,7 +28,7 @@ class SmilesAugmenter:
         self.augmentation_probability = augmentation_probability
         self.shuffle = shuffle
 
-    def augment_one(self, smiles: str, number_augmentations: int) -> List[str]:
+    def augment(self, smiles: str, number_augmentations: int) -> List[str]:
         """
         Augment one SMILES string (of any kind).
 

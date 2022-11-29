@@ -143,7 +143,7 @@ def apply_to_smiles_groups(
 ) -> str:
     """
     Apply a given function to groups of SMILES strings given in any
-    multicomponent SMILES or reaction SMILES).
+    multicomponent SMILES or reaction SMILES.
 
     This function can typically be used for sorting or shuffling precursors,
     products, etc.
