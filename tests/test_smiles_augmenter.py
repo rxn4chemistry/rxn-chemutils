@@ -15,7 +15,7 @@ rxn_smiles_3 = "CC(=O)Cl.NCC.[Na+]~[Cl-]>>CC(=O)NCC.Cl"  # multiple products
 def test_do_nothing() -> None:
     # If there is no SMILES randomization and no shuffling, the class should
     # just return the same strings back
-    augmenter = SmilesAugmenter(augmentation_fn=identity, shuffle_order=False)
+    augmenter = SmilesAugmenter(augmentation_fn=identity, shuffle=False)
 
     test_strings = [
         single_compound,
@@ -30,7 +30,17 @@ def test_do_nothing() -> None:
 
 
 def test_shuffling_only() -> None:
-    augmenter = SmilesAugmenter(augmentation_fn=identity, shuffle_order=True)
+    augmenter = SmilesAugmenter(augmentation_fn=identity, shuffle=True)
+
+    # On single compound: no change at all
+    assert augmenter.augment_one(single_compound, 4) == 4 * [single_compound]
+
+    # On salt compound: reorders it
+    inverted_salt_compound = "CC(=O)[O-].CC[NH+](CC)CC"
+    assert set(augmenter.augment_one(salt_compound, 20)) == {
+        salt_compound,
+        inverted_salt_compound,
+    }
 
 
 def test_exceptions() -> None:

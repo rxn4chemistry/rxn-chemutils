@@ -1,7 +1,7 @@
 import random
 from typing import Callable, Iterable, Iterator, List
 
-from .miscellaneous import apply_to_any_smiles
+from .miscellaneous import apply_to_any_smiles, apply_to_smiles_groups
 from .reaction_equation import ReactionEquation
 from .reaction_smiles import parse_any_reaction_smiles
 from .smiles_randomization import (
@@ -21,7 +21,7 @@ class SmilesAugmenter:
         self,
         augmentation_fn: Callable[[str], str],
         augmentation_probability: float = 1.0,
-        shuffle_order: bool = True,
+        shuffle: bool = True,
     ):
         """
         Args:
@@ -29,11 +29,11 @@ class SmilesAugmenter:
                 such as the functions provided in smiles_randomization.py.
             augmentation_probability: Probability with which to augment individual
                 SMILES strings.
-            shuffle_order: Whether to shuffle the order of the compounds.
+            shuffle: Whether to shuffle the order of the compounds.
         """
         self.augmentation_fn = augmentation_fn
         self.augmentation_probability = augmentation_probability
-        self.shuffle_order = shuffle_order
+        self.shuffle = shuffle
 
     def augment_one(self, smiles: str, number_augmentations: int) -> List[str]:
         """
@@ -43,11 +43,25 @@ class SmilesAugmenter:
             smiles: SMILES string to augment.
             number_augmentations: how many times to do the augmentation.
         """
+
+        # SMILES augmentation
         augmented = [
             apply_to_any_smiles(smiles, self.augmentation_fn)
             for _ in range(number_augmentations)
         ]
+
+        if self.shuffle:
+            augmented = [
+                apply_to_smiles_groups(s, SmilesAugmenter._shuffle) for s in augmented
+            ]
+
         return augmented
+
+    @staticmethod
+    def _shuffle(smiles_list: List[str]) -> List[str]:
+        smiles_list = smiles_list.copy()
+        random.shuffle(smiles_list)
+        return smiles_list
 
     # def augment_many(
     #     self, smiles_strings: Iterable[str], number_augmentations: int

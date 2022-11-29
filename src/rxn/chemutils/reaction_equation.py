@@ -100,8 +100,7 @@ def sort_compounds(reaction: ReactionEquation) -> ReactionEquation:
     """
     Reorder the compounds of each group in alphabetic order.
     """
-    sorted_compound_groups = (sorted(group) for group in reaction)
-    return ReactionEquation(*sorted_compound_groups)
+    return apply_to_compound_groups(reaction, sorted)
 
 
 def apply_to_compounds(
@@ -155,8 +154,7 @@ def remove_duplicate_compounds(reaction: ReactionEquation) -> ReactionEquation:
     """
     Remove compounds that are duplicated in the same category
     """
-    groups_without_duplicates = (remove_duplicates(group) for group in reaction)
-    return ReactionEquation(*groups_without_duplicates)
+    return apply_to_compound_groups(reaction, remove_duplicates)
 
 
 def cleanup_compounds(reaction: ReactionEquation) -> ReactionEquation:
