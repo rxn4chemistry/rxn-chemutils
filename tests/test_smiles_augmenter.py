@@ -101,29 +101,21 @@ def test_smiles_augmentation_only_with_probability() -> None:
 
 
 def test_mix_augmentation_and_shuffling() -> None:
-    def dummy_augmentation(smiles: str) -> str:
-        # shuffle the letters of the SMILES (for maximizing randomness)
-        letters = list(smiles)
-        random.shuffle(letters)
-        return "".join(letters)
-
     augmenter = SmilesAugmenter(
-        augmentation_fn=dummy_augmentation, augmentation_probability=0.5, shuffle=True
+        augmentation_fn=randomize_smiles_rotated,
+        augmentation_probability=0.5,
+        shuffle=True,
     )
 
-    # To illustrate the behavior when having both SMILES augmentation and shuffling,
-    # we inspect the number of samples being generated at different probabilities.
-    # We expect least variability when the augmentation probability is low, and
-    # maximal variability when the probability is high (already with a probability
-    # of 0.5, all the strings will likely be different).
-    augmenter.augmentation_probability = 0.0
-    assert 10 < len(set(augmenter.augment(rxn_smiles_3, 100))) < 14
-    augmenter.augmentation_probability = 0.05
-    assert 20 < len(set(augmenter.augment(rxn_smiles_3, 100))) < 30
-    augmenter.augmentation_probability = 0.1
-    assert 40 < len(set(augmenter.augment(rxn_smiles_3, 100))) < 60
-    augmenter.augmentation_probability = 0.5
-    assert 90 < len(set(augmenter.augment(rxn_smiles_3, 100)))
+    random.seed(42)
+    assert augmenter.augment(rxn_smiles_3, 6) == [
+        "NCC.CC(=O)Cl.[Cl-]~[Na+]>>Cl.CC(=O)NCC",
+        "NCC.ClC(=O)C.[Na+]~[Cl-]>>Cl.N(CC)C(C)=O",
+        "C(=O)(Cl)C.[Na+]~[Cl-].CCN>>CC(=O)NCC.Cl",
+        "NCC.CC(=O)Cl.[Na+]~[Cl-]>>CC(=O)NCC.Cl",
+        "NCC.[Na+]~[Cl-].CC(=O)Cl>>Cl.CC(=O)NCC",
+        "CC(=O)Cl.[Na+]~[Cl-].C(C)N>>CC(=O)NCC.Cl",
+    ]
 
 
 def test_reproducibility() -> None:
