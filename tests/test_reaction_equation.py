@@ -6,6 +6,7 @@ from rxn.chemutils.conversion import canonicalize_smiles
 from rxn.chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
 from rxn.chemutils.reaction_equation import (
     ReactionEquation,
+    apply_to_compound_groups,
     apply_to_compounds,
     canonicalize_compounds,
     cleanup_compounds,
@@ -15,7 +16,6 @@ from rxn.chemutils.reaction_equation import (
     remove_precursors_from_products,
     rxn_standardization,
     sort_compounds,
-    apply_to_compound_groups,
 )
 
 

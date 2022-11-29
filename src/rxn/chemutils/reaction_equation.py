@@ -46,9 +46,7 @@ class ReactionEquation:
         Overwrite init function in order to enable instantiation from any iterator and
         to force copying the lists.
         """
-        self.__attrs_init__(  # type: ignore
-            list(reactants), list(agents), list(products)
-        )
+        self.__attrs_init__(list(reactants), list(agents), list(products))
 
     def __iter__(self) -> Iterator[List[str]]:
         """Helper function to simplify functionality acting on all three

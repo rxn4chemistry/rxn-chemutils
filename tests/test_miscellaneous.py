@@ -6,6 +6,7 @@ import pytest
 from rxn.chemutils.exceptions import InvalidReactionSmiles, InvalidSmiles
 from rxn.chemutils.miscellaneous import (
     apply_to_any_smiles,
+    apply_to_smiles_groups,
     atom_type_counter,
     canonicalize_any,
     equivalent_smiles,
@@ -13,7 +14,6 @@ from rxn.chemutils.miscellaneous import (
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
     sort_any,
-    apply_to_smiles_groups,
 )
 
 
@@ -101,8 +101,13 @@ def test_apply_to_any_smiles() -> None:
         return smiles + "0"
 
     # Single-component SMILES
-    # Note: the first one is not considered to be a multi-component SMILES!
+    # Note: the first one is not considered to be a multi-component SMILES,
+    # except with the "force_multicomponent" flag.
     assert apply_to_any_smiles("A.C.C.B", dummy) == "A.C.C.B0"
+    assert (
+        apply_to_any_smiles("A.C.C.B", dummy, force_multicomponent=True)
+        == "A0.C0.C0.B0"
+    )
     assert apply_to_any_smiles("CBA", dummy) == "CBA0"
 
     # Multi-component SMILES (note that here, the fragments are not reordered)

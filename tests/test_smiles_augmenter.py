@@ -1,8 +1,10 @@
-from rxn.utilities.basic import identity
+import random
 
-from rxn.chemutils.extended_reaction_smiles import to_extended_reaction_smiles
-from rxn.chemutils.reaction_smiles import parse_any_reaction_smiles
+from rxn.utilities.basic import identity
+from rxn.utilities.containers import all_identical
+
 from rxn.chemutils.smiles_augmenter import SmilesAugmenter
+from rxn.chemutils.smiles_randomization import randomize_smiles_rotated
 
 single_compound = "O=C(C)Oc1ccccc1C(=O)O"
 salt_compound = "CC[NH+](CC)CC.CC(=O)[O-]"
@@ -35,13 +37,110 @@ def test_shuffling_only() -> None:
     # On single compound: no change at all
     assert augmenter.augment_one(single_compound, 4) == 4 * [single_compound]
 
-    # On salt compound: reorders it
-    inverted_salt_compound = "CC(=O)[O-].CC[NH+](CC)CC"
-    assert set(augmenter.augment_one(salt_compound, 20)) == {
-        salt_compound,
-        inverted_salt_compound,
+    # On salt compound: just reorders it -> 2 possible combinations
+    assert len(set(augmenter.augment_one(salt_compound, 20))) == 2
+
+    # On multismiles: fragments stay together; this leads to a total of 6 combinations
+    assert len(set(augmenter.augment_one(multismiles, 60))) == 6
+
+    # On reaction SMILES with two products: 6 combinations for precursors, 2 for products
+    assert len(set(augmenter.augment_one(rxn_smiles_3, 150))) == 12
+
+
+def test_smiles_augmentation_only() -> None:
+    def dummy_augmentation(smiles: str) -> str:
+        # Replace the SMILES strings by their lengths.
+        return str(len(smiles))
+
+    augmenter = SmilesAugmenter(augmentation_fn=dummy_augmentation, shuffle=False)
+
+    query_and_expected = [
+        (single_compound, "21"),
+        (salt_compound, "13.10"),
+        (multismiles, "21.2.11"),
+        (rxn_smiles_1, "8.3.11>>9"),
+        (rxn_smiles_2, "8.3.11>>9"),
+        (rxn_smiles_3, "8.3.11>>9.2"),
+    ]
+    for query, expected in query_and_expected:
+        # Note: no randomness, as the dummy augmentation is not random, and
+        # there is no shuffling
+        assert augmenter.augment_one(query, 4) == 4 * [expected]
+
+
+def test_smiles_augmentation_only_with_probability() -> None:
+    def dummy_augmentation(smiles: str) -> str:
+        # Replace the SMILES strings by their lengths.
+        return str(len(smiles))
+
+    augmenter = SmilesAugmenter(
+        augmentation_fn=dummy_augmentation, augmentation_probability=0.5, shuffle=False
+    )
+
+    # On single compound: either augmented or not
+    assert set(augmenter.augment_one(single_compound, 10)) == {"21", single_compound}
+
+    # To illustrate the behavior on strings with multiple SMILES, we just test it on
+    # the multismiles input. There will be a mix of replaced and not replaced
+    assert set(augmenter.augment_one(multismiles, 50)) == {
+        "O=C(C)Oc1ccccc1C(=O)O.Cl.[Na+]~[Cl-]",
+        "21.Cl.[Na+]~[Cl-]",
+        "O=C(C)Oc1ccccc1C(=O)O.2.[Na+]~[Cl-]",
+        "O=C(C)Oc1ccccc1C(=O)O.Cl.11",
+        "21.2.[Na+]~[Cl-]",
+        "21.Cl.11",
+        "O=C(C)Oc1ccccc1C(=O)O.2.11",
+        "21.2.11",
     }
 
+    # No augmentation at all if the probability is zero
+    augmenter = SmilesAugmenter(
+        augmentation_fn=dummy_augmentation, augmentation_probability=0.0, shuffle=False
+    )
+    assert set(augmenter.augment_one(multismiles, 10)) == {multismiles}
 
-def test_exceptions() -> None:
-    pass
+
+def test_mix_augmentation_and_shuffling() -> None:
+    def dummy_augmentation(smiles: str) -> str:
+        # shuffle the letters of the SMILES (for maximizing randomness)
+        letters = list(smiles)
+        random.shuffle(letters)
+        return "".join(letters)
+
+    augmenter = SmilesAugmenter(
+        augmentation_fn=dummy_augmentation, augmentation_probability=0.5, shuffle=True
+    )
+
+    # To illustrate the behavior when having both SMILES augmentation and shuffling,
+    # we inspect the number of samples being generated at different probabilities.
+    # We expect least variability when the augmentation probability is low, and
+    # maximal variability when the probability is high (already with a probability
+    # of 0.5, all the strings will likely be different).
+    augmenter.augmentation_probability = 0.0
+    assert 10 < len(set(augmenter.augment_one(rxn_smiles_3, 100))) < 14
+    augmenter.augmentation_probability = 0.05
+    assert 20 < len(set(augmenter.augment_one(rxn_smiles_3, 100))) < 30
+    augmenter.augmentation_probability = 0.1
+    assert 40 < len(set(augmenter.augment_one(rxn_smiles_3, 100))) < 60
+    augmenter.augmentation_probability = 0.5
+    assert 90 < len(set(augmenter.augment_one(rxn_smiles_3, 100)))
+
+
+def test_reproducibility() -> None:
+    # illustrate the reproducibility at the example of a reaction SMILES
+    augmenter = SmilesAugmenter(
+        augmentation_fn=randomize_smiles_rotated,
+        augmentation_probability=0.5,
+        shuffle=True,
+    )
+
+    # When resetting the seed, we should always get exactly the same results
+    results = []
+    for _ in range(10):
+        random.seed(42)
+        results.append(augmenter.augment_one(rxn_smiles_3, 5))
+    assert all_identical(results)
+
+    # sampling one more time without resetting the seed -> results change
+    results.append(augmenter.augment_one(rxn_smiles_3, 5))
+    assert not all_identical(results)

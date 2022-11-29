@@ -1,14 +1,7 @@
 import random
-from typing import Callable, Iterable, Iterator, List
+from typing import Callable, List
 
 from .miscellaneous import apply_to_any_smiles, apply_to_smiles_groups
-from .reaction_equation import ReactionEquation
-from .reaction_smiles import parse_any_reaction_smiles
-from .smiles_randomization import (
-    randomize_smiles_restricted,
-    randomize_smiles_rotated,
-    randomize_smiles_unrestricted,
-)
 
 
 class SmilesAugmenter:
@@ -46,7 +39,9 @@ class SmilesAugmenter:
 
         # SMILES augmentation
         augmented = [
-            apply_to_any_smiles(smiles, self.augmentation_fn)
+            apply_to_any_smiles(
+                smiles, self._augment_with_probability, force_multicomponent=True
+            )
             for _ in range(number_augmentations)
         ]
 
@@ -57,51 +52,20 @@ class SmilesAugmenter:
 
         return augmented
 
+    def _augment_with_probability(self, smiles: str) -> str:
+        """Augmentation a SMILES, with the probability given by the member variable."""
+
+        # Note: no need to call random.uniform if the augmentation probability is 1.0.
+        if (
+            self.augmentation_probability == 1.0
+            or random.uniform(0, 1) <= self.augmentation_probability
+        ):
+            return self.augmentation_fn(smiles)
+
+        return smiles
+
     @staticmethod
     def _shuffle(smiles_list: List[str]) -> List[str]:
         smiles_list = smiles_list.copy()
         random.shuffle(smiles_list)
         return smiles_list
-
-    # def augment_many(
-    #     self, smiles_strings: Iterable[str], number_augmentations: int
-    # ) -> Iterator[List[str]]:
-    #     """
-    #     Augment many SMILES strings (of any kind).
-    #
-    #     Args:
-    #         smiles_strings: iterable over SMILES strings.
-    #         number_augmentations: how many times to augment each SMILES string.
-    #
-    #     Returns:
-    #         Iterator over the augmentations
-    #     """
-    #     for smiles in smiles_strings:
-    #         yield self.augment_one(smiles, number_augmentations)
-
-
-randomization_functions = [
-    randomize_smiles_rotated,
-    randomize_smiles_unrestricted,
-    randomize_smiles_restricted,
-]
-
-fn = randomization_functions[0]
-
-random.seed(42)
-
-rxn_smiles = "CC(C)c1ccc(C(=O)CCCCl)cc1.ClC(Cl)(Cl)Cl.O=C(OOC(=O)c1ccccc1)c1ccccc1.O=C1CCC(=O)N1Br>>CC(C)(Br)c1ccc(C(=O)CCCCl)cc1"
-print(rxn_smiles)
-
-reaction: ReactionEquation = parse_any_reaction_smiles(rxn_smiles)
-
-
-for _ in range(10):
-    reactants = [fn(smiles) for smiles in reaction.reactants]
-    products = [fn(smiles) for smiles in reaction.products]
-
-    random.shuffle(reactants)
-    random.shuffle(products)
-
-    augmented_reaction = ReactionEquation(reactants, [], products)
-    print(augmented_reaction.to_string(fragment_bond="~"))
