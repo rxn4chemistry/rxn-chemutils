@@ -14,6 +14,7 @@ from rxn.chemutils.miscellaneous import (
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
     sort_any,
+    get_individual_compounds,
 )
 
 
@@ -192,3 +193,28 @@ def test_sort_any() -> None:
     # reaction SMILES
     assert sort_any("B.A.E~D.A>>C.B") == "A.A.B.E~D>>B.C"
     assert sort_any("B.A.E.D.A>>C.B |f:2.3|") == "A.A.B.E.D>>B.C |f:3.4|"
+
+
+def test_get_individual_compounds() -> None:
+    # Single-component SMILES and/or multi-component SMILES
+    assert get_individual_compounds("A.C.C.B") == ["A", "C", "C", "B"]
+    assert get_individual_compounds("A.D~C.B") == ["A", "D.C", "B"]
+    assert get_individual_compounds("CBA") == ["CBA"]
+
+    # reaction SMILES
+    assert get_individual_compounds("B.A.E~D.A>>C.B") == [
+        "B",
+        "A",
+        "E.D",
+        "A",
+        "C",
+        "B",
+    ]
+    assert get_individual_compounds("B.A.E.D.A>>C.B |f:2.3|") == [
+        "B",
+        "A",
+        "A",
+        "E.D",  # Note that it is located elsewhere, due to how extended SMILES are parsed
+        "C",
+        "B",
+    ]
