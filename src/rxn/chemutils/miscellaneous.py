@@ -19,7 +19,12 @@ from .reaction_equation import (
     apply_to_compounds,
     sort_compounds,
 )
-from .reaction_smiles import determine_format, parse_reaction_smiles, to_reaction_smiles
+from .reaction_smiles import (
+    determine_format,
+    parse_any_reaction_smiles,
+    parse_reaction_smiles,
+    to_reaction_smiles,
+)
 
 CHIRAL_CENTER_PATTERN = re.compile(
     r"\[([^],@]+)@+([^]]*)]"
@@ -220,3 +225,29 @@ def sort_any(any_smiles: str) -> str:
     else:
         # we call the same function for single- and multi-component SMILES
         return sort_multicomponent_smiles(any_smiles)
+
+
+def get_individual_compounds(any_smiles: str) -> List[str]:
+    """
+    Get the individual compound SMILES strings starting from any SMILES string
+    (multicomponent SMILES, reaction SMILES).
+
+    Single-component SMILES with dots are interpreted as multicomponent SMILES strings.
+
+    Args:
+        any_smiles: any kind of SMILES string.
+
+    Raises:
+        Exception: different kinds of exception may be raised during parsing.
+
+    Returns:
+        List of individual compound SMILES.
+    """
+    if ">" in any_smiles:
+        # We have a reaction SMILES
+        reaction = parse_any_reaction_smiles(any_smiles)
+        return list(reaction.iter_all_smiles())
+    else:
+        # We interpret it as a multicomponent SMILES.
+        # We use "~" as a fragment bond even if it is not actually needed.
+        return multicomponent_smiles_to_list(any_smiles, fragment_bond="~")
