@@ -72,7 +72,7 @@
 
 
 <div class="viewcode-block" id="SmilesAugmenter"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_augmenter.SmilesAugmenter.html#rxn.chemutils.smiles_augmenter.SmilesAugmenter">[docs]</a><span class="k">class</span> <span class="nc">SmilesAugmenter</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class to augment any kind of SMILES string with the help of randomization</span>
 <span class="sd">    and shuffling.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -83,7 +83,7 @@
         <span class="n">augmentation_probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
 <span class="sd">            augmentation_fn: Function for augmenting the individual SMILES strings,</span>
 <span class="sd">                such as the functions provided in smiles_randomization.py.</span>
@@ -96,7 +96,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span></div>
 
 <div class="viewcode-block" id="SmilesAugmenter.augment"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_augmenter.SmilesAugmenter.html#rxn.chemutils.smiles_augmenter.SmilesAugmenter.augment">[docs]</a>    <span class="k">def</span> <span class="nf">augment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">number_augmentations</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Augment one SMILES string (of any kind).</span>
 
 <span class="sd">        Args:</span>
@@ -121,7 +121,7 @@
         <span class="k">return</span> <span class="n">augmented</span></div>
 
     <span class="k">def</span> <span class="nf">_augment_with_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Augmentat a SMILES, with the probability given by the member variable.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Augmentat a SMILES, with the probability given by the member variable.&quot;&quot;&quot;</span>
 
         <span class="c1"># Note: no need to call random.uniform if the augmentation probability is 1.0.</span>
         <span class="k">if</span> <span class="p">(</span>

@@ -94,7 +94,7 @@
 <div class="viewcode-block" id="smiles_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.smiles_to_mol.html#rxn.chemutils.conversion.smiles_to_mol">[docs]</a><span class="k">def</span> <span class="nf">smiles_to_mol</span><span class="p">(</span>
     <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">find_radicals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a SMILES string to an RDKit Mol.</span>
 
 <span class="sd">    Mainly a wrapper around MolFromSmiles that raises InvalidSmiles when necessary.</span>
@@ -134,7 +134,7 @@
 
 
 <div class="viewcode-block" id="inchi_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.inchi_to_mol.html#rxn.chemutils.conversion.inchi_to_mol">[docs]</a><span class="k">def</span> <span class="nf">inchi_to_mol</span><span class="p">(</span><span class="n">inchi</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">removeHs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an InChI string to an RDKit Mol.</span>
 
 <span class="sd">    Mainly a wrapper around MolFromInchi that raises MolFromInchi when necessary.</span>
@@ -159,7 +159,7 @@
 
 
 <div class="viewcode-block" id="mol_to_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mol_to_smiles.html#rxn.chemutils.conversion.mol_to_smiles">[docs]</a><span class="k">def</span> <span class="nf">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">,</span> <span class="n">canonical</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an RDKit Mol to a SMILES string.</span>
 
 <span class="sd">    Mainly a wrapper around MolToSmiles.</span>
@@ -168,7 +168,7 @@
 
 
 <div class="viewcode-block" id="mdl_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mdl_to_mol.html#rxn.chemutils.conversion.mdl_to_mol">[docs]</a><span class="k">def</span> <span class="nf">mdl_to_mol</span><span class="p">(</span><span class="n">mdl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an MDL Mol string to an RDKit Mol.</span>
 
 <span class="sd">    Mainly a wrapper around MolFromMolBlock that raises InvalidMdl when necessary.</span>
@@ -192,7 +192,7 @@
 
 
 <div class="viewcode-block" id="mol_to_mdl"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mol_to_mdl.html#rxn.chemutils.conversion.mol_to_mdl">[docs]</a><span class="k">def</span> <span class="nf">mol_to_mdl</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an RDKit Mol to an MDL Mol string.</span>
 
 <span class="sd">    Mainly a wrapper around MolToMolBlock.</span>
@@ -206,7 +206,7 @@
     <span class="n">include_sanitizations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">SanitizeFlags</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">exclude_sanitizations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">SanitizeFlags</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize an RDKit Mol with the specification of sanitizations to include or</span>
 <span class="sd">    to exclude.</span>
 
@@ -243,7 +243,7 @@
 
 
 <div class="viewcode-block" id="remove_hydrogens"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.remove_hydrogens.html#rxn.chemutils.conversion.remove_hydrogens">[docs]</a><span class="k">def</span> <span class="nf">remove_hydrogens</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove unnecessary hydrogens in a molecule.</span>
 
 <span class="sd">    NB: The sanitization that is otherwise automatically done by RDKit is disabled.</span>
@@ -255,7 +255,7 @@
 
 
 <div class="viewcode-block" id="canonicalize_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.canonicalize_smiles.html#rxn.chemutils.conversion.canonicalize_smiles">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Canonicalize a SMILES string for a molecule.</span>
 
 <span class="sd">    Args:</span>
@@ -288,7 +288,7 @@
 
 
 <div class="viewcode-block" id="maybe_canonicalize"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.maybe_canonicalize.html#rxn.chemutils.conversion.maybe_canonicalize">[docs]</a><span class="k">def</span> <span class="nf">maybe_canonicalize</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Canonicalize a SMILES string, but returns the original SMILES string if it fails.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
@@ -298,7 +298,7 @@
 
 
 <div class="viewcode-block" id="smiles_to_inchi"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.smiles_to_inchi.html#rxn.chemutils.conversion.smiles_to_inchi">[docs]</a><span class="k">def</span> <span class="nf">smiles_to_inchi</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extended_tautomer_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the InChI string for a given SMILES.</span>
 
 <span class="sd">    Args:</span>
@@ -325,7 +325,7 @@
 
 
 <div class="viewcode-block" id="mol_to_inchi"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mol_to_inchi.html#rxn.chemutils.conversion.mol_to_inchi">[docs]</a><span class="k">def</span> <span class="nf">mol_to_inchi</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">,</span> <span class="n">extended_tautomer_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an RDKit Mol to an InChI.</span>
 
 <span class="sd">    Args:</span>
@@ -346,7 +346,7 @@
 
 
 <div class="viewcode-block" id="cleanup_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.cleanup_smiles.html#rxn.chemutils.conversion.cleanup_smiles">[docs]</a><span class="k">def</span> <span class="nf">cleanup_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cleanup a SMILES string, doing the bare minimum.</span>
 
 <span class="sd">    This means that no canonicalization, no valence check, no kekulization, etc,</span>
@@ -368,7 +368,7 @@
 
 
 <div class="viewcode-block" id="split_smiles_and_fragment_info"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.split_smiles_and_fragment_info.html#rxn.chemutils.conversion.split_smiles_and_fragment_info">[docs]</a><span class="k">def</span> <span class="nf">split_smiles_and_fragment_info</span><span class="p">(</span><span class="n">reaction_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The reaction SMILES from Pistachio sometimes contain fraction information</span>
 <span class="sd">    at the end of the given string. This function splits both parts of the</span>
 <span class="sd">    reaction SMILES.</span>

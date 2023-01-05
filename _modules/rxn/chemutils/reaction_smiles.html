@@ -83,7 +83,7 @@
 
 
 <div class="viewcode-block" id="ReactionFormat"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.ReactionFormat.html#rxn.chemutils.reaction_smiles.ReactionFormat">[docs]</a><span class="k">class</span> <span class="nc">ReactionFormat</span><span class="p">(</span><span class="n">RxnEnum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Existing reaction SMILES formats.</span>
 
 <span class="sd">    Attributes:</span>
@@ -100,7 +100,7 @@
 
 
 <div class="viewcode-block" id="determine_format"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.determine_format.html#rxn.chemutils.reaction_smiles.determine_format">[docs]</a><span class="k">def</span> <span class="nf">determine_format</span><span class="p">(</span><span class="n">reaction_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionFormat</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Determine the format of a reaction SMILES.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot; |&quot;</span> <span class="ow">in</span> <span class="n">reaction_smiles</span><span class="p">:</span>
@@ -113,7 +113,7 @@
 
 
 <div class="viewcode-block" id="parse_any_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.parse_any_reaction_smiles.html#rxn.chemutils.reaction_smiles.parse_any_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">parse_any_reaction_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a reaction SMILES in any format (will be determined automatically).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">parse_reaction_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">reaction_format</span><span class="o">=</span><span class="n">determine_format</span><span class="p">(</span><span class="n">smiles</span><span class="p">))</span></div>
@@ -122,7 +122,7 @@
 <div class="viewcode-block" id="parse_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.parse_reaction_smiles.html#rxn.chemutils.reaction_smiles.parse_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">parse_reaction_smiles</span><span class="p">(</span>
     <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reaction_format</span><span class="p">:</span> <span class="n">ReactionFormat</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse the reaction SMILES in a given format.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">EXTENDED</span><span class="p">:</span>
@@ -140,7 +140,7 @@
 <div class="viewcode-block" id="to_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.reaction_smiles.to_reaction_smiles.html#rxn.chemutils.reaction_smiles.to_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">to_reaction_smiles</span><span class="p">(</span>
     <span class="n">reaction_equation</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">,</span> <span class="n">reaction_format</span><span class="p">:</span> <span class="n">ReactionFormat</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a reaction equation into a reaction SMILES of the specified format.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">reaction_format</span> <span class="ow">is</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">EXTENDED</span><span class="p">:</span>

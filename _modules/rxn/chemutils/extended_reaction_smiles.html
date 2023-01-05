@@ -89,7 +89,7 @@
 <div class="viewcode-block" id="parse_extended_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.extended_reaction_smiles.parse_extended_reaction_smiles.html#rxn.chemutils.extended_reaction_smiles.parse_extended_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">parse_extended_reaction_smiles</span><span class="p">(</span>
     <span class="n">extended_reaction_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">remove_atom_maps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an extended reaction SMILES (with potential fragment information)</span>
 <span class="sd">    to a ReactionEquation instance.</span>
 
@@ -106,7 +106,7 @@
 
 
 <div class="viewcode-block" id="to_extended_reaction_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.extended_reaction_smiles.to_extended_reaction_smiles.html#rxn.chemutils.extended_reaction_smiles.to_extended_reaction_smiles">[docs]</a><span class="k">def</span> <span class="nf">to_extended_reaction_smiles</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span> <span class="n">ReactionEquation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a ReactionEquation instance to an extended reaction SMILES (with</span>
 <span class="sd">    potential fragment information).</span>
 
@@ -120,7 +120,7 @@
 
 
 <span class="k">class</span> <span class="nc">_Importer</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert extended reaction SMILES to ReactionEquation instances.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -128,7 +128,7 @@
     <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span>
         <span class="n">extended_reaction_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">remove_atom_maps</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReactionEquation</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert an extended SMILES to a reaction equation.</span>
 
 <span class="sd">        Used to rely more on RDKit; now does as few RDKit operations as necessary.</span>
@@ -165,7 +165,7 @@
     <span class="k">def</span> <span class="nf">group_fragments</span><span class="p">(</span>
         <span class="n">raw_smiles_groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">fragment_groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Merge the reaction fragments belonging together.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">merged_groups</span> <span class="o">=</span> <span class="p">[]</span>
@@ -182,7 +182,7 @@
 
 
 <span class="k">class</span> <span class="nc">_Exporter</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert ReactionEquation to extended reaction SMILES with fragment information.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -215,7 +215,7 @@
     <span class="k">def</span> <span class="nf">fragment_group</span><span class="p">(</span>
         <span class="n">compounds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a group of molecules, some of which possibly are composed of several fragments,</span>
 <span class="sd">        to the list of SMILES to put in the final reaction SMILES, and a list of groups of molecules</span>
 <span class="sd">        belonging together.</span>
@@ -257,7 +257,7 @@
 
 
 <div class="viewcode-block" id="determine_fragment_groups"><a class="viewcode-back" href="../../../generated/rxn.chemutils.extended_reaction_smiles.determine_fragment_groups.html#rxn.chemutils.extended_reaction_smiles.determine_fragment_groups">[docs]</a><span class="k">def</span> <span class="nf">determine_fragment_groups</span><span class="p">(</span><span class="n">extended_reaction_info</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    From the fragment info string (such as ``|f:0.2,5.6|``), determine the groups</span>
 <span class="sd">    of indices that must be grouped.</span>
 
@@ -290,7 +290,7 @@
 <div class="viewcode-block" id="merge_molecules_from_fragment_groups"><a class="viewcode-back" href="../../../generated/rxn.chemutils.extended_reaction_smiles.merge_molecules_from_fragment_groups.html#rxn.chemutils.extended_reaction_smiles.merge_molecules_from_fragment_groups">[docs]</a><span class="k">def</span> <span class="nf">merge_molecules_from_fragment_groups</span><span class="p">(</span>
     <span class="n">smiles_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">fragment_groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combine molecules according to the fragment definition.</span>
 
 <span class="sd">    Args:</span>

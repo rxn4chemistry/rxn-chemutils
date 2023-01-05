@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.get\_individual\_compounds
+======================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: get_individual_compounds
