@@ -20,8 +20,10 @@ from .reaction_equation import (
     sort_compounds,
 )
 from .reaction_smiles import (
-    determine_format, parse_reaction_smiles, to_reaction_smiles,
-    parse_any_reaction_smiles
+    determine_format,
+    parse_any_reaction_smiles,
+    parse_reaction_smiles,
+    to_reaction_smiles,
 )
 
 CHIRAL_CENTER_PATTERN = re.compile(

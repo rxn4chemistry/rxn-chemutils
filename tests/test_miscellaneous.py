@@ -10,11 +10,11 @@ from rxn.chemutils.miscellaneous import (
     atom_type_counter,
     canonicalize_any,
     equivalent_smiles,
+    get_individual_compounds,
     is_valid_smiles,
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
     sort_any,
-    get_individual_compounds,
 )
 
 
