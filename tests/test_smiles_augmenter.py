@@ -142,8 +142,7 @@ def test_reproducibility() -> None:
 
 def test_augmentation_errors() -> None:
     augmenter = SmilesAugmenter(
-        augmentation_fn=randomize_smiles_rotated,
-        ignore_augmentation_errors=True,
+        augmentation_fn=randomize_smiles_rotated, ignore_exceptions=True
     )
 
     invalid_smiles = "thisisinvalid"
@@ -152,6 +151,6 @@ def test_augmentation_errors() -> None:
     assert augmenter.augment(invalid_smiles, 1) == [invalid_smiles]
 
     # When errors are not ignored: raises an exception
-    augmenter.ignore_augmentation_errors = False
+    augmenter.ignore_exceptions = False
     with pytest.raises(InvalidSmiles):
         _ = augmenter.augment(invalid_smiles, 1)

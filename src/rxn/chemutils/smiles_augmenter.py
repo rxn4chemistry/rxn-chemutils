@@ -19,7 +19,7 @@ class SmilesAugmenter:
         augmentation_fn: Callable[[str], str],
         augmentation_probability: float = 1.0,
         shuffle: bool = True,
-        ignore_augmentation_errors: bool = True,
+        ignore_exceptions: bool = True,
     ):
         """
         Args:
@@ -28,14 +28,14 @@ class SmilesAugmenter:
             augmentation_probability: Probability with which to augment individual
                 SMILES strings.
             shuffle: Whether to shuffle the order of the compounds.
-            ignore_augmentation_errors: Whether to ignore the error (and return the
+            ignore_exceptions: Whether to ignore the error (and return the
                 original string) when an augmentation fails. If False, exceptions
                 will be propagated.
         """
         self.augmentation_fn = augmentation_fn
         self.augmentation_probability = augmentation_probability
         self.shuffle = shuffle
-        self.ignore_augmentation_errors = ignore_augmentation_errors
+        self.ignore_exceptions = ignore_exceptions
 
     def augment(self, smiles: str, number_augmentations: int) -> List[str]:
         """
@@ -73,7 +73,7 @@ class SmilesAugmenter:
             try:
                 return self.augmentation_fn(smiles)
             except Exception as e:
-                if self.ignore_augmentation_errors:
+                if self.ignore_exceptions:
                     logger.warning(f"Augmentation failed for {smiles}: {e}")
                     return smiles
                 else:
