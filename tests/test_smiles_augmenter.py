@@ -1,8 +1,10 @@
 import random
 
+import pytest
 from rxn.utilities.basic import identity
 from rxn.utilities.containers import all_identical
 
+from rxn.chemutils.exceptions import InvalidSmiles
 from rxn.chemutils.smiles_augmenter import SmilesAugmenter
 from rxn.chemutils.smiles_randomization import randomize_smiles_rotated
 
@@ -136,3 +138,20 @@ def test_reproducibility() -> None:
     # sampling one more time without resetting the seed -> results change
     results.append(augmenter.augment(rxn_smiles_3, 5))
     assert not all_identical(results)
+
+
+def test_augmentation_errors() -> None:
+    augmenter = SmilesAugmenter(
+        augmentation_fn=randomize_smiles_rotated,
+        ignore_augmentation_errors=True,
+    )
+
+    invalid_smiles = "thisisinvalid"
+
+    # When errors are ignored: returns the original input
+    assert augmenter.augment(invalid_smiles, 1) == [invalid_smiles]
+
+    # When errors are not ignored: raises an exception
+    augmenter.ignore_augmentation_errors = False
+    with pytest.raises(InvalidSmiles):
+        _ = augmenter.augment(invalid_smiles, 1)
