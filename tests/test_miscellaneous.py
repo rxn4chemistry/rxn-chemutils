@@ -12,10 +12,12 @@ from rxn.chemutils.miscellaneous import (
     equivalent_smiles,
     get_individual_compounds,
     is_valid_smiles,
+    merge_reactions,
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
     sort_any,
 )
+from rxn.chemutils.reaction_equation import ReactionEquation
 
 
 def test_equivalent_smiles() -> None:
@@ -217,3 +219,25 @@ def test_get_individual_compounds() -> None:
         "C",
         "B",
     ]
+
+
+def test_merge_reactions() -> None:
+    # No reaction given
+    assert merge_reactions() == ReactionEquation([], [], [])
+
+    # one reaction
+    r1 = ReactionEquation(["A", "B"], ["C"], ["D"])
+    assert merge_reactions(r1) == r1
+
+    # two reactions
+    r2 = ReactionEquation(["F"], ["G"], [])
+    assert merge_reactions(r1, r2) == ReactionEquation(
+        ["A", "B", "F"], ["C", "G"], ["D"]
+    )
+
+    # more than two reactions
+    r3 = ReactionEquation([], ["H"], [])
+    r4 = ReactionEquation([], [], ["I"])
+    assert merge_reactions(r1, r2, r3, r4) == ReactionEquation(
+        ["A", "B", "F"], ["C", "G", "H"], ["D", "I"]
+    )
