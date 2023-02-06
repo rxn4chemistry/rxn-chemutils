@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rxn.chemutils.miscellaneous.get_individual_compounds &mdash; RXN chemutils 0.1 documentation</title>
+  <title>rxn.chemutils.miscellaneous.merge_reactions &mdash; RXN chemutils 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.miscellaneous.is_valid_smiles" href="rxn.chemutils.miscellaneous.is_valid_smiles.html" />
-    <link rel="prev" title="rxn.chemutils.miscellaneous.equivalent_smiles" href="rxn.chemutils.miscellaneous.equivalent_smiles.html" /> 
+    <link rel="next" title="rxn.chemutils.miscellaneous.remove_chiral_centers" href="rxn.chemutils.miscellaneous.remove_chiral_centers.html" />
+    <link rel="prev" title="rxn.chemutils.miscellaneous.is_valid_smiles" href="rxn.chemutils.miscellaneous.is_valid_smiles.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,9 +51,9 @@
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.atom_type_counter.html">rxn.chemutils.miscellaneous.atom_type_counter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_any.html">rxn.chemutils.miscellaneous.canonicalize_any</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.equivalent_smiles.html">rxn.chemutils.miscellaneous.equivalent_smiles</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.miscellaneous.get_individual_compounds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.get_individual_compounds.html">rxn.chemutils.miscellaneous.get_individual_compounds</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.is_valid_smiles.html">rxn.chemutils.miscellaneous.is_valid_smiles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.merge_reactions.html">rxn.chemutils.miscellaneous.merge_reactions</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.miscellaneous.merge_reactions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.remove_chiral_centers.html">rxn.chemutils.miscellaneous.remove_chiral_centers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry.html">rxn.chemutils.miscellaneous.remove_double_bond_stereochemistry</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.sort_any.html">rxn.chemutils.miscellaneous.sort_any</a></li>
@@ -91,9 +91,9 @@
           <li><a href="../api.html">API</a> &raquo;</li>
           <li><a href="rxn.chemutils.html">rxn.chemutils</a> &raquo;</li>
           <li><a href="rxn.chemutils.miscellaneous.html">rxn.chemutils.miscellaneous</a> &raquo;</li>
-      <li>rxn.chemutils.miscellaneous.get_individual_compounds</li>
+      <li>rxn.chemutils.miscellaneous.merge_reactions</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/rxn.chemutils.miscellaneous.get_individual_compounds.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/rxn.chemutils.miscellaneous.merge_reactions.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -101,26 +101,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="rxn-chemutils-miscellaneous-get-individual-compounds">
-<h1>rxn.chemutils.miscellaneous.get_individual_compounds<a class="headerlink" href="#rxn-chemutils-miscellaneous-get-individual-compounds" title="Permalink to this heading"></a></h1>
+  <section id="rxn-chemutils-miscellaneous-merge-reactions">
+<h1>rxn.chemutils.miscellaneous.merge_reactions<a class="headerlink" href="#rxn-chemutils-miscellaneous-merge-reactions" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="rxn.chemutils.miscellaneous.get_individual_compounds">
-<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">get_individual_compounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">any_smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/miscellaneous.html#get_individual_compounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.miscellaneous.get_individual_compounds" title="Permalink to this definition"></a></dt>
-<dd><p>Get the individual compound SMILES strings starting from any SMILES string
-(multicomponent SMILES, reaction SMILES).</p>
-<p>Single-component SMILES with dots are interpreted as multicomponent SMILES strings.</p>
+<dt class="sig sig-object py" id="rxn.chemutils.miscellaneous.merge_reactions">
+<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">merge_reactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">reactions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/miscellaneous.html#merge_reactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.miscellaneous.merge_reactions" title="Permalink to this definition"></a></dt>
+<dd><p>Merge several reactions into one.</p>
+<p>Useful when ReactionEquation is used to store partial equations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>any_smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – any kind of SMILES string.</p>
+<dd class="field-odd"><p><strong>reactions</strong> (<a class="reference internal" href="rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation" title="rxn.chemutils.reaction_equation.ReactionEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReactionEquation</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>Exception</strong> – different kinds of exception may be raised during parsing.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of individual compound SMILES.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation" title="rxn.chemutils.reaction_equation.ReactionEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReactionEquation</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -131,8 +124,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rxn.chemutils.miscellaneous.equivalent_smiles.html" class="btn btn-neutral float-left" title="rxn.chemutils.miscellaneous.equivalent_smiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.miscellaneous.is_valid_smiles.html" class="btn btn-neutral float-right" title="rxn.chemutils.miscellaneous.is_valid_smiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.miscellaneous.is_valid_smiles.html" class="btn btn-neutral float-left" title="rxn.chemutils.miscellaneous.is_valid_smiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rxn.chemutils.miscellaneous.remove_chiral_centers.html" class="btn btn-neutral float-right" title="rxn.chemutils.miscellaneous.remove_chiral_centers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

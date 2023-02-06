@@ -21,6 +21,7 @@ rxn.chemutils.miscellaneous
       equivalent_smiles
       get_individual_compounds
       is_valid_smiles
+      merge_reactions
       remove_chiral_centers
       remove_double_bond_stereochemistry
       sort_any

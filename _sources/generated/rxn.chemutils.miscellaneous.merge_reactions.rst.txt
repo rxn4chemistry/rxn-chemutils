@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.merge\_reactions
+============================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: merge_reactions
