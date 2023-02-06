@@ -15,10 +15,10 @@ from .multicomponent_smiles import (
     sort_multicomponent_smiles,
 )
 from .reaction_equation import (
+    ReactionEquation,
     apply_to_compound_groups,
     apply_to_compounds,
     sort_compounds,
-    ReactionEquation,
 )
 from .reaction_smiles import (
     determine_format,

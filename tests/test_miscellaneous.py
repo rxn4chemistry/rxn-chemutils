@@ -12,10 +12,10 @@ from rxn.chemutils.miscellaneous import (
     equivalent_smiles,
     get_individual_compounds,
     is_valid_smiles,
+    merge_reactions,
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
     sort_any,
-    merge_reactions,
 )
 from rxn.chemutils.reaction_equation import ReactionEquation
 
