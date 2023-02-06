@@ -18,6 +18,7 @@ from .reaction_equation import (
     apply_to_compound_groups,
     apply_to_compounds,
     sort_compounds,
+    ReactionEquation,
 )
 from .reaction_smiles import (
     determine_format,
@@ -251,3 +252,17 @@ def get_individual_compounds(any_smiles: str) -> List[str]:
         # We interpret it as a multicomponent SMILES.
         # We use "~" as a fragment bond even if it is not actually needed.
         return multicomponent_smiles_to_list(any_smiles, fragment_bond="~")
+
+
+def merge_reactions(*reactions: ReactionEquation) -> ReactionEquation:
+    """Merge several reactions into one.
+
+    Useful when ReactionEquation is used to store partial equations."""
+    reactants = []
+    agents = []
+    products = []
+    for reaction in reactions:
+        reactants.extend(reaction.reactants)
+        agents.extend(reaction.agents)
+        products.extend(reaction.products)
+    return ReactionEquation(reactants=reactants, agents=agents, products=products)
