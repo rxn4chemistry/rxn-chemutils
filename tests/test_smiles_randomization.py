@@ -99,7 +99,6 @@ def test_reproducibility() -> None:
     adenine = "Nc1ncnc2[nH]cnc12"
 
     for fn in randomization_functions:
-
         samples = []
         for _ in range(10):
             random.seed(42)

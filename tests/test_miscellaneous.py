@@ -161,7 +161,6 @@ def test_canonicalize_any_on_multicomponent_smiles() -> None:
 
 
 def test_canonicalize_any_on_reaction_smiles() -> None:
-
     # Basic examples
     assert canonicalize_any("CC(C)>>C(O)") == "CCC>>CO"
     assert canonicalize_any("CC(C)>C(O)>C(O)") == "CCC>CO>CO"
