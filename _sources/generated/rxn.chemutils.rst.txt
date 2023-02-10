@@ -34,6 +34,7 @@
    rxn.chemutils.miscellaneous
    rxn.chemutils.multicomponent_smiles
    rxn.chemutils.rdkit_utils
+   rxn.chemutils.reaction_combiner
    rxn.chemutils.reaction_equation
    rxn.chemutils.reaction_smiles
    rxn.chemutils.scripts

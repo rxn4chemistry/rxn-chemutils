@@ -1,0 +1,26 @@
+rxn.chemutils.reaction\_combiner.ReactionCombiner
+=================================================
+
+.. currentmodule:: rxn.chemutils.reaction_combiner
+
+.. autoclass:: ReactionCombiner
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ReactionCombiner.__init__
+      ~ReactionCombiner.combine
+   
+   
+
+   
+   
+   

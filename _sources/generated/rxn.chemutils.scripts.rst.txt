@@ -29,6 +29,7 @@ rxn.chemutils.scripts
    :recursive:
 
    rxn.chemutils.scripts.canonicalize
+   rxn.chemutils.scripts.combine_reaction
    rxn.chemutils.scripts.detokenize
    rxn.chemutils.scripts.tokenize
 
