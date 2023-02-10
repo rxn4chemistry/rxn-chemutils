@@ -6,9 +6,9 @@ from rxn.chemutils.reaction_smiles import ReactionFormat
 
 
 @click.command()
-@click.argument("precursors_file")
-@click.argument("products_file")
-@click.option("--no-standardize", is_flag=True)
+@click.argument("fragments_1_file", type=click.Path(exists=True, dir_okay=False))
+@click.argument("fragments_2_file", type=click.Path(exists=True, dir_okay=False))
+@click.option("--standardize/--no-standardize", default=False)
 @click.option(
     "--reaction_format",
     type=click.Choice(
@@ -17,22 +17,26 @@ from rxn.chemutils.reaction_smiles import ReactionFormat
     default="extended",
 )
 def main(
-    precursors_file: str, products_file: str, no_standardize: bool, reaction_format: str
+    fragments_1_file: str,
+    fragments_2_file: str,
+    standardize: bool,
+    reaction_format: str,
 ) -> None:
-    """Combine precursors and products, and write the reactions into std output.
+    """Combine precursors and products (or two sets of partial reactions, and
+    write the reactions into std output.
 
     If one of both file sizes is a multiple of the other, we consider it to
     have been generated via a "top-N" prediction.
     """
-    precursors = load_list_from_file(precursors_file)
-    products = load_list_from_file(products_file)
+    fragments_1 = load_list_from_file(fragments_1_file)
+    fragments_2 = load_list_from_file(fragments_2_file)
 
     combiner = ReactionCombiner(
-        standardize=not no_standardize,
+        standardize=standardize,
         reaction_format=ReactionFormat.from_string(reaction_format),
     )
 
-    for reaction_smiles in combiner.combine(precursors, products):
+    for reaction_smiles in combiner.combine(fragments_1, fragments_2):
         print(reaction_smiles)
 
 
