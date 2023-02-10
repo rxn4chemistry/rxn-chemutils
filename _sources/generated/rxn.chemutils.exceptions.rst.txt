@@ -27,6 +27,7 @@ rxn.chemutils.exceptions
       InvalidReactionSmiles
       InvalidSmiles
       SanitizationError
+      UnclearWhetherTokenized
    
    
 

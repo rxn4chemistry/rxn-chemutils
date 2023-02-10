@@ -1,0 +1,6 @@
+rxn.chemutils.exceptions.UnclearWhetherTokenized
+================================================
+
+.. currentmodule:: rxn.chemutils.exceptions
+
+.. autoexception:: UnclearWhetherTokenized

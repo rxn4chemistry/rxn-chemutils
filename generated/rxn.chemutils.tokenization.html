@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.tokenization.detokenize_smiles" href="rxn.chemutils.tokenization.detokenize_smiles.html" />
+    <link rel="next" title="rxn.chemutils.tokenization.copy_as_detokenized" href="rxn.chemutils.tokenization.copy_as_detokenized.html" />
     <link rel="prev" title="rxn.chemutils.smiles_randomization.randomize_smiles_unrestricted" href="rxn.chemutils.smiles_randomization.randomize_smiles_unrestricted.html" /> 
 </head>
 
@@ -54,8 +54,14 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_augmenter.html">rxn.chemutils.smiles_augmenter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_randomization.html">rxn.chemutils.smiles_randomization</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rxn.chemutils.tokenization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.copy_as_detokenized.html">rxn.chemutils.tokenization.copy_as_detokenized</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.detokenize_file.html">rxn.chemutils.tokenization.detokenize_file</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.detokenize_smiles.html">rxn.chemutils.tokenization.detokenize_smiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.ensure_tokenized_file.html">rxn.chemutils.tokenization.ensure_tokenized_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.file_is_tokenized.html">rxn.chemutils.tokenization.file_is_tokenized</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.string_is_tokenized.html">rxn.chemutils.tokenization.string_is_tokenized</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.to_tokens.html">rxn.chemutils.tokenization.to_tokens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.tokenize_file.html">rxn.chemutils.tokenization.tokenize_file</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.tokenize_smiles.html">rxn.chemutils.tokenization.tokenize_smiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.TokenizationError.html">rxn.chemutils.tokenization.TokenizationError</a></li>
 </ul>
@@ -102,13 +108,35 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.copy_as_detokenized.html#rxn.chemutils.tokenization.copy_as_detokenized" title="rxn.chemutils.tokenization.copy_as_detokenized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_as_detokenized</span></code></a>(src, dest)</p></td>
+<td><p>Copy a source file to a destination, while making sure that it is not tokenized.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.detokenize_file.html#rxn.chemutils.tokenization.detokenize_file" title="rxn.chemutils.tokenization.detokenize_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detokenize_file</span></code></a>(input_file, output_file)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param input_file</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.detokenize_smiles.html#rxn.chemutils.tokenization.detokenize_smiles" title="rxn.chemutils.tokenization.detokenize_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detokenize_smiles</span></code></a>(tokenized_smiles)</p></td>
 <td><p>Detokenize a tokenized SMILES string (that contains spaces between the characters).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.to_tokens.html#rxn.chemutils.tokenization.to_tokens" title="rxn.chemutils.tokenization.to_tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tokens</span></code></a>(smiles)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.ensure_tokenized_file.html#rxn.chemutils.tokenization.ensure_tokenized_file" title="rxn.chemutils.tokenization.ensure_tokenized_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_tokenized_file</span></code></a>(file[, postfix, ...])</p></td>
+<td><p>Ensure that a file is tokenized: do nothing if the file is already tokenized, create a tokenized copy otherwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.file_is_tokenized.html#rxn.chemutils.tokenization.file_is_tokenized" title="rxn.chemutils.tokenization.file_is_tokenized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_is_tokenized</span></code></a>(filepath)</p></td>
+<td><p>Whether a file contains tokenized SMILES or not.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.string_is_tokenized.html#rxn.chemutils.tokenization.string_is_tokenized" title="rxn.chemutils.tokenization.string_is_tokenized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">string_is_tokenized</span></code></a>(smiles_line)</p></td>
+<td><p>Whether a string is a tokenized SMILES or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.to_tokens.html#rxn.chemutils.tokenization.to_tokens" title="rxn.chemutils.tokenization.to_tokens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tokens</span></code></a>(smiles)</p></td>
 <td><p>Tokenize a SMILES molecule or reaction into a list of tokens.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.tokenize_smiles.html#rxn.chemutils.tokenization.tokenize_smiles" title="rxn.chemutils.tokenization.tokenize_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokenize_smiles</span></code></a>(smiles)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.tokenize_file.html#rxn.chemutils.tokenization.tokenize_file" title="rxn.chemutils.tokenization.tokenize_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokenize_file</span></code></a>(input_file, output_file[, ...])</p></td>
+<td><p>Tokenize a file containing SMILES strings.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="rxn.chemutils.tokenization.tokenize_smiles.html#rxn.chemutils.tokenization.tokenize_smiles" title="rxn.chemutils.tokenization.tokenize_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tokenize_smiles</span></code></a>(smiles[, fallback_value])</p></td>
 <td><p>Tokenize a SMILES molecule or reaction, and join the tokens with spaces.</p></td>
 </tr>
 </tbody>
@@ -132,7 +160,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="rxn.chemutils.smiles_randomization.randomize_smiles_unrestricted.html" class="btn btn-neutral float-left" title="rxn.chemutils.smiles_randomization.randomize_smiles_unrestricted" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.tokenization.detokenize_smiles.html" class="btn btn-neutral float-right" title="rxn.chemutils.tokenization.detokenize_smiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.tokenization.copy_as_detokenized.html" class="btn btn-neutral float-right" title="rxn.chemutils.tokenization.copy_as_detokenized" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

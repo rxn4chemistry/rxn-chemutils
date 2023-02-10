@@ -14,8 +14,14 @@ rxn.chemutils.tokenization
    .. autosummary::
       :toctree:
    
+      copy_as_detokenized
+      detokenize_file
       detokenize_smiles
+      ensure_tokenized_file
+      file_is_tokenized
+      string_is_tokenized
       to_tokens
+      tokenize_file
       tokenize_smiles
    
    

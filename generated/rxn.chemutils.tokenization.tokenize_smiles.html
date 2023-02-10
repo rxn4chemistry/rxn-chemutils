@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="rxn.chemutils.tokenization.TokenizationError" href="rxn.chemutils.tokenization.TokenizationError.html" />
-    <link rel="prev" title="rxn.chemutils.tokenization.to_tokens" href="rxn.chemutils.tokenization.to_tokens.html" /> 
+    <link rel="prev" title="rxn.chemutils.tokenization.tokenize_file" href="rxn.chemutils.tokenization.tokenize_file.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,8 +54,14 @@
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_augmenter.html">rxn.chemutils.smiles_augmenter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_randomization.html">rxn.chemutils.smiles_randomization</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="rxn.chemutils.tokenization.html">rxn.chemutils.tokenization</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.copy_as_detokenized.html">rxn.chemutils.tokenization.copy_as_detokenized</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.detokenize_file.html">rxn.chemutils.tokenization.detokenize_file</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.detokenize_smiles.html">rxn.chemutils.tokenization.detokenize_smiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.ensure_tokenized_file.html">rxn.chemutils.tokenization.ensure_tokenized_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.file_is_tokenized.html">rxn.chemutils.tokenization.file_is_tokenized</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.string_is_tokenized.html">rxn.chemutils.tokenization.string_is_tokenized</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.to_tokens.html">rxn.chemutils.tokenization.to_tokens</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.tokenize_file.html">rxn.chemutils.tokenization.tokenize_file</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.tokenization.tokenize_smiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.tokenization.TokenizationError.html">rxn.chemutils.tokenization.TokenizationError</a></li>
 </ul>
@@ -98,11 +104,15 @@
 <h1>rxn.chemutils.tokenization.tokenize_smiles<a class="headerlink" href="#rxn-chemutils-tokenization-tokenize-smiles" title="Permalink to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="rxn.chemutils.tokenization.tokenize_smiles">
-<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.tokenization.</span></span><span class="sig-name descname"><span class="pre">tokenize_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/tokenization.html#tokenize_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.tokenization.tokenize_smiles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.tokenization.</span></span><span class="sig-name descname"><span class="pre">tokenize_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/tokenization.html#tokenize_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.tokenization.tokenize_smiles" title="Permalink to this definition"></a></dt>
 <dd><p>Tokenize a SMILES molecule or reaction, and join the tokens with spaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – SMILES string to tokenize, for instance ‘CC(CO)=N&gt;&gt;CC(C=O)N’.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – SMILES string to tokenize, for instance ‘CC(CO)=N&gt;&gt;CC(C=O)N’.</p></li>
+<li><p><strong>fallback_value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – what value to returns when the tokenization is unsuccessful.
+Default: no fallback, will propagate the TokenizationError exception.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
@@ -119,7 +129,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rxn.chemutils.tokenization.to_tokens.html" class="btn btn-neutral float-left" title="rxn.chemutils.tokenization.to_tokens" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rxn.chemutils.tokenization.tokenize_file.html" class="btn btn-neutral float-left" title="rxn.chemutils.tokenization.tokenize_file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="rxn.chemutils.tokenization.TokenizationError.html" class="btn btn-neutral float-right" title="rxn.chemutils.tokenization.TokenizationError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

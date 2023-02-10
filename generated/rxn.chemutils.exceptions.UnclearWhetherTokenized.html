@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rxn.chemutils.exceptions.InvalidSmiles &mdash; RXN chemutils 0.1 documentation</title>
+  <title>rxn.chemutils.exceptions.UnclearWhetherTokenized &mdash; RXN chemutils 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.exceptions.SanitizationError" href="rxn.chemutils.exceptions.SanitizationError.html" />
-    <link rel="prev" title="rxn.chemutils.exceptions.InvalidReactionSmiles" href="rxn.chemutils.exceptions.InvalidReactionSmiles.html" /> 
+    <link rel="next" title="rxn.chemutils.extended_reaction_smiles" href="rxn.chemutils.extended_reaction_smiles.html" />
+    <link rel="prev" title="rxn.chemutils.exceptions.SanitizationError" href="rxn.chemutils.exceptions.SanitizationError.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,9 +47,9 @@
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidInchi.html">rxn.chemutils.exceptions.InvalidInchi</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidMdl.html">rxn.chemutils.exceptions.InvalidMdl</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidReactionSmiles.html">rxn.chemutils.exceptions.InvalidReactionSmiles</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.exceptions.InvalidSmiles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.InvalidSmiles.html">rxn.chemutils.exceptions.InvalidSmiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.SanitizationError.html">rxn.chemutils.exceptions.SanitizationError</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.exceptions.UnclearWhetherTokenized.html">rxn.chemutils.exceptions.UnclearWhetherTokenized</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.exceptions.UnclearWhetherTokenized</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.extended_reaction_smiles.html">rxn.chemutils.extended_reaction_smiles</a></li>
@@ -86,9 +86,9 @@
           <li><a href="../api.html">API</a> &raquo;</li>
           <li><a href="rxn.chemutils.html">rxn.chemutils</a> &raquo;</li>
           <li><a href="rxn.chemutils.exceptions.html">rxn.chemutils.exceptions</a> &raquo;</li>
-      <li>rxn.chemutils.exceptions.InvalidSmiles</li>
+      <li>rxn.chemutils.exceptions.UnclearWhetherTokenized</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/rxn.chemutils.exceptions.InvalidSmiles.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/rxn.chemutils.exceptions.UnclearWhetherTokenized.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -96,17 +96,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="rxn-chemutils-exceptions-invalidsmiles">
-<h1>rxn.chemutils.exceptions.InvalidSmiles<a class="headerlink" href="#rxn-chemutils-exceptions-invalidsmiles" title="Permalink to this heading"></a></h1>
+  <section id="rxn-chemutils-exceptions-unclearwhethertokenized">
+<h1>rxn.chemutils.exceptions.UnclearWhetherTokenized<a class="headerlink" href="#rxn-chemutils-exceptions-unclearwhethertokenized" title="Permalink to this heading"></a></h1>
 <dl class="py exception">
-<dt class="sig sig-object py" id="rxn.chemutils.exceptions.InvalidSmiles">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rxn.chemutils.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidSmiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/exceptions.html#InvalidSmiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.exceptions.InvalidSmiles" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dt class="sig sig-object py" id="rxn.chemutils.exceptions.UnclearWhetherTokenized">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rxn.chemutils.exceptions.</span></span><span class="sig-name descname"><span class="pre">UnclearWhetherTokenized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/exceptions.html#UnclearWhetherTokenized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.exceptions.UnclearWhetherTokenized" title="Permalink to this definition"></a></dt>
+<dd><p>Exception raised when unclear if something was tokenized or not.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
-<li><p><strong>msg</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>string</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -117,8 +115,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rxn.chemutils.exceptions.InvalidReactionSmiles.html" class="btn btn-neutral float-left" title="rxn.chemutils.exceptions.InvalidReactionSmiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.exceptions.SanitizationError.html" class="btn btn-neutral float-right" title="rxn.chemutils.exceptions.SanitizationError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.exceptions.SanitizationError.html" class="btn btn-neutral float-left" title="rxn.chemutils.exceptions.SanitizationError" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rxn.chemutils.extended_reaction_smiles.html" class="btn btn-neutral float-right" title="rxn.chemutils.extended_reaction_smiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

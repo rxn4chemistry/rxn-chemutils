@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.ensure\_tokenized\_file
+==================================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autofunction:: ensure_tokenized_file

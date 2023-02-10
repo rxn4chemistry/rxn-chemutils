@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.string\_is\_tokenized
+================================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autofunction:: string_is_tokenized

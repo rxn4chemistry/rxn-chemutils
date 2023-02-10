@@ -1,0 +1,6 @@
+rxn.chemutils.tokenization.copy\_as\_detokenized
+================================================
+
+.. currentmodule:: rxn.chemutils.tokenization
+
+.. autofunction:: copy_as_detokenized
