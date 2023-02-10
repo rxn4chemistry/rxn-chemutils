@@ -2,6 +2,7 @@ import sys
 from typing import Optional, TextIO
 
 import click
+from rxn.utilities.logging import setup_console_logger
 
 from rxn.chemutils.miscellaneous import canonicalize_any
 
@@ -27,6 +28,7 @@ def main(
     first argument, and write to stdout, or from a file given as the second
     argument.
     """
+    setup_console_logger()
 
     for line in input_file:
         smiles = line.strip()

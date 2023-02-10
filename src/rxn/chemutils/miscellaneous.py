@@ -1,3 +1,4 @@
+import logging
 import re
 import typing
 from collections import Counter
@@ -5,6 +6,12 @@ from functools import partial
 from typing import Callable, List
 
 from rdkit.Chem import AddHs, Atom, Mol
+from rxn.utilities.files import (
+    PathLike,
+    dump_list_to_file,
+    iterate_lines_from_file,
+    raise_if_paths_are_identical,
+)
 
 from .conversion import canonicalize_smiles, smiles_to_mol
 from .exceptions import InvalidSmiles
@@ -26,6 +33,9 @@ from .reaction_smiles import (
     parse_reaction_smiles,
     to_reaction_smiles,
 )
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 CHIRAL_CENTER_PATTERN = re.compile(
     r"\[([^],@]+)@+([^]]*)]"
@@ -180,7 +190,12 @@ def apply_to_smiles_groups(
         return list_to_multicomponent_smiles(fn(compounds), fragment_bond="~")
 
 
-def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
+def canonicalize_any(
+    any_smiles: str,
+    check_valence: bool = True,
+    sort_molecules: bool = False,
+    fallback_value: typing.Optional[str] = None,
+) -> str:
     """
     Canonicalize any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).
 
@@ -189,6 +204,9 @@ def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
     Args:
         any_smiles: any kind of SMILES string.
         check_valence: if False, will not do any valence check.
+        sort_molecules: whether to sort the compounds alphabetically at the same time.
+        fallback_value: what value to returns when the canonicalization is unsuccessful.
+            Default: no fallback, will propagate the exception.
 
     Raises:
         Exception: different kinds of exception may be raised during parsing.
@@ -197,8 +215,41 @@ def canonicalize_any(any_smiles: str, check_valence: bool = True) -> str:
     Returns:
         the canonical (molecule, multicomponent, or reaction) SMILES string.
     """
-    fn = partial(canonicalize_smiles, check_valence=check_valence)
-    return apply_to_any_smiles(any_smiles, fn)
+    try:
+        fn = partial(canonicalize_smiles, check_valence=check_valence)
+        canonical_smiles = apply_to_any_smiles(any_smiles, fn)
+        if sort_molecules:
+            canonical_smiles = sort_any(canonical_smiles)
+        return canonical_smiles
+    except Exception as e:
+        if fallback_value is not None:
+            logger.debug(f'Error when canonicalizing "{any_smiles}": {e}')
+            return fallback_value
+        raise
+
+
+def canonicalize_file(
+    input_file: PathLike,
+    output_file: PathLike,
+    check_valence: bool = True,
+    fallback_value: str = "",
+    sort_molecules: bool = False,
+) -> None:
+    raise_if_paths_are_identical(input_file, output_file)
+    logger.info(f'Canonicalizing file "{input_file}" -> "{output_file}".')
+
+    # We formulate it as a generator, so that the file below is written directly
+    canonical = (
+        canonicalize_any(
+            line,
+            check_valence=check_valence,
+            fallback_value=fallback_value,
+            sort_molecules=sort_molecules,
+        )
+        for line in iterate_lines_from_file(input_file)
+    )
+
+    dump_list_to_file(canonical, output_file)
 
 
 def sort_any(any_smiles: str) -> str:
