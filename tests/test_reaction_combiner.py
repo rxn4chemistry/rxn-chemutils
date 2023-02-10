@@ -4,7 +4,7 @@ from rxn.chemutils.reaction_combiner import ReactionCombiner
 from rxn.chemutils.reaction_smiles import ReactionFormat
 
 
-def test_reaction_combiner() -> None:
+def test_reaction_combiner_on_precursors_and_products() -> None:
     combiner = ReactionCombiner()
 
     precursors = ["CC.O", "CCC.O"]
@@ -14,20 +14,31 @@ def test_reaction_combiner() -> None:
     assert list(combiner.combine(precursors, products)) == expected
 
 
+def test_reaction_combiner_on_fragment_reactions() -> None:
+    combiner = ReactionCombiner()
+
+    fragment_1 = ["CC.O>>", "CCC>>CCCO"]
+    fragment_2 = [">>CCO", "O.N>>"]
+    expected = ["CC.O>>CCO", "CCC.O.N>>CCCO"]
+
+    assert list(combiner.combine(fragment_1, fragment_2)) == expected
+
+
 def test_reaction_combiner_with_tokenized_input() -> None:
     combiner = ReactionCombiner()
 
-    precursors = ["C C . O", "C C C . O"]
-    products = ["C C O", "C C C O"]
-    expected = ["CC.O>>CCO", "CCC.O>>CCCO"]
+    fragment_1 = ["C C . O", "C C C >> C C C O"]
+    fragment_2 = ["C C O", "O . N >>"]
+    expected = ["CC.O>>CCO", "CCC.O.N>>CCCO"]
 
-    assert list(combiner.combine(precursors, products)) == expected
+    assert list(combiner.combine(fragment_1, fragment_2)) == expected
 
 
 def test_multiple_precursors_per_product() -> None:
     combiner = ReactionCombiner()
 
     # Three sets of precursors for one product
+    # Note: the same would work for two sets of fragment reactions.
     precursors = ["CC.O", "CC.O.N", "CC.O.P", "CCC.O", "CCC.O.N", "CCC.O.P"]
     products = ["CCO", "CCCO"]
     expected = [
@@ -46,6 +57,7 @@ def test_multiple_products_per_precursors() -> None:
     combiner = ReactionCombiner()
 
     # Two products for each set of precursors
+    # Note: the same would work for two sets of fragment reactions.
     precursors = ["CC.O", "CCC.O"]
     products = ["CCO", "OCCO", "CCCO", "OCCCO"]
     expected = [
@@ -70,24 +82,24 @@ def test_incompatible_number_of_precursors_and_products() -> None:
 
 
 def test_different_output_formats() -> None:
-    precursors = ["CC~O", "CCC~O"]
-    products = ["CCO", "CCCO"]
+    fragment_1 = ["CC~O", "CCC>>CCCO"]
+    fragment_2 = ["CCO", "N~O>>"]
 
     assert list(
         ReactionCombiner(reaction_format=ReactionFormat.STANDARD).combine(
-            precursors, products
+            fragment_1, fragment_2
         )
-    ) == ["CC.O>>CCO", "CCC.O>>CCCO"]
+    ) == ["CC.O>>CCO", "CCC.N.O>>CCCO"]
     assert list(
         ReactionCombiner(reaction_format=ReactionFormat.STANDARD_WITH_TILDE).combine(
-            precursors, products
+            fragment_1, fragment_2
         )
-    ) == ["CC~O>>CCO", "CCC~O>>CCCO"]
+    ) == ["CC~O>>CCO", "CCC.N~O>>CCCO"]
     assert list(
         ReactionCombiner(reaction_format=ReactionFormat.EXTENDED).combine(
-            precursors, products
+            fragment_1, fragment_2
         )
-    ) == ["CC.O>>CCO |f:0.1|", "CCC.O>>CCCO |f:0.1|"]
+    ) == ["CC.O>>CCO |f:0.1|", "CCC.N.O>>CCCO |f:1.2|"]
 
 
 def test_standardization() -> None:
@@ -105,11 +117,11 @@ def test_standardization() -> None:
 
 
 def test_invalid_reactions() -> None:
-    invalid_string = "C>>C"
-    combiner = ReactionCombiner(standardize=True, invalid_reaction=invalid_string)
+    fallback_string = "C>>C"
+    combiner = ReactionCombiner(standardize=True, fallback_reaction=fallback_string)
 
     precursors = ["CC.O", "CCC.O", "CC>CC>O"]
     products = ["CCo", "CCCO", "CCCCO"]
-    expected = [invalid_string, "CCC.O>>CCCO", invalid_string]
+    expected = [fallback_string, "CCC.O>>CCCO", fallback_string]
 
     assert list(combiner.combine(precursors, products)) == expected
