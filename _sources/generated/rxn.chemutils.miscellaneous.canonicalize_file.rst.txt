@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.canonicalize\_file
+==============================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: canonicalize_file

@@ -65,13 +65,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for rxn.chemutils.miscellaneous</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">typing</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AddHs</span><span class="p">,</span> <span class="n">Atom</span><span class="p">,</span> <span class="n">Mol</span>
+<span class="kn">from</span> <span class="nn">rxn.utilities.files</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">dump_list_to_file</span><span class="p">,</span>
+    <span class="n">iterate_lines_from_file</span><span class="p">,</span>
+    <span class="n">raise_if_paths_are_identical</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">.conversion</span> <span class="kn">import</span> <span class="n">canonicalize_smiles</span><span class="p">,</span> <span class="n">smiles_to_mol</span>
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidSmiles</span>
@@ -93,6 +100,9 @@
     <span class="n">parse_reaction_smiles</span><span class="p">,</span>
     <span class="n">to_reaction_smiles</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NullHandler</span><span class="p">())</span>
 
 <span class="n">CHIRAL_CENTER_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
     <span class="sa">r</span><span class="s2">&quot;\[([^],@]+)@+([^]]*)]&quot;</span>
@@ -247,7 +257,12 @@
         <span class="k">return</span> <span class="n">list_to_multicomponent_smiles</span><span class="p">(</span><span class="n">fn</span><span class="p">(</span><span class="n">compounds</span><span class="p">),</span> <span class="n">fragment_bond</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="canonicalize_any"><a class="viewcode-back" href="../../../generated/rxn.chemutils.miscellaneous.canonicalize_any.html#rxn.chemutils.miscellaneous.canonicalize_any">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_any</span><span class="p">(</span><span class="n">any_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="canonicalize_any"><a class="viewcode-back" href="../../../generated/rxn.chemutils.miscellaneous.canonicalize_any.html#rxn.chemutils.miscellaneous.canonicalize_any">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_any</span><span class="p">(</span>
+    <span class="n">any_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">sort_molecules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">fallback_value</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Canonicalize any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</span>
 
@@ -256,6 +271,9 @@
 <span class="sd">    Args:</span>
 <span class="sd">        any_smiles: any kind of SMILES string.</span>
 <span class="sd">        check_valence: if False, will not do any valence check.</span>
+<span class="sd">        sort_molecules: whether to sort the compounds alphabetically at the same time.</span>
+<span class="sd">        fallback_value: what value to returns when the canonicalization is unsuccessful.</span>
+<span class="sd">            Default: no fallback, will propagate the exception.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        Exception: different kinds of exception may be raised during parsing.</span>
@@ -264,8 +282,41 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        the canonical (molecule, multicomponent, or reaction) SMILES string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fn</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">canonicalize_smiles</span><span class="p">,</span> <span class="n">check_valence</span><span class="o">=</span><span class="n">check_valence</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">apply_to_any_smiles</span><span class="p">(</span><span class="n">any_smiles</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">canonicalize_smiles</span><span class="p">,</span> <span class="n">check_valence</span><span class="o">=</span><span class="n">check_valence</span><span class="p">)</span>
+        <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="n">apply_to_any_smiles</span><span class="p">(</span><span class="n">any_smiles</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sort_molecules</span><span class="p">:</span>
+            <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="n">sort_any</span><span class="p">(</span><span class="n">canonical_smiles</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">canonical_smiles</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fallback_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error when canonicalizing &quot;</span><span class="si">{</span><span class="n">any_smiles</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fallback_value</span>
+        <span class="k">raise</span></div>
+
+
+<div class="viewcode-block" id="canonicalize_file"><a class="viewcode-back" href="../../../generated/rxn.chemutils.miscellaneous.canonicalize_file.html#rxn.chemutils.miscellaneous.canonicalize_file">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_file</span><span class="p">(</span>
+    <span class="n">input_file</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">output_file</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span>
+    <span class="n">check_valence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">fallback_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">sort_molecules</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">raise_if_paths_are_identical</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Canonicalizing file &quot;</span><span class="si">{</span><span class="n">input_file</span><span class="si">}</span><span class="s1">&quot; -&gt; &quot;</span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s1">&quot;.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># We formulate it as a generator, so that the file below is written directly</span>
+    <span class="n">canonical</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">canonicalize_any</span><span class="p">(</span>
+            <span class="n">line</span><span class="p">,</span>
+            <span class="n">check_valence</span><span class="o">=</span><span class="n">check_valence</span><span class="p">,</span>
+            <span class="n">fallback_value</span><span class="o">=</span><span class="n">fallback_value</span><span class="p">,</span>
+            <span class="n">sort_molecules</span><span class="o">=</span><span class="n">sort_molecules</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">iterate_lines_from_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">dump_list_to_file</span><span class="p">(</span><span class="n">canonical</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="sort_any"><a class="viewcode-back" href="../../../generated/rxn.chemutils.miscellaneous.sort_any.html#rxn.chemutils.miscellaneous.sort_any">[docs]</a><span class="k">def</span> <span class="nf">sort_any</span><span class="p">(</span><span class="n">any_smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

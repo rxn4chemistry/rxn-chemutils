@@ -18,6 +18,7 @@ rxn.chemutils.miscellaneous
       apply_to_smiles_groups
       atom_type_counter
       canonicalize_any
+      canonicalize_file
       equivalent_smiles
       get_individual_compounds
       is_valid_smiles

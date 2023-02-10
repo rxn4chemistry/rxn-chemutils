@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rxn.chemutils.miscellaneous.canonicalize_any &mdash; RXN chemutils 0.1 documentation</title>
+  <title>rxn.chemutils.miscellaneous.canonicalize_file &mdash; RXN chemutils 0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="rxn.chemutils.miscellaneous.canonicalize_file" href="rxn.chemutils.miscellaneous.canonicalize_file.html" />
-    <link rel="prev" title="rxn.chemutils.miscellaneous.atom_type_counter" href="rxn.chemutils.miscellaneous.atom_type_counter.html" /> 
+    <link rel="next" title="rxn.chemutils.miscellaneous.equivalent_smiles" href="rxn.chemutils.miscellaneous.equivalent_smiles.html" />
+    <link rel="prev" title="rxn.chemutils.miscellaneous.canonicalize_any" href="rxn.chemutils.miscellaneous.canonicalize_any.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,8 +49,8 @@
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_any_smiles.html">rxn.chemutils.miscellaneous.apply_to_any_smiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.apply_to_smiles_groups.html">rxn.chemutils.miscellaneous.apply_to_smiles_groups</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.atom_type_counter.html">rxn.chemutils.miscellaneous.atom_type_counter</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.miscellaneous.canonicalize_any</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_file.html">rxn.chemutils.miscellaneous.canonicalize_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.canonicalize_any.html">rxn.chemutils.miscellaneous.canonicalize_any</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">rxn.chemutils.miscellaneous.canonicalize_file</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.equivalent_smiles.html">rxn.chemutils.miscellaneous.equivalent_smiles</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.get_individual_compounds.html">rxn.chemutils.miscellaneous.get_individual_compounds</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.miscellaneous.is_valid_smiles.html">rxn.chemutils.miscellaneous.is_valid_smiles</a></li>
@@ -93,9 +93,9 @@
           <li><a href="../api.html">API</a> &raquo;</li>
           <li><a href="rxn.chemutils.html">rxn.chemutils</a> &raquo;</li>
           <li><a href="rxn.chemutils.miscellaneous.html">rxn.chemutils.miscellaneous</a> &raquo;</li>
-      <li>rxn.chemutils.miscellaneous.canonicalize_any</li>
+      <li>rxn.chemutils.miscellaneous.canonicalize_file</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/generated/rxn.chemutils.miscellaneous.canonicalize_any.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/rxn.chemutils.miscellaneous.canonicalize_file.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -103,34 +103,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="rxn-chemutils-miscellaneous-canonicalize-any">
-<h1>rxn.chemutils.miscellaneous.canonicalize_any<a class="headerlink" href="#rxn-chemutils-miscellaneous-canonicalize-any" title="Permalink to this heading"></a></h1>
+  <section id="rxn-chemutils-miscellaneous-canonicalize-file">
+<h1>rxn.chemutils.miscellaneous.canonicalize_file<a class="headerlink" href="#rxn-chemutils-miscellaneous-canonicalize-file" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="rxn.chemutils.miscellaneous.canonicalize_any">
-<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">canonicalize_any</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">any_smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_valence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_molecules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/miscellaneous.html#canonicalize_any"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.miscellaneous.canonicalize_any" title="Permalink to this definition"></a></dt>
-<dd><p>Canonicalize any SMILES string (molecule SMILES, multicomponent SMILES, reaction SMILES).</p>
-<p>In the case of reaction SMILES, the format is kept.</p>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="rxn.chemutils.miscellaneous.canonicalize_file">
+<span class="sig-prename descclassname"><span class="pre">rxn.chemutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">canonicalize_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_valence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_molecules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/miscellaneous.html#canonicalize_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.miscellaneous.canonicalize_file" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>any_smiles</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – any kind of SMILES string.</p></li>
-<li><p><strong>check_valence</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) – if False, will not do any valence check.</p></li>
-<li><p><strong>sort_molecules</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – whether to sort the compounds alphabetically at the same time.</p></li>
-<li><p><strong>fallback_value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – what value to returns when the canonicalization is unsuccessful.
-Default: no fallback, will propagate the exception.</p></li>
+<li><p><strong>input_file</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code>]) – </p></li>
+<li><p><strong>output_file</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code>]) – </p></li>
+<li><p><strong>check_valence</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) – </p></li>
+<li><p><strong>fallback_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, default: <code class="docutils literal notranslate"><span class="pre">''</span></code>) – </p></li>
+<li><p><strong>sort_molecules</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>Exception</strong> – different kinds of exception may be raised during parsing.</p></li>
-<li><p><a class="reference internal" href="rxn.chemutils.exceptions.InvalidSmiles.html#rxn.chemutils.exceptions.InvalidSmiles" title="rxn.chemutils.exceptions.InvalidSmiles"><strong>InvalidSmiles</strong></a> – for canonicalization errors.</p></li>
-</ul>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the canonical (molecule, multicomponent, or reaction) SMILES string.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,8 +130,8 @@ Default: no fallback, will propagate the exception.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rxn.chemutils.miscellaneous.atom_type_counter.html" class="btn btn-neutral float-left" title="rxn.chemutils.miscellaneous.atom_type_counter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rxn.chemutils.miscellaneous.canonicalize_file.html" class="btn btn-neutral float-right" title="rxn.chemutils.miscellaneous.canonicalize_file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rxn.chemutils.miscellaneous.canonicalize_any.html" class="btn btn-neutral float-left" title="rxn.chemutils.miscellaneous.canonicalize_any" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rxn.chemutils.miscellaneous.equivalent_smiles.html" class="btn btn-neutral float-right" title="rxn.chemutils.miscellaneous.equivalent_smiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
