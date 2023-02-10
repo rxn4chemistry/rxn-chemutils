@@ -197,9 +197,9 @@ def test_canonicalize_any_with_fallback_value() -> None:
 
 def test_canonicalize_any_with_sorting() -> None:
     # Note: the sorting in `N~OO` comes from the RDKit canonicalization of that compound.
-    assert canonicalize_any("CC.OO~N", sort_molecules=True) == "CC.N~OO"
-    assert canonicalize_any("OO~N.CC", sort_molecules=True) == "CC.N~OO"
-    assert canonicalize_any("OO~N.CC>>N.C", sort_molecules=True) == "CC.N~OO>>C.N"
+    assert canonicalize_any("C(C).OO~N", sort_molecules=True) == "CC.N~OO"
+    assert canonicalize_any("OO~N.C(C)", sort_molecules=True) == "CC.N~OO"
+    assert canonicalize_any("OO~N.C(C)>>N.C", sort_molecules=True) == "CC.N~OO>>C.N"
 
 
 def test_sort_any() -> None:
