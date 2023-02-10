@@ -183,6 +183,25 @@ def test_canonicalize_any_on_reaction_smiles() -> None:
         _ = canonicalize_any("CC>>CC>>C(O)")
 
 
+def test_canonicalize_any_with_fallback_value() -> None:
+    fallback = "some_fallback_value"
+
+    # No error -> fallback value not used
+    assert canonicalize_any("C(C)C", fallback_value=fallback) == "CCC"
+    assert canonicalize_any("CO>>C(C)C", fallback_value=fallback) == "CO>>CCC"
+
+    # Error -> returns the fallback value
+    assert canonicalize_any("CoMo", fallback_value=fallback) == fallback
+    assert canonicalize_any("invalid>>C(C)C", fallback_value=fallback) == fallback
+
+
+def test_canonicalize_any_with_sorting() -> None:
+    # Note: the sorting in `N~OO` comes from the RDKit canonicalization of that compound.
+    assert canonicalize_any("CC.OO~N", sort_molecules=True) == "CC.N~OO"
+    assert canonicalize_any("OO~N.CC", sort_molecules=True) == "CC.N~OO"
+    assert canonicalize_any("OO~N.CC>>N.C", sort_molecules=True) == "CC.N~OO>>C.N"
+
+
 def test_sort_any() -> None:
     # Single-component SMILES
     assert sort_any("A.C.C.B") == "A.B.C.C"
