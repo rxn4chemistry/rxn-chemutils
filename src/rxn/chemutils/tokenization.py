@@ -1,6 +1,7 @@
 import logging
 import re
-from typing import List
+import shutil
+from typing import List, Optional
 
 from rxn.utilities.files import (
     PathLike,
@@ -59,18 +60,26 @@ def to_tokens(smiles: str) -> List[str]:
     return tokens
 
 
-def tokenize_smiles(smiles: str) -> str:
+def tokenize_smiles(smiles: str, fallback_value: Optional[str] = None) -> str:
     """
     Tokenize a SMILES molecule or reaction, and join the tokens with spaces.
 
     Args:
         smiles: SMILES string to tokenize, for instance 'CC(CO)=N>>CC(C=O)N'.
+        fallback_value: what value to returns when the tokenization is unsuccessful.
+            Default: no fallback, will propagate the TokenizationError exception.
 
     Returns:
         SMILES string after tokenization, for instance 'C C ( C O ) = N >> C C ( C = O ) N'.
     """
-    tokens = to_tokens(smiles)
-    return " ".join(tokens)
+    try:
+        tokens = to_tokens(smiles)
+        return " ".join(tokens)
+    except TokenizationError:
+        if fallback_value is not None:
+            logger.debug(f'Error when tokenizing "{smiles}"')
+            return fallback_value
+        raise
 
 
 def detokenize_smiles(tokenized_smiles: str) -> str:
@@ -104,22 +113,22 @@ def string_is_tokenized(smiles_line: str) -> bool:
     return " ".join(tokens) == smiles_line
 
 
-def tokenize_line(smiles_line: str, invalid_placeholder: str) -> str:
-    try:
-        return tokenize_smiles(smiles_line)
-    except TokenizationError:
-        logger.debug(f'Error when tokenizing "{smiles_line}"')
-        return invalid_placeholder
-
-
 def tokenize_file(
-    input_file: PathLike, output_file: PathLike, invalid_placeholder: str = ""
+    input_file: PathLike, output_file: PathLike, fallback_value: str = ""
 ) -> None:
+    """
+    Tokenize a file containing SMILES strings.
+
+    Args:
+        input_file: file to tokenize.
+        output_file: where to save the tokenized file.
+        fallback_value: placeholder for strings that cannot be tokenized.
+    """
     raise_if_paths_are_identical(input_file, output_file)
     logger.info(f'Tokenizing "{input_file}" -> "{output_file}".')
 
     tokenized = (
-        tokenize_line(line, invalid_placeholder)
+        tokenize_smiles(line, fallback_value)
         for line in iterate_lines_from_file(input_file)
     )
 
@@ -140,7 +149,7 @@ def detokenize_file(
 
 
 def ensure_tokenized_file(
-    file: PathLike, postfix: str = ".tokenized", invalid_placeholder: str = ""
+    file: PathLike, postfix: str = ".tokenized", fallback_value: str = ""
 ) -> str:
     """
     Ensure that a file is tokenized: do nothing if the file is already tokenized, create
@@ -149,7 +158,7 @@ def ensure_tokenized_file(
     Args:
         file: path to the file that we want to ensure is tokenized.
         postfix: postfix to add to the tokenized copy (if applicable).
-        invalid_placeholder: placeholder for lines that cannot be tokenized (if applicable).
+        fallback_value: placeholder for strings that cannot be tokenized (if applicable).
 
     Returns:
         The path to the tokenized file (original path, or path to new file).
@@ -158,7 +167,7 @@ def ensure_tokenized_file(
         return str(file)
 
     tokenized_copy = str(file) + postfix
-    tokenize_file(file, tokenized_copy, invalid_placeholder=invalid_placeholder)
+    tokenize_file(file, tokenized_copy, fallback_value=fallback_value)
     return tokenized_copy
 
 

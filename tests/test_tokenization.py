@@ -81,6 +81,12 @@ def test_tokenize_reaction_smiles_with_fragment_bond() -> None:
     assert tokenize_smiles(smiles) == expected
 
 
+def test_tokenize_with_fallback_value() -> None:
+    assert tokenize_smiles("CCOC", "fallback") == "C C O C"
+    assert tokenize_smiles("C C O C", "fallback") == "fallback"
+    assert tokenize_smiles("invalid", "fallback") == "fallback"
+
+
 def test_detokenize() -> None:
     # Basically, detokenizing simply removes the spaces
     tokenized = "some random string also not S M I L E S ."
@@ -102,7 +108,7 @@ def test_tokenization_roundtrip() -> None:
         assert detokenize_smiles(tokenize_smiles(smiles)) == smiles
 
 
-def test_string_is_tokenized():
+def test_string_is_tokenized() -> None:
     assert string_is_tokenized("C C O . [Na+]")
     assert string_is_tokenized("C C O . [Na+] >> C ( O ) Cl")
     assert not string_is_tokenized("C C O . [Na+] >> C (O) Cl")
@@ -118,7 +124,7 @@ def test_string_is_tokenized():
         _ = string_is_tokenized("I N V A L I D")
 
 
-def test_file_is_tokenized():
+def test_file_is_tokenized() -> None:
     # Basic tokenized example
     with named_temporary_path() as path:
         dump_list_to_file(["C C O >> C C O", "C C . C"], path)
@@ -163,22 +169,22 @@ def test_file_is_tokenized():
         assert not file_is_tokenized(path)
 
 
-def test_tokenize_file():
+def test_tokenize_file() -> None:
     with named_temporary_path() as f_in, named_temporary_path() as f_out:
         # Original content
         original = ["CCO>>CCO", "CC.C", "INVALID", "C(NCC)[S]OC"]
         dump_list_to_file(original, f_in)
 
         # Expected (tokenized) content
-        placeholder = "ERROR"
-        tokenized = ["C C O >> C C O", "C C . C", placeholder, "C ( N C C ) [S] O C"]
+        fallback = "ERROR"
+        tokenized = ["C C O >> C C O", "C C . C", fallback, "C ( N C C ) [S] O C"]
 
-        tokenize_file(f_in, f_out, invalid_placeholder=placeholder)
+        tokenize_file(f_in, f_out, fallback_value=fallback)
 
         assert load_list_from_file(f_out) == tokenized
 
 
-def test_detokenize_file():
+def test_detokenize_file() -> None:
     with named_temporary_path() as f_in, named_temporary_path() as f_out:
         # Original (tokenized) content
         original = ["C C O >> C C O", "C C . C", "C ( N C C ) [S] O C"]
@@ -192,7 +198,7 @@ def test_detokenize_file():
         assert load_list_from_file(f_out) == detokenized
 
 
-def test_ensure_tokenized_file():
+def test_ensure_tokenized_file() -> None:
     with named_temporary_path() as temporary_path:
         temporary_path.mkdir()
 
@@ -203,10 +209,10 @@ def test_ensure_tokenized_file():
         updated_tokenized_file = str(temporary_path / "b.txt") + postfix
 
         # contents (original and expected)
-        placeholder = "error"
+        fallback = "error"
         tokenized = ["C C O >> C C O", "C C . C", "C ( N C C ) [S] O"]
         not_tokenized = ["CCO>>CCO", "CC.C", "INVALID", "C(N)[S]O"]
-        after_tokenization = ["C C O >> C C O", "C C . C", placeholder, "C ( N ) [S] O"]
+        after_tokenization = ["C C O >> C C O", "C C . C", fallback, "C ( N ) [S] O"]
 
         # Put into files
         dump_list_to_file(tokenized, already_tokenized_file)
@@ -214,14 +220,14 @@ def test_ensure_tokenized_file():
 
         # ensure for already tokenized - the original unchanged file can be used
         result = ensure_tokenized_file(
-            already_tokenized_file, postfix=postfix, invalid_placeholder=placeholder
+            already_tokenized_file, postfix=postfix, fallback_value=fallback
         )
         assert result == already_tokenized_file
         assert load_list_from_file(result) == tokenized
 
         # ensure for non-tokenized - a new file was created with tokenized strings
         result = ensure_tokenized_file(
-            not_tokenized_file, postfix=postfix, invalid_placeholder=placeholder
+            not_tokenized_file, postfix=postfix, fallback_value=fallback
         )
         assert result == updated_tokenized_file
         assert load_list_from_file(updated_tokenized_file) == after_tokenization
