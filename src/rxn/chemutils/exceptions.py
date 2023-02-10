@@ -48,3 +48,10 @@ class SanitizationError(ValueError):
         except Exception:
             pass
         super().__init__(message)
+
+
+class UnclearWhetherTokenized(ValueError):
+    """Exception raised when unclear if something was tokenized or not."""
+
+    def __init__(self, string: str):
+        super().__init__(f'Cannot determine if "{string}" is tokenized.')
