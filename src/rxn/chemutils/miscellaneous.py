@@ -1,16 +1,16 @@
+import logging
 import re
 import typing
 from collections import Counter
 from functools import partial
 from typing import Callable, List
-import logging
 
 from rdkit.Chem import AddHs, Atom, Mol
 from rxn.utilities.files import (
     PathLike,
-    raise_if_paths_are_identical,
     dump_list_to_file,
     iterate_lines_from_file,
+    raise_if_paths_are_identical,
 )
 
 from .conversion import canonicalize_smiles, smiles_to_mol
