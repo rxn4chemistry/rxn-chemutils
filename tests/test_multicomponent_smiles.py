@@ -54,11 +54,11 @@ def test_canonicalize_multicomponent_smiles() -> None:
 
     # with fragment bond; may fail if fragment bond not specified
     assert (
-        canonicalize_multicomponent_smiles("C.[Na+]~[H-].O", fragment_bond="~")
-        == "C.[H-]~[Na+].O"
+        canonicalize_multicomponent_smiles("C.[H-]~[F-]~[Mg+2].O", fragment_bond="~")
+        == "C.[F-]~[H-]~[Mg+2].O"
     )
     with pytest.raises(InvalidSmiles):
-        _ = canonicalize_multicomponent_smiles("C.[Na+]~[H-].O")
+        _ = canonicalize_multicomponent_smiles("C.[H-]~[F-]~[Mg+2].O")
 
     # possibility to check valence or not
     assert (
