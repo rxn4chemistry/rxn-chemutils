@@ -18,8 +18,17 @@ from rxn.chemutils.miscellaneous import canonicalize_any
         "By default, an exception is raised in such cases."
     ),
 )
+@click.option(
+    "--sort_compounds",
+    "-s",
+    is_flag=True,
+    help="If specified, the compounds will be sorted after canonicalization.",
+)
 def main(
-    input_file: TextIO, output_file: TextIO, invalid_placeholder: Optional[str]
+    input_file: TextIO,
+    output_file: TextIO,
+    invalid_placeholder: Optional[str],
+    sort_compounds: bool,
 ) -> None:
     """
     Canonicalize SMILES strings (molecules, sets of molecules, or reactions).
@@ -35,7 +44,7 @@ def main(
 
         # Canonicalize the SMILES, handle exception if needed
         try:
-            canonical = canonicalize_any(smiles)
+            canonical = canonicalize_any(smiles, sort_molecules=sort_compounds)
         except Exception:
             if invalid_placeholder is None:
                 raise
