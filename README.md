@@ -5,7 +5,7 @@
 This repository contains various chemistry-related Python utilities used in the RXN universe.
 For general utilities not related to chemistry, see our other repository [`rxn-utilities`](https://github.com/rxn4chemistry/rxn-utilities).
 
-The documentation can be found [here](https://rxn4chemistry.github.io/rxn-chemutils/).
+The code is available on GitHub ([link](https://github.com/rxn4chemistry/rxn-chemutils)) and the documentation can be found [here](https://rxn4chemistry.github.io/rxn-chemutils/).
 
 ## System Requirements
 
@@ -14,7 +14,7 @@ It has been tested on the following systems:
 + macOS: Big Sur (11.1)
 + Linux: Ubuntu 18.04.4
 
-A Python version of 3.6 or greater is recommended.
+A Python version of 3.7 or greater is recommended.
 
 ## Installation guide
 
@@ -35,6 +35,4 @@ conda install -c conda-forge rdkit
 
 # Install RDKit from Pypi
 pip install rdkit
-# for Python<3.7
-# pip install rdkit-pypi
 ```
