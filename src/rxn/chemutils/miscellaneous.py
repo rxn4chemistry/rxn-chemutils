@@ -317,3 +317,28 @@ def merge_reactions(*reactions: ReactionEquation) -> ReactionEquation:
         agents.extend(reaction.agents)
         products.extend(reaction.products)
     return ReactionEquation(reactants=reactants, agents=agents, products=products)
+
+
+def mol_has_atom_mapping(mol: Mol) -> bool:
+    """
+    Whether at least one atom of an RDKit Mol contains an atom map number.
+
+    Args:
+        mol: RDKit Mol.
+    """
+    atom: Atom
+    for atom in mol.GetAtoms():
+        if atom.GetAtomMapNum() != 0:
+            return True
+    return False
+
+
+def smiles_has_atom_mapping(smiles: str) -> bool:
+    """
+    Whether at least one atom of a compound SMILES contains an atom map number.
+
+    Args:
+        smiles: compound SMILES.
+    """
+    mol = smiles_to_mol(smiles, sanitize=False)
+    return mol_has_atom_mapping(mol)

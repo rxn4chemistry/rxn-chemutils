@@ -15,6 +15,7 @@ from rxn.chemutils.miscellaneous import (
     merge_reactions,
     remove_chiral_centers,
     remove_double_bond_stereochemistry,
+    smiles_has_atom_mapping,
     sort_any,
 )
 from rxn.chemutils.reaction_equation import ReactionEquation
@@ -260,3 +261,20 @@ def test_merge_reactions() -> None:
     assert merge_reactions(r1, r2, r3, r4) == ReactionEquation(
         ["A", "B", "F"], ["C", "G", "H"], ["D", "I"]
     )
+
+
+def test_smiles_has_atom_mapping() -> None:
+    assert smiles_has_atom_mapping("[CH3:9][CH:8]([CH3:10])c1ccccc1")
+    assert smiles_has_atom_mapping("CCO[CH3:9]")
+    assert smiles_has_atom_mapping("C[CH3:9].O")
+
+    assert not smiles_has_atom_mapping("CC")
+    assert not smiles_has_atom_mapping("C[CH3]")
+    assert not smiles_has_atom_mapping("C[12CH3]")
+
+    # Note: does not care about valence, but SMILES must be valid
+    # invalid valence -> call succeeds:
+    assert smiles_has_atom_mapping("CF(C)CC[C:9]")
+    # invalid SMILES -> call raises:
+    with pytest.raises(InvalidSmiles):
+        _ = canonicalize_any("[CH3:9]C(")
