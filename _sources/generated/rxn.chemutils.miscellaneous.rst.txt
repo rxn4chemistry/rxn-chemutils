@@ -23,8 +23,10 @@ rxn.chemutils.miscellaneous
       get_individual_compounds
       is_valid_smiles
       merge_reactions
+      mol_has_atom_mapping
       remove_chiral_centers
       remove_double_bond_stereochemistry
+      smiles_has_atom_mapping
       sort_any
    
    

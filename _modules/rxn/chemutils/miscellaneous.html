@@ -384,6 +384,31 @@
         <span class="n">agents</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">reaction</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="n">products</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">reaction</span><span class="o">.</span><span class="n">products</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ReactionEquation</span><span class="p">(</span><span class="n">reactants</span><span class="o">=</span><span class="n">reactants</span><span class="p">,</span> <span class="n">agents</span><span class="o">=</span><span class="n">agents</span><span class="p">,</span> <span class="n">products</span><span class="o">=</span><span class="n">products</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mol_has_atom_mapping"><a class="viewcode-back" href="../../../generated/rxn.chemutils.miscellaneous.mol_has_atom_mapping.html#rxn.chemutils.miscellaneous.mol_has_atom_mapping">[docs]</a><span class="k">def</span> <span class="nf">mol_has_atom_mapping</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Whether at least one atom of an RDKit Mol contains an atom map number.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mol: RDKit Mol.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">atom</span><span class="p">:</span> <span class="n">Atom</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetAtomMapNum</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="smiles_has_atom_mapping"><a class="viewcode-back" href="../../../generated/rxn.chemutils.miscellaneous.smiles_has_atom_mapping.html#rxn.chemutils.miscellaneous.smiles_has_atom_mapping">[docs]</a><span class="k">def</span> <span class="nf">smiles_has_atom_mapping</span><span class="p">(</span><span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Whether at least one atom of a compound SMILES contains an atom map number.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles: compound SMILES.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol_has_atom_mapping</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.smiles\_has\_atom\_mapping
+======================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: smiles_has_atom_mapping

@@ -1,0 +1,6 @@
+rxn.chemutils.miscellaneous.mol\_has\_atom\_mapping
+===================================================
+
+.. currentmodule:: rxn.chemutils.miscellaneous
+
+.. autofunction:: mol_has_atom_mapping
