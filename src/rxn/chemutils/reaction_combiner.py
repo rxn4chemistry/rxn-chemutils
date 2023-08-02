@@ -105,7 +105,7 @@ class ReactionCombiner:
 
         self._validate_multipliers(fragments_1_multiplier, fragments_2_multiplier)
 
-        # # repeat itemwise the elements: https://stackoverflow.com/a/45799320
+        # repeat itemwise the elements: https://stackoverflow.com/a/45799320
         fragment_1_iterator = chain.from_iterable(
             (repeat(e, fragments_1_multiplier) for e in fragments_1)
         )
