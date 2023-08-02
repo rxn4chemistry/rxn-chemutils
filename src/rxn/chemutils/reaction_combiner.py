@@ -116,7 +116,7 @@ class ReactionCombiner:
         for fragment_1, fragment_2 in zip_longest(
             fragment_1_iterator, fragment_2_iterator
         ):
-            if fragment_1 or fragment_2 is None:
+            if fragment_1 is None or fragment_2 is None:
                 raise RuntimeError("Mismatch in expected iterator length")
             yield self._to_reaction_smiles(fragment_1, fragment_2)
 
