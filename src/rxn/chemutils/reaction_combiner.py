@@ -1,5 +1,5 @@
 from itertools import chain, repeat
-from typing import Iterator, List, Tuple
+from typing import Iterator, Sequence, Tuple
 
 from rxn.utilities.misc import get_multipliers
 
@@ -44,12 +44,24 @@ class ReactionCombiner:
         self.reaction_format = reaction_format
         self.fallback_reaction = fallback_reaction
 
-    def combine(self, fragments_1: List[str], fragments_2: List[str]) -> Iterator[str]:
+    def combine(
+        self, fragments_1: Sequence[str], fragments_2: Sequence[str]
+    ) -> Iterator[str]:
         """
+        See docstring of function ``combine_sequences``.
+        """
+        yield from self.combine_sequences(fragments_1, fragments_2)
+
+    def combine_sequences(
+        self, fragments_1: Sequence[str], fragments_2: Sequence[str]
+    ) -> Iterator[str]:
+        """
+        Combine the two sequences of fragments into an iterator of reactions.
+
         Args:
-            fragments_1: List of sets of precursors strings (such as "CC.O.[Na+]~[Cl-]"),
+            fragments_1: Sequence of sets of precursors strings (such as "CC.O.[Na+]~[Cl-]"),
                 or list of partial reactions.
-            fragments_2: List of sets of product(s) strings, or list of partial
+            fragments_2: Sequence of sets of product(s) strings, or list of partial
                 reactions.
 
         Returns:
@@ -58,13 +70,41 @@ class ReactionCombiner:
         fragments_1_multiplier, fragments_2_multiplier = self._get_multipliers(
             fragments_1, fragments_2
         )
+        self._validate_multipliers(fragments_1_multiplier, fragments_2_multiplier)
+        yield from self.combine_iterators(
+            fragments_1=iter(fragments_1),
+            fragments_2=iter(fragments_2),
+            fragments_1_multiplier=fragments_1_multiplier,
+            fragments_2_multiplier=fragments_2_multiplier,
+        )
 
-        # repeat itemwise the elements: https://stackoverflow.com/a/45799308
+    def combine_iterators(
+        self,
+        fragments_1: Iterator[str],
+        fragments_2: Iterator[str],
+        fragments_1_multiplier: int = 1,
+        fragments_2_multiplier: int = 1,
+    ) -> Iterator[str]:
+        """
+        Combine the two iterators of fragments into an iterator of reactions.
+
+        Args:
+            fragments_1: Sequence of sets of precursors strings (such as "CC.O.[Na+]~[Cl-]"),
+                or list of partial reactions.
+            fragments_2: Sequence of sets of product(s) strings, or list of partial
+                reactions.
+            fragments_1_multiplier: how many times to duplicate the fragments_1.
+            fragments_2_multiplier: how many times to duplicate the fragments_2.
+
+        Returns:
+            Iterator over the resulting reaction SMILES.
+        """
+        # # repeat itemwise the elements: https://stackoverflow.com/a/45799320
         fragment_1_iterator = chain.from_iterable(
-            zip(*repeat(fragments_1, fragments_1_multiplier))
+            (repeat(e, fragments_1_multiplier) for e in fragments_1)
         )
         fragment_2_iterator = chain.from_iterable(
-            zip(*repeat(fragments_2, fragments_2_multiplier))
+            (repeat(e, fragments_2_multiplier) for e in fragments_2)
         )
 
         for fragment_1, fragment_2 in zip(fragment_1_iterator, fragment_2_iterator):
@@ -114,7 +154,7 @@ class ReactionCombiner:
         )
 
     def _get_multipliers(
-        self, fragments_1: List[str], fragments_2: List[str]
+        self, fragments_1: Sequence[str], fragments_2: Sequence[str]
     ) -> Tuple[int, int]:
         """Get the multipliers to use when iterating through the respective fragments.
 
@@ -129,11 +169,18 @@ class ReactionCombiner:
 
         m_a, m_b = get_multipliers(a, b)
 
-        # Fail if one is not exactly a multiple of the other
-        if 1 not in {m_a, m_b}:
-            raise ValueError(
-                "The number of fragments of reactions "
-                f"are not an exact multiple of each other ({a} and {b})"
-            )
-
         return m_a, m_b
+
+    def _validate_multipliers(self, multiplier_1: int, multiplier_2: int) -> None:
+        """
+        Make sure that the given multipliers can be used with the reaction combiner.
+
+        Raises:
+            ValueError: when one is not exactly a multiple of the other.
+        """
+        # Fail if one is not exactly a multiple of the other
+        if 1 not in {multiplier_1, multiplier_2}:
+            raise ValueError(
+                "The number of fragments of reactions are not an exact multiple of "
+                f"each other: the multipliers are {multiplier_1} and {multiplier_2}."
+            )
