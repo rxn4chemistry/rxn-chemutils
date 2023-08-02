@@ -70,7 +70,6 @@ class ReactionCombiner:
         fragments_1_multiplier, fragments_2_multiplier = self._get_multipliers(
             fragments_1, fragments_2
         )
-        self._validate_multipliers(fragments_1_multiplier, fragments_2_multiplier)
         yield from self.combine_iterators(
             fragments_1=fragments_1,
             fragments_2=fragments_2,
@@ -98,10 +97,14 @@ class ReactionCombiner:
 
         Raises:
             RuntimeError: if one of the iterators isn't fully consumed.
+            ValueError: when one is not exactly a multiple of the other.
 
         Returns:
             Iterator over the resulting reaction SMILES.
         """
+
+        self._validate_multipliers(fragments_1_multiplier, fragments_2_multiplier)
+
         # # repeat itemwise the elements: https://stackoverflow.com/a/45799320
         fragment_1_iterator = chain.from_iterable(
             (repeat(e, fragments_1_multiplier) for e in fragments_1)
