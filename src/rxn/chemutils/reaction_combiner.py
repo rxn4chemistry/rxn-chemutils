@@ -1,5 +1,5 @@
-from itertools import chain, repeat
-from typing import Iterator, Sequence, Tuple
+from itertools import chain, repeat, zip_longest
+from typing import Iterable, Iterator, Sequence, Tuple
 
 from rxn.utilities.misc import get_multipliers
 
@@ -72,16 +72,16 @@ class ReactionCombiner:
         )
         self._validate_multipliers(fragments_1_multiplier, fragments_2_multiplier)
         yield from self.combine_iterators(
-            fragments_1=iter(fragments_1),
-            fragments_2=iter(fragments_2),
+            fragments_1=fragments_1,
+            fragments_2=fragments_2,
             fragments_1_multiplier=fragments_1_multiplier,
             fragments_2_multiplier=fragments_2_multiplier,
         )
 
     def combine_iterators(
         self,
-        fragments_1: Iterator[str],
-        fragments_2: Iterator[str],
+        fragments_1: Iterable[str],
+        fragments_2: Iterable[str],
         fragments_1_multiplier: int = 1,
         fragments_2_multiplier: int = 1,
     ) -> Iterator[str]:
@@ -96,6 +96,9 @@ class ReactionCombiner:
             fragments_1_multiplier: how many times to duplicate the fragments_1.
             fragments_2_multiplier: how many times to duplicate the fragments_2.
 
+        Raises:
+            RuntimeError: if one of the iterators isn't fully consumed.
+
         Returns:
             Iterator over the resulting reaction SMILES.
         """
@@ -107,7 +110,11 @@ class ReactionCombiner:
             (repeat(e, fragments_2_multiplier) for e in fragments_2)
         )
 
-        for fragment_1, fragment_2 in zip(fragment_1_iterator, fragment_2_iterator):
+        for fragment_1, fragment_2 in zip_longest(
+            fragment_1_iterator, fragment_2_iterator
+        ):
+            if fragment_1 or fragment_2 is None:
+                raise RuntimeError("Mismatch in expected iterator length")
             yield self._to_reaction_smiles(fragment_1, fragment_2)
 
     def _to_reaction_smiles(self, fragment_1: str, fragment_2: str) -> str:
