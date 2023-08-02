@@ -18,6 +18,8 @@ rxn.chemutils.reaction\_combiner.ReactionCombiner
    
       ~ReactionCombiner.__init__
       ~ReactionCombiner.combine
+      ~ReactionCombiner.combine_iterators
+      ~ReactionCombiner.combine_sequences
    
    
 

@@ -146,24 +146,73 @@ of these files.</p>
 </p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rxn.chemutils.reaction_combiner.ReactionCombiner.combine" title="rxn.chemutils.reaction_combiner.ReactionCombiner.combine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">combine</span></code></a>(fragments_1, fragments_2)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">type fragments_1</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
-</dd>
-</dl>
-</p></td>
+<td><p>See docstring of function <code class="docutils literal notranslate"><span class="pre">combine_sequences</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rxn.chemutils.reaction_combiner.ReactionCombiner.combine_iterators" title="rxn.chemutils.reaction_combiner.ReactionCombiner.combine_iterators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">combine_iterators</span></code></a>(fragments_1, fragments_2)</p></td>
+<td><p>Combine the two iterators of fragments into an iterator of reactions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rxn.chemutils.reaction_combiner.ReactionCombiner.combine_sequences" title="rxn.chemutils.reaction_combiner.ReactionCombiner.combine_sequences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">combine_sequences</span></code></a>(fragments_1, fragments_2)</p></td>
+<td><p>Combine the two sequences of fragments into an iterator of reactions.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="rxn.chemutils.reaction_combiner.ReactionCombiner.combine">
 <span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragments_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/reaction_combiner.html#ReactionCombiner.combine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.reaction_combiner.ReactionCombiner.combine" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>See docstring of function <code class="docutils literal notranslate"><span class="pre">combine_sequences</span></code>.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fragments_1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of sets of precursors strings (such as “CC.O.[Na+]~[Cl-]”),
+<li><p><strong>fragments_1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – </p></li>
+<li><p><strong>fragments_2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rxn.chemutils.reaction_combiner.ReactionCombiner.combine_iterators">
+<span class="sig-name descname"><span class="pre">combine_iterators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragments_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments_1_multiplier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments_2_multiplier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/reaction_combiner.html#ReactionCombiner.combine_iterators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.reaction_combiner.ReactionCombiner.combine_iterators" title="Permalink to this definition"></a></dt>
+<dd><p>Combine the two iterators of fragments into an iterator of reactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fragments_1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Sequence of sets of precursors strings (such as “CC.O.[Na+]~[Cl-]”),
 or list of partial reactions.</p></li>
-<li><p><strong>fragments_2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of sets of product(s) strings, or list of partial
+<li><p><strong>fragments_2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Sequence of sets of product(s) strings, or list of partial
+reactions.</p></li>
+<li><p><strong>fragments_1_multiplier</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, default: <code class="docutils literal notranslate"><span class="pre">1</span></code>) – how many times to duplicate the fragments_1.</p></li>
+<li><p><strong>fragments_2_multiplier</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, default: <code class="docutils literal notranslate"><span class="pre">1</span></code>) – how many times to duplicate the fragments_2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – if one of the iterators isn’t fully consumed.</p></li>
+<li><p><strong>ValueError</strong> – when one is not exactly a multiple of the other.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Iterator over the resulting reaction SMILES.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rxn.chemutils.reaction_combiner.ReactionCombiner.combine_sequences">
+<span class="sig-name descname"><span class="pre">combine_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragments_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/reaction_combiner.html#ReactionCombiner.combine_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.reaction_combiner.ReactionCombiner.combine_sequences" title="Permalink to this definition"></a></dt>
+<dd><p>Combine the two sequences of fragments into an iterator of reactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fragments_1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Sequence of sets of precursors strings (such as “CC.O.[Na+]~[Cl-]”),
+or list of partial reactions.</p></li>
+<li><p><strong>fragments_2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Sequence of sets of product(s) strings, or list of partial
 reactions.</p></li>
 </ul>
 </dd>
