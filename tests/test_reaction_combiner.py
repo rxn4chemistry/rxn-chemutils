@@ -125,3 +125,40 @@ def test_invalid_reactions() -> None:
     expected = [fallback_string, "CCC.O>>CCCO", fallback_string]
 
     assert list(combiner.combine(precursors, products)) == expected
+
+
+def test_combine_iterators() -> None:
+    combiner = ReactionCombiner()
+
+    precursors = iter(["CC.O", "CCC.O"])
+    products = iter(["CCO", "CCCO"])
+    expected = ["CC.O>>CCO", "CCC.O>>CCCO"]
+
+    assert list(combiner.combine_iterators(precursors, products)) == expected
+
+
+def test_combine_iterators_with_multiplier() -> None:
+    combiner = ReactionCombiner()
+
+    precursors = iter(["CC.O", "CC.O.N", "CCC.O", "CCC.O.N"])
+    products = iter(["CCO", "CCCO"])
+    expected = ["CC.O>>CCO", "CC.O.N>>CCO", "CCC.O>>CCCO", "CCC.O.N>>CCCO"]
+
+    results = combiner.combine_iterators(precursors, products, 1, 2)
+    assert list(results) == expected
+
+
+def test_raise_if_iterator_not_fully_consumed() -> None:
+    combiner = ReactionCombiner()
+
+    # One more precursor than supposed to be ("CC")
+    precursors = iter(["CC.O", "CC.O.N", "CCC.O", "CCC.O.N", "CC"])
+    products = iter(["CCO", "CCCO"])
+    with pytest.raises(RuntimeError):
+        _ = list(combiner.combine_iterators(precursors, products, 1, 2))
+
+    # One more product than supposed to be ("CC")
+    precursors = iter(["CC.O", "CC.O.N", "CCC.O", "CCC.O.N"])
+    products = iter(["CCO", "CCCO", "CC"])
+    with pytest.raises(RuntimeError):
+        _ = list(combiner.combine_iterators(precursors, products, 1, 2))
