@@ -1,0 +1,26 @@
+rxn.chemutils.rdf.property\_parser.PropertySerializer
+=====================================================
+
+.. currentmodule:: rxn.chemutils.rdf.property_parser
+
+.. autoclass:: PropertySerializer
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PropertySerializer.__init__
+      ~PropertySerializer.convert_dict
+   
+   
+
+   
+   
+   

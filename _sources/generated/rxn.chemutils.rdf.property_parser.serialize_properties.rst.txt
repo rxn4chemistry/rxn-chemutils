@@ -1,0 +1,6 @@
+rxn.chemutils.rdf.property\_parser.serialize\_properties
+========================================================
+
+.. currentmodule:: rxn.chemutils.rdf.property_parser
+
+.. autofunction:: serialize_properties

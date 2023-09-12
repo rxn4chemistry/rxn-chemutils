@@ -33,6 +33,7 @@
    rxn.chemutils.extended_reaction_smiles
    rxn.chemutils.miscellaneous
    rxn.chemutils.multicomponent_smiles
+   rxn.chemutils.rdf
    rxn.chemutils.rdkit_utils
    rxn.chemutils.reaction_combiner
    rxn.chemutils.reaction_equation

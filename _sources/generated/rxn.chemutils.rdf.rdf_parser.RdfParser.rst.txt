@@ -1,0 +1,27 @@
+rxn.chemutils.rdf.rdf\_parser.RdfParser
+=======================================
+
+.. currentmodule:: rxn.chemutils.rdf.rdf_parser
+
+.. autoclass:: RdfParser
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RdfParser.__init__
+      ~RdfParser.iter_blocks
+      ~RdfParser.iter_reactions
+   
+   
+
+   
+   
+   

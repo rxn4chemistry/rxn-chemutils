@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="rxn.chemutils.rdkit_utils" href="rxn.chemutils.rdkit_utils.html" />
+    <link rel="prev" title="rxn.chemutils.rdf.reaction_smiles_extractor" href="rxn.chemutils.rdf.reaction_smiles_extractor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">README</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="rxn.chemutils.html">rxn.chemutils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.conversion.html">rxn.chemutils.conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.exceptions.html">rxn.chemutils.exceptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.extended_reaction_smiles.html">rxn.chemutils.extended_reaction_smiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.miscellaneous.html">rxn.chemutils.miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.multicomponent_smiles.html">rxn.chemutils.multicomponent_smiles</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="rxn.chemutils.rdf.html">rxn.chemutils.rdf</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.rdf.property_parser.html">rxn.chemutils.rdf.property_parser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.rdf.rdf_parser.html">rxn.chemutils.rdf.rdf_parser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.rdf.rdf_reaction.html">rxn.chemutils.rdf.rdf_reaction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rxn.chemutils.rdf.reaction_properties.html">rxn.chemutils.rdf.reaction_properties</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="rxn.chemutils.rdf.reaction_smiles_extractor.html">rxn.chemutils.rdf.reaction_smiles_extractor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.rdkit_utils.html">rxn.chemutils.rdkit_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_combiner.html">rxn.chemutils.reaction_combiner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_equation.html">rxn.chemutils.reaction_equation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.reaction_smiles.html">rxn.chemutils.reaction_smiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.scripts.html">rxn.chemutils.scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_augmenter.html">rxn.chemutils.smiles_augmenter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.smiles_randomization.html">rxn.chemutils.smiles_randomization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.tokenization.html">rxn.chemutils.tokenization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rxn.chemutils.utils.html">rxn.chemutils.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+          <li><a href="rxn.chemutils.html">rxn.chemutils</a> &raquo;</li>
+          <li><a href="rxn.chemutils.rdf.html">rxn.chemutils.rdf</a> &raquo;</li>
+          <li><a href="rxn.chemutils.rdf.reaction_smiles_extractor.html">rxn.chemutils.rdf.reaction_smiles_extractor</a> &raquo;</li>
+      <li>rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rxn-chemutils-rdf-reaction-smiles-extractor-reactionsmilesextractor">
+<h1>rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor<a class="headerlink" href="#rxn-chemutils-rdf-reaction-smiles-extractor-reactionsmilesextractor" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rxn.chemutils.rdf.reaction_smiles_extractor.</span></span><span class="sig-name descname"><span class="pre">ReactionSmilesExtractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragment_bond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sanitize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/rdf/reaction_smiles_extractor.html#ReactionSmilesExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Extract reaction SMILES from RdfReaction instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fragment_bond</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – </p></li>
+<li><p><strong>sanitize</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragment_bond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sanitize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/rdf/reaction_smiles_extractor.html#ReactionSmilesExtractor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.__init__" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fragment_bond</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – </p></li>
+<li><p><strong>sanitize</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, default: <code class="docutils literal notranslate"><span class="pre">True</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.__init__" title="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([fragment_bond, sanitize])</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param fragment_bond</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_equation" title="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_equation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_reaction_equation</span></code></a>(reaction)</p></td>
+<td><p>Extract the reaction equation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_smiles" title="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_smiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_reaction_smiles</span></code></a>(reaction)</p></td>
+<td><p>Extract the reaction SMILES.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_string" title="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_string</span></code></a>(reaction_equation)</p></td>
+<td><p>Convert a ReactionEquation to a reaction SMILES.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_equation">
+<span class="sig-name descname"><span class="pre">to_reaction_equation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reaction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/rdf/reaction_smiles_extractor.html#ReactionSmilesExtractor.to_reaction_equation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_equation" title="Permalink to this definition"></a></dt>
+<dd><p>Extract the reaction equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reaction</strong> (<a class="reference internal" href="rxn.chemutils.rdf.rdf_reaction.RdfReaction.html#rxn.chemutils.rdf.rdf_reaction.RdfReaction" title="rxn.chemutils.rdf.rdf_reaction.RdfReaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">RdfReaction</span></code></a>) – RdfReaction to extract the reaction equation from.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation" title="rxn.chemutils.reaction_equation.ReactionEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReactionEquation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_smiles">
+<span class="sig-name descname"><span class="pre">to_reaction_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reaction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/rdf/reaction_smiles_extractor.html#ReactionSmilesExtractor.to_reaction_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_reaction_smiles" title="Permalink to this definition"></a></dt>
+<dd><p>Extract the reaction SMILES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reaction</strong> (<a class="reference internal" href="rxn.chemutils.rdf.rdf_reaction.RdfReaction.html#rxn.chemutils.rdf.rdf_reaction.RdfReaction" title="rxn.chemutils.rdf.rdf_reaction.RdfReaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">RdfReaction</span></code></a>) – RdfReaction to extract the reaction equation from.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reaction_equation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rxn/chemutils/rdf/reaction_smiles_extractor.html#ReactionSmilesExtractor.to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rxn.chemutils.rdf.reaction_smiles_extractor.ReactionSmilesExtractor.to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a ReactionEquation to a reaction SMILES.</p>
+<p>Useful function as it automatically uses the correct fragment bond.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reaction_equation</strong> (<a class="reference internal" href="rxn.chemutils.reaction_equation.ReactionEquation.html#rxn.chemutils.reaction_equation.ReactionEquation" title="rxn.chemutils.reaction_equation.ReactionEquation"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReactionEquation</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rxn.chemutils.rdf.reaction_smiles_extractor.html" class="btn btn-neutral float-left" title="rxn.chemutils.rdf.reaction_smiles_extractor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rxn.chemutils.rdkit_utils.html" class="btn btn-neutral float-right" title="rxn.chemutils.rdkit_utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

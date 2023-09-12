@@ -1,0 +1,6 @@
+rxn.chemutils.conversion.mdl\_to\_smiles
+========================================
+
+.. currentmodule:: rxn.chemutils.conversion
+
+.. autofunction:: mdl_to_smiles

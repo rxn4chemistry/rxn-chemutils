@@ -1,0 +1,6 @@
+rxn.chemutils.rdf.reaction\_properties.find\_compounds\_with\_category
+======================================================================
+
+.. currentmodule:: rxn.chemutils.rdf.reaction_properties
+
+.. autofunction:: find_compounds_with_category

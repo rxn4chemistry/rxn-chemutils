@@ -1,0 +1,40 @@
+rxn.chemutils.rdf.property\_parser
+==================================
+
+.. automodule:: rxn.chemutils.rdf.property_parser
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      parse_properties
+      serialize_properties
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      PropertyParser
+      PropertySerializer
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,6 @@
+rxn.chemutils.rdf.rdf\_parser.iterate\_reactions\_from\_file
+============================================================
+
+.. currentmodule:: rxn.chemutils.rdf.rdf_parser
+
+.. autofunction:: iterate_reactions_from_file

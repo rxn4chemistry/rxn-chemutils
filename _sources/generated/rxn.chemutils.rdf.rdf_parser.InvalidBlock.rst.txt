@@ -1,0 +1,6 @@
+rxn.chemutils.rdf.rdf\_parser.InvalidBlock
+==========================================
+
+.. currentmodule:: rxn.chemutils.rdf.rdf_parser
+
+.. autoexception:: InvalidBlock

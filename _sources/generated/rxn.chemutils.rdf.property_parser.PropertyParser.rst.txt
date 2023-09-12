@@ -1,0 +1,27 @@
+rxn.chemutils.rdf.property\_parser.PropertyParser
+=================================================
+
+.. currentmodule:: rxn.chemutils.rdf.property_parser
+
+.. autoclass:: PropertyParser
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PropertyParser.__init__
+      ~PropertyParser.parse_dict
+      ~PropertyParser.parse_property
+   
+   
+
+   
+   
+   

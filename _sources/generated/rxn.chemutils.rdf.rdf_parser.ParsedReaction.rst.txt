@@ -1,0 +1,33 @@
+rxn.chemutils.rdf.rdf\_parser.ParsedReaction
+============================================
+
+.. currentmodule:: rxn.chemutils.rdf.rdf_parser
+
+.. autoclass:: ParsedReaction
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ParsedReaction.__init__
+      ~ParsedReaction.block_type
+      ~ParsedReaction.handle_datum
+      ~ParsedReaction.handle_dtype
+      ~ParsedReaction.handle_line_block
+      ~ParsedReaction.handle_mol
+      ~ParsedReaction.handle_rfmt
+      ~ParsedReaction.handle_rxn
+      ~ParsedReaction.to_reaction
+   
+   
+
+   
+   
+   

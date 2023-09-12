@@ -1,0 +1,37 @@
+rxn.chemutils.rdf.reaction\_properties.Compound
+===============================================
+
+.. currentmodule:: rxn.chemutils.rdf.reaction_properties
+
+.. autoclass:: Compound
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Compound.__init__
+      ~Compound.from_dict
+      ~Compound.get_name
+      ~Compound.to_dict
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Compound.mol_structure
+      ~Compound.symbol
+      ~Compound.mol_caption
+      ~Compound.category
+   
+   

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.rdf.reaction_properties &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>rxn.chemutils.rdf.reaction_properties</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rxn.chemutils.rdf.reaction_properties</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">attr</span>
+
+<span class="kn">from</span> <span class="nn">.property_parser</span> <span class="kn">import</span> <span class="n">parse_properties</span>
+
+
+<div class="viewcode-block" id="Compound"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.Compound.html#rxn.chemutils.rdf.reaction_properties.Compound">[docs]</a><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Compound</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for the compound dicts, which always contain a MOLSTRUCTURE,</span>
+<span class="sd">    usually a SYMBOL, and sometimes a MOL_CAPTION.&quot;&quot;&quot;</span>
+
+    <span class="n">mol_structure</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">symbol</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">mol_caption</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Compound.get_name"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.Compound.html#rxn.chemutils.rdf.reaction_properties.Compound.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Try to get a name by first looking at the SYMBOL and then at the MOLCAPTION.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol_caption</span></div>
+
+<div class="viewcode-block" id="Compound.to_dict"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.Compound.html#rxn.chemutils.rdf.reaction_properties.Compound.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert back to a dictionary, as in the RdfReaction properties.&quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;MOLSTRUCTURE&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol_structure</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;SYMBOL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol_caption</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;MOL_CAPTION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mol_caption</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">compound_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Compound&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">category</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">mol_structure</span><span class="o">=</span><span class="n">compound_dict</span><span class="p">[</span><span class="s2">&quot;MOLSTRUCTURE&quot;</span><span class="p">],</span>
+            <span class="n">symbol</span><span class="o">=</span><span class="n">compound_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SYMBOL&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">mol_caption</span><span class="o">=</span><span class="n">compound_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MOL_CAPTION&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReactionProperties"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.ReactionProperties.html#rxn.chemutils.rdf.reaction_properties.ReactionProperties">[docs]</a><span class="k">class</span> <span class="nc">ReactionProperties</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class compiling the reaction properties given for an RDF reaction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReactionProperties.__init__"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.ReactionProperties.html#rxn.chemutils.rdf.reaction_properties.ReactionProperties.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="n">pruned_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prune_unnecessary_lists</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="n">parsed_properties</span> <span class="o">=</span> <span class="n">parse_properties</span><span class="p">(</span><span class="n">pruned_meta</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed_properties</span><span class="p">[</span><span class="s2">&quot;RXN&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="n">parsed_properties</span></div>
+
+<div class="viewcode-block" id="ReactionProperties.get_compound_dicts"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.ReactionProperties.html#rxn.chemutils.rdf.reaction_properties.ReactionProperties.get_compound_dicts">[docs]</a>    <span class="k">def</span> <span class="nf">get_compound_dicts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;NB: this function allows to iterate through the compounds in the</span>
+<span class="sd">        property dict and make edits there (see ReactionUpdater).&quot;&quot;&quot;</span>
+        <span class="k">yield from</span> <span class="n">find_compounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ReactionProperties.get_compounds"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.ReactionProperties.html#rxn.chemutils.rdf.reaction_properties.ReactionProperties.get_compounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_compounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Compound</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the compounds involved in a reaction, without the reactants and products.&quot;&quot;&quot;</span>
+        <span class="k">yield from</span> <span class="p">(</span>
+            <span class="n">Compound</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cpd_dict</span><span class="p">,</span> <span class="n">category</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cpd_dict</span><span class="p">,</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">find_compounds_with_category</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_prune_unnecessary_lists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In the meta dict, often there will be unnecessary list-like keys.</span>
+<span class="sd">        In particular, &quot;MOL(1):&quot; and &quot;SYMBOL(1):&quot; can be removed as they are</span>
+<span class="sd">        never necessary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">simplify_key</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">updated_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;MOL(1):&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;SYMBOL(1):&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;MOL(&quot;</span> <span class="ow">in</span> <span class="n">updated_key</span> <span class="ow">or</span> <span class="s2">&quot;SYMBOL(&quot;</span> <span class="ow">in</span> <span class="n">updated_key</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MOL or SYMBOL list with index other than 1: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">updated_key</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="n">simplify_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+<div class="viewcode-block" id="find_compounds"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.find_compounds.html#rxn.chemutils.rdf.reaction_properties.find_compounds">[docs]</a><span class="k">def</span> <span class="nf">find_compounds</span><span class="p">(</span><span class="n">property_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate through a property dictionary to find compound dicts.&quot;&quot;&quot;</span>
+    <span class="k">yield from</span> <span class="p">(</span>
+        <span class="n">compound_dict</span>
+        <span class="k">for</span> <span class="n">compound_dict</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">find_compounds_with_category</span><span class="p">(</span><span class="n">property_dict</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="find_compounds_with_category"><a class="viewcode-back" href="../../../../generated/rxn.chemutils.rdf.reaction_properties.find_compounds_with_category.html#rxn.chemutils.rdf.reaction_properties.find_compounds_with_category">[docs]</a><span class="k">def</span> <span class="nf">find_compounds_with_category</span><span class="p">(</span>
+    <span class="n">property_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterate through a property dictionary to find compound dicts, with the</span>
+<span class="sd">    associated category (&quot;SOLVENT&quot;, &quot;CATALYST&quot;, etc.).&quot;&quot;&quot;</span>
+    <span class="k">yield from</span> <span class="n">_find_compounds_with_prefix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">property_dict</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_find_compounds_with_prefix</span><span class="p">(</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">property_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="s2">&quot;MOLSTRUCTURE&quot;</span> <span class="ow">in</span> <span class="n">property_dict</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">property_dict</span><span class="p">,</span> <span class="n">prefix</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">property_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">_find_compounds_with_prefix</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># If the item is a list, we take the key as a prefix - this may be</span>
+        <span class="c1"># something such as &quot;SOLVENT&quot;, &quot;CATALYST&quot;, etc.</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">yield from</span> <span class="n">_find_compounds_with_prefix</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

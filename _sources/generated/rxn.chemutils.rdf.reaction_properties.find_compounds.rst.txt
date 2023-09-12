@@ -1,0 +1,6 @@
+rxn.chemutils.rdf.reaction\_properties.find\_compounds
+======================================================
+
+.. currentmodule:: rxn.chemutils.rdf.reaction_properties
+
+.. autofunction:: find_compounds

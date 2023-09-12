@@ -1,0 +1,6 @@
+rxn.chemutils.rdf.rdf\_parser.IncompleteReaction
+================================================
+
+.. currentmodule:: rxn.chemutils.rdf.rdf_parser
+
+.. autoexception:: IncompleteReaction

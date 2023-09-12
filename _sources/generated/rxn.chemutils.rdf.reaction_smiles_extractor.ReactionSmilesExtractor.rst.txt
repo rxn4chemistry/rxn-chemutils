@@ -1,0 +1,28 @@
+rxn.chemutils.rdf.reaction\_smiles\_extractor.ReactionSmilesExtractor
+=====================================================================
+
+.. currentmodule:: rxn.chemutils.rdf.reaction_smiles_extractor
+
+.. autoclass:: ReactionSmilesExtractor
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ReactionSmilesExtractor.__init__
+      ~ReactionSmilesExtractor.to_reaction_equation
+      ~ReactionSmilesExtractor.to_reaction_smiles
+      ~ReactionSmilesExtractor.to_string
+   
+   
+
+   
+   
+   

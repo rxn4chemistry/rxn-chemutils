@@ -1,0 +1,40 @@
+rxn.chemutils.rdf.reaction\_properties
+======================================
+
+.. automodule:: rxn.chemutils.rdf.reaction_properties
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      find_compounds
+      find_compounds_with_category
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Compound
+      ReactionProperties
+   
+   
+
+   
+   
+   
+
+
+

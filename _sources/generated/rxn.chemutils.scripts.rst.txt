@@ -31,5 +31,6 @@ rxn.chemutils.scripts
    rxn.chemutils.scripts.canonicalize
    rxn.chemutils.scripts.combine_reaction
    rxn.chemutils.scripts.detokenize
+   rxn.chemutils.scripts.rdf_to_smiles
    rxn.chemutils.scripts.tokenize
 

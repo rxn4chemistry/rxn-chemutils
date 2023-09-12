@@ -1,0 +1,38 @@
+rxn.chemutils.rdf.rdf\_reaction.RdfReaction
+===========================================
+
+.. currentmodule:: rxn.chemutils.rdf.rdf_reaction
+
+.. autoclass:: RdfReaction
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RdfReaction.__init__
+      ~RdfReaction.additional_reagents_from_meta
+      ~RdfReaction.all_reagents
+      ~RdfReaction.get_mol_structure
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RdfReaction.reactants
+      ~RdfReaction.reagents
+      ~RdfReaction.products
+      ~RdfReaction.meta
+      ~RdfReaction.reaction_index
+   
+   

@@ -242,6 +242,35 @@
         <span class="k">raise</span> <span class="n">SanitizationError</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
 
 
+<div class="viewcode-block" id="mdl_to_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mdl_to_smiles.html#rxn.chemutils.conversion.mdl_to_smiles">[docs]</a><span class="k">def</span> <span class="nf">mdl_to_smiles</span><span class="p">(</span>
+    <span class="n">mdl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">canonicalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert MDL molecule description to SMILES.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mdl: molblock to convert</span>
+<span class="sd">        sanitize: whether to sanitize. May be set to False to avoid RDKit valence check.</span>
+<span class="sd">        canonicalize: whether to canonicalize for conversion to SMILES.</span>
+<span class="sd">        default: if specified, what will be returned for conversion errors.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        SMILES string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">mdl_to_mol</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">InvalidMdl</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonicalize</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="remove_hydrogens"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.remove_hydrogens.html#rxn.chemutils.conversion.remove_hydrogens">[docs]</a><span class="k">def</span> <span class="nf">remove_hydrogens</span><span class="p">(</span><span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove unnecessary hydrogens in a molecule.</span>
