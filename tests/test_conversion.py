@@ -8,6 +8,7 @@ from rxn.chemutils.conversion import (
     inchi_to_mol,
     maybe_canonicalize,
     mdl_to_mol,
+    mdl_to_smiles,
     mol_to_inchi,
     mol_to_mdl,
     mol_to_smiles,
@@ -139,6 +140,17 @@ def test_mdl_to_mol() -> None:
     # Back-conversion leads to original MDL
     assert mol_to_mdl(mdl_to_mol(WATER_MDL)) == WATER_MDL
     assert mol_to_mdl(mdl_to_mol(CFC_MDL, sanitize=False)) == CFC_MDL
+
+
+def test_mdl_to_smiles() -> None:
+    assert mdl_to_smiles(WATER_MDL) == "O"
+
+    # invalid MDL -> exception
+    with pytest.raises(InvalidMdl):
+        _ = mdl_to_smiles("invalid mdl")
+
+    # invalid MDL, called with default -> returns the default
+    assert mdl_to_smiles("invalid mdl", default="[Invalid]") == "[Invalid]"
 
 
 def test_sanitize_mol() -> None:
