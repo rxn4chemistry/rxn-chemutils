@@ -175,6 +175,35 @@ def sanitize_mol(
         raise SanitizationError(mol) from e
 
 
+def mdl_to_smiles(
+    mdl: str,
+    sanitize: bool = True,
+    canonicalize: bool = True,
+    default: Optional[str] = None,
+) -> str:
+    """
+    Convert MDL molecule description to SMILES.
+
+    Args:
+        mdl: molblock to convert
+        sanitize: whether to sanitize. May be set to False to avoid RDKit valence check.
+        canonicalize: whether to canonicalize for conversion to SMILES.
+        default: if specified, what will be returned for conversion errors.
+
+    Returns:
+        SMILES string.
+    """
+
+    try:
+        mol = mdl_to_mol(mdl, sanitize=sanitize)
+    except InvalidMdl:
+        if default is not None:
+            return default
+        else:
+            raise
+    return mol_to_smiles(mol, canonical=canonicalize)
+
+
 def remove_hydrogens(mol: Mol) -> Mol:
     """
     Remove unnecessary hydrogens in a molecule.
