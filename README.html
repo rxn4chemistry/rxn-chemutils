@@ -42,6 +42,15 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#system-requirements">System Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-guide">Installation guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-highlights">Package highlights</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#convert-between-compound-representations">Convert between compound representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reaction-smiles">Reaction SMILES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multicomponent-smiles">Multicomponent SMILES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#canonicalization">Canonicalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#augmentation">Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#others">Others</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
@@ -110,6 +119,117 @@ conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> <
 pip<span class="w"> </span>install<span class="w"> </span>rdkit
 </pre></div>
 </div>
+</section>
+<section id="package-highlights">
+<h2>Package highlights<a class="headerlink" href="#package-highlights" title="Permalink to this heading"></a></h2>
+<section id="convert-between-compound-representations">
+<h3>Convert between compound representations<a class="headerlink" href="#convert-between-compound-representations" title="Permalink to this heading"></a></h3>
+<p>There are functions to convert between SMILES, <code class="docutils literal notranslate"><span class="pre">RDKit.Mol</span></code>, MDL, InChI, etc.
+All of them work in a similar way:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rxn.chemutils.conversion</span> <span class="kn">import</span> <span class="n">smiles_to_mol</span><span class="p">,</span> <span class="n">mol_to_smiles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="s2">&quot;CO(C)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="go">&#39;COC&#39;</span>
+</pre></div>
+</div>
+<p>The functions raise exceptions when failing, and allow to be used without sanitization.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="s2">&quot;CFC&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">[...]</span>
+<span class="gr">rxn.chemutils.exceptions.InvalidSmiles</span>: <span class="n">&quot;CFC&quot; is not a valid SMILES string</span>
+</pre></div>
+</div>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="s2">&quot;CFC&quot;</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+<span class="go">&#39;CFC&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="reaction-smiles">
+<h3>Reaction SMILES<a class="headerlink" href="#reaction-smiles" title="Permalink to this heading"></a></h3>
+<p>The package supports different kinds of reaction SMILES, which, internally, are stored as <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">ReactionEquation</span></code>s</span>.</p>
+<p>To convert to and from <code class="docutils literal notranslate"><span class="pre">ReactionEquation</span></code>, a few functions are provided:</p>
+<ul class="simple">
+<li><p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">parse_reaction_smiles</span></code></span> and <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">to_reaction_smiles</span></code></span>, if you know already the format.</p></li>
+<li><p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">parse_any_reaction_smiles</span></code></span>, if you don’t know the format or want to be flexible.</p></li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rxn.chemutils.reaction_smiles</span> <span class="kn">import</span> <span class="n">ReactionFormat</span><span class="p">,</span> <span class="n">determine_format</span><span class="p">,</span> <span class="n">parse_reaction_smiles</span><span class="p">,</span> <span class="n">to_reaction_smiles</span><span class="p">,</span> <span class="n">parse_any_reaction_smiles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rxn_smiles</span> <span class="o">=</span> <span class="s2">&quot;CC.O.[Na+]~[Cl-]&gt;&gt;CCO&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">determine_format</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">)</span>
+<span class="go">&lt;ReactionFormat.STANDARD_WITH_TILDE: 3&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_reaction_smiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">,</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">STANDARD_WITH_TILDE</span><span class="p">)</span>
+<span class="go">ReactionEquation(reactants=[&#39;CC&#39;, &#39;O&#39;, &#39;[Na+].[Cl-]&#39;], agents=[], products=[&#39;CCO&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_any_reaction_smiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">)</span>
+<span class="go">ReactionEquation(reactants=[&#39;CC&#39;, &#39;O&#39;, &#39;[Na+].[Cl-]&#39;], agents=[], products=[&#39;CCO&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_reaction_smiles</span><span class="p">(</span><span class="n">parse_any_reaction_smiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">),</span> <span class="n">ReactionFormat</span><span class="o">.</span><span class="n">EXTENDED</span><span class="p">)</span>
+<span class="go">&#39;CC.O.[Na+].[Cl-]&gt;&gt;CCO |f:2.3|&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="multicomponent-smiles">
+<h3>Multicomponent SMILES<a class="headerlink" href="#multicomponent-smiles" title="Permalink to this heading"></a></h3>
+<p>Sometimes, it is necessary to represent multiple compounds as one single SMILES string.
+For fragments / ions, it becomes necessary to distinguish between what parts belong together as one compound, and what are differentt compounds.
+In such “multitcomponent SMILES”, we typically use tildes, <code class="docutils literal notranslate"><span class="pre">~</span></code>, to indicate that different SMILES fragments belong to the same compound.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rxn.chemutils.multicomponent_smiles</span> <span class="kn">import</span> <span class="n">multicomponent_smiles_to_list</span><span class="p">,</span> <span class="n">list_to_multicomponent_smiles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_to_multicomponent_smiles</span><span class="p">([</span><span class="s2">&quot;CC&quot;</span><span class="p">,</span> <span class="s2">&quot;[Na+].[Cl-]&quot;</span><span class="p">],</span> <span class="n">fragment_bond</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+<span class="go">&#39;CC.[Na+]~[Cl-]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">multicomponent_smiles_to_list</span><span class="p">(</span><span class="s1">&#39;CC.[Na+]~[Cl-]&#39;</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="o">=</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+<span class="go">[&#39;CC&#39;, &#39;[Na+].[Cl-]&#39;]</span>
+</pre></div>
+</div>
+</section>
+<section id="canonicalization">
+<h3>Canonicalization<a class="headerlink" href="#canonicalization" title="Permalink to this heading"></a></h3>
+<p>Canonicalization of compounds, with the possibility to remove the valence check:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rxn.chemutils.conversion</span> <span class="kn">import</span> <span class="n">canonicalize_smiles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_smiles</span><span class="p">(</span><span class="s2">&quot;CC(O)&quot;</span><span class="p">)</span>
+<span class="go">&#39;CCO&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_smiles</span><span class="p">(</span><span class="s2">&quot;ABCD&quot;</span><span class="p">)</span>  <span class="c1"># Invalid SMILES</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">[...]</span>
+<span class="gr">rxn.chemutils.exceptions.InvalidSmiles</span>: <span class="n">&quot;ABCD&quot; is not a valid SMILES string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_smiles</span><span class="p">(</span><span class="s2">&quot;CF(C)&quot;</span><span class="p">)</span>  <span class="c1"># Invalid valence, fails by default</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="gr">[...]</span>
+<span class="gr">rxn.chemutils.exceptions.InvalidSmiles</span>: <span class="n">&quot;CFC&quot; is not a valid SMILES string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_smiles</span><span class="p">(</span><span class="s2">&quot;CF(C)&quot;</span><span class="p">,</span> <span class="n">check_valence</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># Invalid valence, does not fail</span>
+<span class="go">&#39;CFC&#39;</span>
+</pre></div>
+</div>
+<p>Canonicalization of any kind of SMILES (components, multicomponent SMILES, reaction SMILES, etc.), again with the possibility to disable the valence check.
+Note that the resulting string is in the same format.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rxn.chemutils.miscellaneous</span> <span class="kn">import</span> <span class="n">canonicalize_any</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_any</span><span class="p">(</span><span class="s2">&quot;[Na+].[Cl-]&quot;</span><span class="p">)</span>
+<span class="go">&#39;[Cl-].[Na+]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_any</span><span class="p">(</span><span class="s2">&quot;OC.C(O)~CF(C)&quot;</span><span class="p">,</span> <span class="n">check_valence</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">&#39;CO.CFC~CO&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_any</span><span class="p">(</span><span class="s2">&quot;CC(C)&gt;C(O)&gt;C(O)&quot;</span><span class="p">)</span>
+<span class="go">&#39;CCC&gt;CO&gt;CO&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canonicalize_any</span><span class="p">(</span><span class="s2">&quot;CO.O.C&gt;&gt;C(O) |f:1.2|&quot;</span><span class="p">)</span>
+<span class="go">&#39;CO.C.O&gt;&gt;CO |f:1.2|&#39;</span>
+</pre></div>
+</div>
+<p>The executable <code class="docutils literal notranslate"><span class="pre">rxn-canonicalize</span></code> (installed with the package), which works either on files or on stdin</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>rxn-canonicalize<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+<section id="augmentation">
+<h3>Augmentation<a class="headerlink" href="#augmentation" title="Permalink to this heading"></a></h3>
+<p>See <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">smiles_randomization.py</span></code></span> and <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">smiles_augmenter.py</span></code></span> for the augmentation of compound SMILES and reaction SMILES strings.</p>
+</section>
+<section id="others">
+<h3>Others<a class="headerlink" href="#others" title="Permalink to this heading"></a></h3>
+<p>Without going into details, the package also does the following:</p>
+<ul class="simple">
+<li><p>Tokenization and detokenization of SMILES strings in <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">tokenization.py</span></code></span>, and the executables <code class="docutils literal notranslate"><span class="pre">rxn-tokenize</span></code> and <code class="docutils literal notranslate"><span class="pre">rxn-detokenize</span></code>.</p></li>
+<li><p>Easy combination of precursor SMILES and product SMILES into a reaction SMILES with the <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">ReactionCombiner</span></code></span>, and the executable <code class="docutils literal notranslate"><span class="pre">rxn-combine-reaction</span></code>.</p></li>
+<li><p>Parsing of RDFs into reaction SMILES: different <span class="xref myst">modules</span>, and the executable <code class="docutils literal notranslate"><span class="pre">rxn-rdf-to-smiles</span></code>.</p></li>
+<li><p>… and many others.</p></li>
+</ul>
+</section>
 </section>
 </section>
 
