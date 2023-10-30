@@ -96,10 +96,10 @@ In such "multitcomponent SMILES", we typically use tildes, `~`, to indicate that
 
 ```pycon
 >>> from rxn.chemutils.multicomponent_smiles import multicomponent_smiles_to_list, list_to_multicomponent_smiles
->>> list_to_multicomponent_smiles(["CC", "[Na+].[Cl-"], fragment_bond="~")
-'CC.[Na+]~[Cl-'
->>> multicomponent_smiles_to_list('CC.[Na+]~[Cl-', fragment_bond="~")
-['CC', '[Na+].[Cl-']
+>>> list_to_multicomponent_smiles(["CC", "[Na+].[Cl-]"], fragment_bond="~")
+'CC.[Na+]~[Cl-]'
+>>> multicomponent_smiles_to_list('CC.[Na+]~[Cl-]', fragment_bond="~")
+['CC', '[Na+].[Cl-]']
 ```
 
 ### Canonicalization
@@ -125,7 +125,6 @@ Canonicalization of any kind of SMILES (components, multicomponent SMILES, react
 Note that the resulting string is in the same format.
 ```pycon
 >>> from rxn.chemutils.miscellaneous import canonicalize_any
->>> canonicalize_any()
 >>> canonicalize_any("[Na+].[Cl-]")
 '[Cl-].[Na+]'
 >>> canonicalize_any("OC.C(O)~CF(C)", check_valence=False)
