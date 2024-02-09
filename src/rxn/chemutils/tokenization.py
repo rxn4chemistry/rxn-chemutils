@@ -28,8 +28,8 @@ class TokenizationError(ValueError):
         Initialize TokenizationError.
 
         Args:
-            title (str): title of the error.
-            detail (str): decscription of the error.
+            title: title of the error.
+            detail: decscription of the error.
         """
         self.type = "TokenizationError"
         self.title = title
