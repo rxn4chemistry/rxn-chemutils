@@ -24,10 +24,10 @@ def standardize_smiles(
     Note that inchify set to True will also canonicalize the molecule.
 
     Args:
-        smiles (str): SMILES representation of a molecule.
-        canonicalize (bool): canonicalize SMILES. Defaults to True.
-        sanitize (bool): sanitize SMILES. Defaults to True.
-        inchify (bool): inchify the SMILES. Defaults to False.
+        smiles: SMILES representation of a molecule.
+        canonicalize: canonicalize SMILES. Defaults to True.
+        sanitize: sanitize SMILES. Defaults to True.
+        inchify: inchify the SMILES. Defaults to False.
 
     Returns:
         a SMILES following the desired standard.
