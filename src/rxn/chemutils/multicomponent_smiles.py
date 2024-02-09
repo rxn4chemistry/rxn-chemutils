@@ -2,6 +2,7 @@
 Utilities related to "multi-component SMILES", i.e. strings containing multiple compounds
 in SMILES notation, which may include fragment bonds.
 """
+
 from functools import partial
 from typing import Callable, Iterable, List, Optional
 

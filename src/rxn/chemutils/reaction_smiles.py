@@ -4,6 +4,7 @@ Functionality to handle different kinds of reaction SMILES with the same functio
 In a separate file than miscellaneous.py or conversion.py in order to avoid
 cyclic dependencies.
 """
+
 from enum import auto
 
 from rxn.utilities.types import RxnEnum

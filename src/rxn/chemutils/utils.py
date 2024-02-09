@@ -1,6 +1,5 @@
 """Simple utilities not involving RDKit."""
 
-
 import re
 
 
