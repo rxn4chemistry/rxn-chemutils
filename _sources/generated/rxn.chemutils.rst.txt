@@ -41,6 +41,7 @@
    rxn.chemutils.scripts
    rxn.chemutils.smiles_augmenter
    rxn.chemutils.smiles_randomization
+   rxn.chemutils.smiles_standardization
    rxn.chemutils.tokenization
    rxn.chemutils.utils
 

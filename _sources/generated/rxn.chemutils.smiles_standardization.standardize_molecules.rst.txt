@@ -1,0 +1,6 @@
+rxn.chemutils.smiles\_standardization.standardize\_molecules
+============================================================
+
+.. currentmodule:: rxn.chemutils.smiles_standardization
+
+.. autofunction:: standardize_molecules

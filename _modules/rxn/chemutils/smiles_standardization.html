@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rxn.chemutils.smiles_standardization &mdash; RXN chemutils 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> RXN chemutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Python API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">RXN chemutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>rxn.chemutils.smiles_standardization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rxn.chemutils.smiles_standardization</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">.conversion</span> <span class="kn">import</span> <span class="n">inchi_to_mol</span><span class="p">,</span> <span class="n">mol_to_inchi</span><span class="p">,</span> <span class="n">mol_to_smiles</span><span class="p">,</span> <span class="n">smiles_to_mol</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidInchi</span><span class="p">,</span> <span class="n">InvalidSmiles</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NullHandler</span><span class="p">())</span>
+
+<span class="n">RXN_SMILES_SEPARATOR</span> <span class="o">=</span> <span class="s2">&quot;&gt;&gt;&quot;</span>
+
+
+<div class="viewcode-block" id="standardize_smiles"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_standardization.standardize_smiles.html#rxn.chemutils.smiles_standardization.standardize_smiles">[docs]</a><span class="k">def</span> <span class="nf">standardize_smiles</span><span class="p">(</span>
+    <span class="n">smiles</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">canonicalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">find_radicals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">inchify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure that a SMILES follows a desired standard.</span>
+
+<span class="sd">    It allows canonicalization, sanitization and inchification keeping stereochemistry with isomericSmile=True.</span>
+<span class="sd">    It can process multiple molecules separated by &quot;.&quot;.</span>
+<span class="sd">    Note that inchify set to True will also canonicalize the molecule.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        smiles: SMILES representation of a molecule.</span>
+<span class="sd">        canonicalize: canonicalize SMILES. Defaults to True.</span>
+<span class="sd">        sanitize: sanitize SMILES. Defaults to True.</span>
+<span class="sd">        inchify: inchify the SMILES. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a SMILES following the desired standard.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">molecule</span> <span class="o">=</span> <span class="n">smiles_to_mol</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span> <span class="n">find_radicals</span><span class="o">=</span><span class="n">find_radicals</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">InvalidSmiles</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMILES parsing failure: </span><span class="si">{</span><span class="n">smiles</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+    <span class="k">if</span> <span class="n">inchify</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">inchi_string</span> <span class="o">=</span> <span class="n">mol_to_inchi</span><span class="p">(</span><span class="n">molecule</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">InvalidInchi</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Inchification failure for SMILES: </span><span class="si">{</span><span class="n">smiles</span><span class="si">}</span><span class="s2">. Returning its canonical version.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># canonical set to True because we can&#39;t guarantee no canonicalization</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">molecule_from_inchi</span> <span class="o">=</span> <span class="n">inchi_to_mol</span><span class="p">(</span><span class="n">inchi_string</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">InvalidInchi</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;De-inchification failure for InChi: </span><span class="si">{</span><span class="n">inchi_string</span><span class="si">}</span><span class="s2">. Returning its canonical version.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">molecule_from_inchi</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">canonicalize</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mol_to_smiles</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">smiles</span></div>
+
+
+<div class="viewcode-block" id="standardize_molecules"><a class="viewcode-back" href="../../../generated/rxn.chemutils.smiles_standardization.standardize_molecules.html#rxn.chemutils.smiles_standardization.standardize_molecules">[docs]</a><span class="k">def</span> <span class="nf">standardize_molecules</span><span class="p">(</span>
+    <span class="n">molecules</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">canonicalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">inchify</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">fragment_bond</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;~&quot;</span><span class="p">,</span>
+    <span class="n">ordered_precursors</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">molecule_token_delimiter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_enzymatic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">enzyme_separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure that a set of molecules represented by a string follows a desired standard.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        molecules: molecules SMILES. Molecules can be separated via a &quot;.&quot;.</span>
+<span class="sd">            Fragments are supported with a custom `fragment_bond`.</span>
+<span class="sd">        canonicalize: canonicalize SMILES. Defaults to True.</span>
+<span class="sd">        sanitize: sanitize SMILES. Defaults to True.</span>
+<span class="sd">        inchify: inchify the SMILES. Defaults to False.</span>
+<span class="sd">        fragment_bond: fragment bond. Defaults to &#39;~&#39;.</span>
+<span class="sd">        ordered_precursors: order precursors. Defaults to True.</span>
+<span class="sd">        molecule_token_delimiter: delimiter for big molecule tokens. Defaults to None</span>
+<span class="sd">        is_enzymatic: the molecules are representing an enzymatic reaction. Defaults to False.</span>
+<span class="sd">        enzyme_separator: separator for molecules and the enzyme. Defaults to &#39;|&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        standardized molecules.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        Standardize multiple molecules:</span>
+<span class="sd">        &gt;&gt;&gt; standardize_molecules(&#39;CCO.CC&#39;)</span>
+<span class="sd">        &#39;CC.CCO&#39;</span>
+<span class="sd">        Standardize multiple molecules including fragment information:</span>
+<span class="sd">        &gt;&gt;&gt; standardize_molecules(&#39;CCO.CC~C&#39;)</span>
+<span class="sd">        &#39;CCO.C~CC&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">enzyme</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_enzymatic</span><span class="p">:</span>
+        <span class="n">splitted_molecules</span> <span class="o">=</span> <span class="n">molecules</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">enzyme_separator</span><span class="p">)</span>
+        <span class="n">molecules</span> <span class="o">=</span> <span class="n">splitted_molecules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">splitted_molecules</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">enzyme</span> <span class="o">=</span> <span class="n">splitted_molecules</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">enzyme</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">enzyme_separator</span><span class="p">,</span> <span class="n">enzyme</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">molecule_token_delimiter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">molecules</span> <span class="o">=</span> <span class="n">molecules</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">molecule_token_delimiter</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fragment_bond</span> <span class="ow">in</span> <span class="n">molecules</span><span class="p">:</span>
+        <span class="n">standardized_molecules_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># make sure we remove the fragment to have valid SMILES</span>
+            <span class="n">standardize_smiles</span><span class="p">(</span>
+                <span class="n">molecule</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">fragment_bond</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">),</span>
+                <span class="n">canonicalize</span><span class="o">=</span><span class="n">canonicalize</span><span class="p">,</span>
+                <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span>
+                <span class="n">inchify</span><span class="o">=</span><span class="n">inchify</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="n">molecules</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">ordered_precursors</span><span class="p">:</span>
+            <span class="n">standardized_molecules_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">standardized_molecules_list</span><span class="p">)</span>
+        <span class="n">standardized_molecules</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">standardized_molecules_list</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ordered_precursors</span><span class="p">:</span>
+            <span class="c1"># RDKit guarantees ordered precursors</span>
+            <span class="n">standardized_molecules</span> <span class="o">=</span> <span class="n">standardize_smiles</span><span class="p">(</span>
+                <span class="n">molecules</span><span class="p">,</span>
+                <span class="n">canonicalize</span><span class="o">=</span><span class="n">canonicalize</span><span class="p">,</span>
+                <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span>
+                <span class="n">inchify</span><span class="o">=</span><span class="n">inchify</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">standardized_molecules_list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">standardize_smiles</span><span class="p">(</span>
+                    <span class="n">molecule</span><span class="p">,</span>
+                    <span class="n">canonicalize</span><span class="o">=</span><span class="n">canonicalize</span><span class="p">,</span>
+                    <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span>
+                    <span class="n">inchify</span><span class="o">=</span><span class="n">inchify</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">molecule</span> <span class="ow">in</span> <span class="n">molecules</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">standardized_molecules</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">standardized_molecules_list</span><span class="p">)</span>
+    <span class="c1"># add optional enzyme information</span>
+    <span class="n">standardized_molecules</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">standardized_molecules</span><span class="p">,</span> <span class="n">enzyme</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">standardized_molecules</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM RXN team 2022.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
