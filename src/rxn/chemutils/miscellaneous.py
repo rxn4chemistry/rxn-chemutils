@@ -84,7 +84,7 @@ def atom_type_counter(smiles: str) -> typing.Counter[str]:
     """
 
     mol: Mol = AddHs(smiles_to_mol(smiles, sanitize=False))
-    atoms: List[Atom] = mol.GetAtoms()
+    atoms: List[Atom] = mol.GetAtoms()  # type: ignore[call-arg,no-untyped-call]
     return Counter(atom.GetSymbol() for atom in atoms)
 
 
@@ -327,7 +327,7 @@ def mol_has_atom_mapping(mol: Mol) -> bool:
         mol: RDKit Mol.
     """
     atom: Atom
-    for atom in mol.GetAtoms():
+    for atom in mol.GetAtoms():  # type: ignore[call-arg,no-untyped-call]
         if atom.GetAtomMapNum() != 0:
             return True
     return False

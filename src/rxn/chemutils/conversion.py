@@ -21,7 +21,7 @@ from rdkit.Chem.rdmolfiles import (
 
 from .exceptions import InvalidInchi, InvalidMdl, InvalidSmiles, SanitizationError
 
-RDLogger.logger().setLevel(RDLogger.CRITICAL)
+RDLogger.logger().setLevel(RDLogger.CRITICAL)  # type: ignore[no-untyped-call]
 
 
 def smiles_to_mol(
@@ -57,7 +57,7 @@ def smiles_to_mol(
     # function, either with no sanitization, or with radical finding.
     if not sanitize:
         if find_radicals:
-            sanitizations = [Chem.SANITIZE_FINDRADICALS]
+            sanitizations: List[SanitizeFlags | int] = [Chem.SANITIZE_FINDRADICALS]
         else:
             sanitizations = [Chem.SANITIZE_NONE]
 
@@ -84,7 +84,7 @@ def inchi_to_mol(inchi: str, sanitize: bool = True, removeHs: bool = True) -> Mo
     Returns:
         Mol instance.
     """
-    mol = MolFromInchi(inchi, sanitize=sanitize, removeHs=removeHs)
+    mol: Mol = MolFromInchi(inchi, sanitize=sanitize, removeHs=removeHs)  # type: ignore[no-untyped-call]
     if not inchi or mol is None:
         raise InvalidInchi(inchi)
 
@@ -97,7 +97,7 @@ def mol_to_smiles(mol: Mol, canonical: bool = True, isomericSmiles: bool = True)
 
     Mainly a wrapper around MolToSmiles.
     """
-    return MolToSmiles(mol, canonical=canonical, isomericSmiles=isomericSmiles)  # type: ignore
+    return MolToSmiles(mol, canonical=canonical, isomericSmiles=isomericSmiles)
 
 
 def mdl_to_mol(mdl: str, sanitize: bool = True) -> Mol:
@@ -130,7 +130,7 @@ def mol_to_mdl(mol: Mol) -> str:
 
     Mainly a wrapper around MolToMolBlock.
     """
-    return MolToMolBlock(mol)  # type: ignore
+    return MolToMolBlock(mol)
 
 
 def sanitize_mol(
@@ -239,7 +239,7 @@ def canonicalize_smiles(smiles: str, check_valence: bool = True) -> str:
 
     # Sanitization as a separate step, to enable exclusion of valence check
     try:
-        excluded_sanitizations = []
+        excluded_sanitizations: List[SanitizeFlags | int] = []
         if not check_valence:
             excluded_sanitizations.append(Chem.SANITIZE_PROPERTIES)
         sanitize_mol(mol, exclude_sanitizations=excluded_sanitizations)
