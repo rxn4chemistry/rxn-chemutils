@@ -1,3 +1,4 @@
+import re
 from functools import partial
 from typing import (
     Callable,
@@ -75,9 +76,11 @@ class ReactionEquation:
         Convert a ReactionEquation from an "rxn" reaction SMILES.
         """
 
+        # We split at the ">" characters, only if they are not preceded by a "-",
+        # which would indicate a dative bond.
         groups = [
             multicomponent_smiles_to_list(smiles_group, fragment_bond=fragment_bond)
-            for smiles_group in reaction_string.split(">")
+            for smiles_group in re.split(r"(?<!-)>", reaction_string)
         ]
 
         try:

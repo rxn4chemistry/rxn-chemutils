@@ -175,6 +175,21 @@ def test_equation_from_string_with_no_agent() -> None:
     assert reaction == expected_reaction
 
 
+def test_equation_from_string_with_dative_bond() -> None:
+    reaction_string = "COC(=O)CCBr.O=C([O-]->[K+])>>COC(=O)CCOC(=O)C"
+
+    reaction = ReactionEquation.from_string(reaction_string)
+
+    expected_reactants = ["COC(=O)CCBr", "O=C([O-]->[K+])"]
+    expected_agents: List[str] = []
+    expected_products = ["COC(=O)CCOC(=O)C"]
+    expected_reaction = ReactionEquation(
+        expected_reactants, expected_agents, expected_products
+    )
+
+    assert reaction == expected_reaction
+
+
 def test_iter_all_smiles() -> None:
     reaction_string = "COCO.[Na+].[OH-]>O>NCOC"
     reaction = ReactionEquation.from_string(reaction_string)
