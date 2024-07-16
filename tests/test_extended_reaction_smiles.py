@@ -58,6 +58,20 @@ def test_from_reaction_smiles_with_fragments() -> None:
     assert reaction.products == ["OC1=CC=C2C3=C(C(=O)OC2=C1)C=C(COC)C=C3"]
 
 
+def test_from_reaction_smiles_with_dative_bond() -> None:
+    reaction_smiles = "COC(=O)CCBr.O=C[O-]->[K+].[OH-].[Na+]>>COC(=O)CCOC(=O)C |f:2.3|"
+
+    reaction = parse_extended_reaction_smiles(reaction_smiles)
+
+    assert reaction.reactants == [
+        "COC(=O)CCBr",
+        "O=C[O-]->[K+]",
+        "[OH-].[Na+]",
+    ]
+    assert reaction.agents == []
+    assert reaction.products == ["COC(=O)CCOC(=O)C"]
+
+
 def test_from_reaction_smiles_with_other_extended_information() -> None:
     # the part with "&1:", "c:", "H:", must not be considered for determination of fragments
     reaction_smiles = (

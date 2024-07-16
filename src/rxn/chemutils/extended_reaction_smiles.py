@@ -78,7 +78,9 @@ class _Importer:
         if remove_atom_maps:
             pure_smiles = remove_atom_mapping(pure_smiles)
 
-        reactant_groups = pure_smiles.split(">")
+        # We split at the ">" characters, only if they are not preceded by a "-",
+        # which would indicate a dative bond.
+        reactant_groups = re.split(r"(?<!-)>", pure_smiles)
         mols_groups = [group.split(".") for group in reactant_groups]
         mols_groups = [[mol for mol in group if mol] for group in mols_groups]
 
