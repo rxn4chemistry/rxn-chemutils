@@ -65,7 +65,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for rxn.chemutils.reaction_equation</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Callable</span><span class="p">,</span>
     <span class="n">Generator</span><span class="p">,</span>
@@ -142,9 +143,11 @@
 <span class="sd">        Convert a ReactionEquation from an &quot;rxn&quot; reaction SMILES.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># We split at the &quot;&gt;&quot; characters, only if they are not preceded by a &quot;-&quot;,</span>
+        <span class="c1"># which would indicate a dative bond.</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">multicomponent_smiles_to_list</span><span class="p">(</span><span class="n">smiles_group</span><span class="p">,</span> <span class="n">fragment_bond</span><span class="o">=</span><span class="n">fragment_bond</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">smiles_group</span> <span class="ow">in</span> <span class="n">reaction_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">smiles_group</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;!-)&gt;&quot;</span><span class="p">,</span> <span class="n">reaction_string</span><span class="p">)</span>
         <span class="p">]</span>
 
         <span class="k">try</span><span class="p">:</span>
