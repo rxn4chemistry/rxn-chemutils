@@ -88,7 +88,7 @@
 
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidInchi</span><span class="p">,</span> <span class="n">InvalidMdl</span><span class="p">,</span> <span class="n">InvalidSmiles</span><span class="p">,</span> <span class="n">SanitizationError</span>
 
-<span class="n">RDLogger</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">RDLogger</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+<span class="n">RDLogger</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">RDLogger</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
 
 
 <div class="viewcode-block" id="smiles_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.smiles_to_mol.html#rxn.chemutils.conversion.smiles_to_mol">[docs]</a><span class="k">def</span> <span class="nf">smiles_to_mol</span><span class="p">(</span>
@@ -124,7 +124,7 @@
     <span class="c1"># function, either with no sanitization, or with radical finding.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sanitize</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">find_radicals</span><span class="p">:</span>
-            <span class="n">sanitizations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">SANITIZE_FINDRADICALS</span><span class="p">]</span>
+            <span class="n">sanitizations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SanitizeFlags</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">SANITIZE_FINDRADICALS</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sanitizations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">SANITIZE_NONE</span><span class="p">]</span>
 
@@ -151,7 +151,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Mol instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">mol</span> <span class="o">=</span> <span class="n">MolFromInchi</span><span class="p">(</span><span class="n">inchi</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span> <span class="n">removeHs</span><span class="o">=</span><span class="n">removeHs</span><span class="p">)</span>
+    <span class="n">mol</span><span class="p">:</span> <span class="n">Mol</span> <span class="o">=</span> <span class="n">MolFromInchi</span><span class="p">(</span><span class="n">inchi</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="n">sanitize</span><span class="p">,</span> <span class="n">removeHs</span><span class="o">=</span><span class="n">removeHs</span><span class="p">)</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">inchi</span> <span class="ow">or</span> <span class="n">mol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">InvalidInchi</span><span class="p">(</span><span class="n">inchi</span><span class="p">)</span>
 
@@ -164,7 +164,7 @@
 
 <span class="sd">    Mainly a wrapper around MolToSmiles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonical</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="n">isomericSmiles</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+    <span class="k">return</span> <span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="n">canonical</span><span class="p">,</span> <span class="n">isomericSmiles</span><span class="o">=</span><span class="n">isomericSmiles</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="mdl_to_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.mdl_to_mol.html#rxn.chemutils.conversion.mdl_to_mol">[docs]</a><span class="k">def</span> <span class="nf">mdl_to_mol</span><span class="p">(</span><span class="n">mdl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sanitize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mol</span><span class="p">:</span>
@@ -197,7 +197,7 @@
 
 <span class="sd">    Mainly a wrapper around MolToMolBlock.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MolToMolBlock</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+    <span class="k">return</span> <span class="n">MolToMolBlock</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="sanitize_mol"><a class="viewcode-back" href="../../../generated/rxn.chemutils.conversion.sanitize_mol.html#rxn.chemutils.conversion.sanitize_mol">[docs]</a><span class="k">def</span> <span class="nf">sanitize_mol</span><span class="p">(</span>
@@ -306,7 +306,7 @@
 
     <span class="c1"># Sanitization as a separate step, to enable exclusion of valence check</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">excluded_sanitizations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">excluded_sanitizations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SanitizeFlags</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">check_valence</span><span class="p">:</span>
             <span class="n">excluded_sanitizations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">SANITIZE_PROPERTIES</span><span class="p">)</span>
         <span class="n">sanitize_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">exclude_sanitizations</span><span class="o">=</span><span class="n">excluded_sanitizations</span><span class="p">)</span>
